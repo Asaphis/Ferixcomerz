@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "652920725106",
+    "project_id": "kryros-notification",
+    "storage_bucket": "kryros-notification.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652920725106:android:895e60ff8311ee61e16ceb",
+        "android_client_info": {
+          "package_name": "com.kryros.kryros_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVu8tBHThCli0WPJci1wdoyyHOEWBpS04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

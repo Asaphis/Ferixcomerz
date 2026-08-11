@@ -1,0 +1,1254 @@
+import { useState, useEffect, useRef } from "react";
+import { Link, useLocation } from "wouter";
+import {
+  LayoutDashboard, Package, Heart, MapPin, CreditCard, Zap,
+  MessageCircle, Bell, RefreshCcw, Star, Settings, ChevronRight, Check,
+  Truck, MoreVertical, Plus, X, Search, DollarSign,
+  ChevronDown, Menu, ShoppingBag, Info, Tag, AlertCircle, LogOut,
+  UserCircle, Phone, Mail, Edit2, Save, Loader2, Home, Building2, Clock,
+} from "lucide-react";
+import { useAuthStore } from "@/store/authStore";
+import { useCurrencyStore } from "@/store/currencyStore";
+import { EFFECTIVE_API_BASE } from "@/lib/api";
+import { formatDeliveryWindow, resolveDeliveryWindowFromItems } from "@/lib/delivery";
+
+
+function DashboardAuthGuard({ children }: { children: React.ReactNode }) {
+  const token = useAuthStore((s) => s.token);
+  const user = useAuthStore((s) => s.user);
+  const getMe = useAuthStore((s) => s.getMe);
+  
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!token) {
+      window.location.replace('/login');
+      return;
+    }
+    if (!user) {
+      void getMe();
+    }
+  }, [token, user, getMe]);
+
+  if (!token || !user) return null;
+  return <>{children}</>;
+}
+
+function getOrderTimeline(status: string) {
+  const norm = ({
+    PENDING:    "Pending",
+    PROCESSING: "Processing",
+    CONFIRMED:  "Confirmed",
+    SHIPPED:    "Shipped",
+    IN_TRANSIT: "In Transit",
+    DELIVERED:  "Delivered",
+    COLLECTED:  "Collected",
+    CANCELLED:  "Cancelled",
+    REFUNDED:   "Refunded",
+    RETURNED:   "Returned",
+  } as Record<string, string>)[status?.toUpperCase?.()] ?? status ?? "Pending";
+
+  const steps = ["Pending", "Confirmed", "Shipped", "In Transit", "Delivered", "Collected"];
+  const activeIdx =
+    norm === "Collected"  ? 5 :
+    norm === "Delivered"  ? 4 :
+    norm === "In Transit" ? 3 :
+    norm === "Shipped"    ? 2 :
+    norm === "Confirmed"  ? 1 : 0;
+  const doneSet = new Set(
+    norm === "Collected"  ? [0,1,2,3,4,5] :
+    norm === "Delivered"  ? [0,1,2,3,4] :
+    norm === "In Transit" ? [0,1,2,3] :
+    norm === "Shipped"    ? [0,1,2] :
+    norm === "Confirmed"  ? [0,1] :
+    norm === "Processing" ? [0] : []
+  );
+  return steps.map((label, i) => ({
+    label,
+    done: doneSet.has(i),
+    active: i === activeIdx && norm !== "Collected" && norm !== "Cancelled",
+    date: "",
+  }));
+}
+
+const statusColors: Record<string, string> = {
+  "Pending":    "bg-yellow-500/10 text-yellow-600",
+  "Processing": "bg-blue-500/10 text-blue-600",
+  "Confirmed":  "bg-indigo-500/10 text-indigo-600",
+  "Shipped":    "bg-sky-500/10 text-sky-600",
+  "In Transit": "bg-primary/10 text-primary",
+  "Delivered":  "bg-green-500/10 text-green-600",
+  "Collected":  "bg-emerald-500/10 text-emerald-600",
+  "Cancelled":  "bg-red-500/10 text-red-600",
+  "Refunded":   "bg-orange-500/10 text-orange-600",
+  "Returned":   "bg-pink-500/10 text-pink-600",
+};
+
+interface OrderItem {
+  id: string;
+  name: string;
+  orderId: string;
+  totalDisplay: string;
+  date: string;
+  status: string;
+  image: string;
+  estDelivery: string;
+}
+
+interface WishlistItem {
+  id: string;
+  productId: string;
+  product: {
+    name: string;
+    price: number;
+    comparePrice?: number;
+    images: { url: string; isPrimary: boolean }[];
+  };
+}
+
+interface Address {
+  id: string;
+  label?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zip?: string;
+  isDefault?: boolean;
+  [key: string]: unknown;
+}
+
+interface UserProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+  avatar: string | null;
+  addresses: Address[];
+}
+
+type ActiveSection = "overview" | "profile" | "addresses" | "credit" | "wholesale";
+
+function buildShortOrderReference(rawId?: string | null) {
+  const clean = rawId?.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+  if (!clean) return "ORD-UNKNOWN";
+  return `ORD-${clean.slice(-6)}`;
+}
+
+function formatOrderReference(orderNumber?: string | null, fallbackId?: string | null) {
+  if (orderNumber?.trim()) return `#${orderNumber.trim()}`;
+  if (fallbackId?.trim()) return `#${buildShortOrderReference(fallbackId)}`;
+  return "#—";
+}
+
+export default function DashboardPage() {
+  const { user, token, logout, notifications, unreadCount, fetchNotifications, markAsRead, markAllAsRead } = useAuthStore();
+  const [, setLocation] = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<ActiveSection>("overview");
+  const addressesRef = useRef<HTMLDivElement>(null);
+  const [recentOrders, setRecentOrders] = useState<OrderItem[]>([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editForm, setEditForm] = useState({ firstName: "", lastName: "", phone: "" });
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState("");
+  const format = useCurrencyStore((s) => s.format);
+  // Auth guard: redirect to login if not authenticated
+  useEffect(() => {
+    if (!token || !user) {
+      setLocation("/login");
+    }
+  }, [token, user]);
+
+  // Show nothing while redirecting (all hooks already declared)
+  if (!token || !user) return null;
+
+  const displayName = `${user.firstName} ${user.lastName}`;
+  const firstName = user.firstName ?? "there";
+  const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+
+  const liveTimeline = getOrderTimeline(recentOrders[0]?.status ?? "Pending");
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  useEffect(() => {
+    setOrdersLoading(true);
+    fetch(`${EFFECTIVE_API_BASE}/api/orders/my-orders`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        const list = Array.isArray(data) ? data : (data.data ?? data.orders ?? []);
+        const mapped: OrderItem[] = list.slice(0, 5).map((o: any) => {
+          const deliveryWindow = resolveDeliveryWindowFromItems(o.items, o.estimatedDays);
+          return {
+            id: String(o.id),
+            name: o.items?.[0]?.name ?? o.items?.[0]?.product?.name ?? o.productName ?? "Order",
+            orderId: formatOrderReference(o.orderNumber, o.id),
+            totalDisplay: o.totalZMW && o.currencyCode === 'ZMW' 
+              ? `ZMW ${Number(o.totalZMW).toLocaleString()}` 
+              : `${o.currencyCode || 'USD'} ${Number(o.total || 0).toLocaleString()}`,
+            date: o.createdAt
+              ? new Date(o.createdAt).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })
+              : "",
+            status: o.status ?? "Pending",
+            image:
+              o.items?.[0]?.image ??
+              o.items?.[0]?.product?.images?.[0]?.url ??
+              o.items?.[0]?.product?.images?.[0] ??
+              ((import.meta as unknown as { env: Record<string, string> }).env?.VITE_FALLBACK_IMAGE_URL ??
+                "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=100&q=80"),
+            estDelivery: deliveryWindow && o.createdAt ? formatDeliveryWindow(o.createdAt, deliveryWindow) : "—",
+          };
+        });
+        setRecentOrders(mapped);
+      })
+      .catch(() => {})
+      .finally(() => setOrdersLoading(false));
+  }, [token]);
+
+  useEffect(() => {
+    if (!token) return;
+    setWishlistLoading(true);
+    fetch(`${EFFECTIVE_API_BASE}/api/wishlist`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        const list = Array.isArray(data) ? data : [];
+        setWishlist(list);
+      })
+      .catch(() => {})
+      .finally(() => setWishlistLoading(false));
+  }, [token]);
+
+  useEffect(() => {
+    if (!token) return;
+    setProfileLoading(true);
+    fetch(`${EFFECTIVE_API_BASE}/api/users/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        setProfile(data);
+        setEditForm({
+          firstName: data.firstName ?? "",
+          lastName: data.lastName ?? "",
+          phone: data.phone ?? "",
+        });
+      })
+      .catch(() => {})
+      .finally(() => setProfileLoading(false));
+  }, [token]);
+
+  const handleLogout = async () => {
+    await logout();
+    setLocation("/login");
+  };
+
+  const handleSaveProfile = async () => {
+    if (!token || !user) return;
+    setEditSaving(true);
+    setEditError("");
+    try {
+      const res = await fetch(`${EFFECTIVE_API_BASE}/api/users/${user.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(editForm),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(Array.isArray(err.message) ? err.message.join(", ") : (err.message ?? "Update failed"));
+      }
+      const updated = await res.json();
+      setProfile((p) => p ? { ...p, ...updated } : p);
+      setEditMode(false);
+    } catch (e: any) {
+      setEditError(e.message ?? "Something went wrong");
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
+  const sidebarItems: { icon: any; label: string; section?: ActiveSection; href?: string }[] = [
+    { icon: LayoutDashboard, label: "Dashboard", section: "overview" },
+    { icon: Package, label: "Orders", href: "/track" },
+    { icon: Heart, label: "Wishlist", href: "/wishlist" },
+    { icon: MapPin, label: "Addresses", section: "addresses" },
+    { icon: CreditCard, label: "Credit Plans", section: "credit" },
+    { icon: ShoppingBag, label: "Wholesale Account", section: "wholesale" },
+    { icon: Zap, label: "Get Now Plans", href: "/get-now" },
+    { icon: MapPin, label: "Pickup Stations", href: "/pickup-stations" },
+    { icon: MessageCircle, label: "Messages", href: "/contact" },
+    { icon: RefreshCcw, label: "Returns & Refunds", href: "/returns" },
+    { icon: Star, label: "My Reviews", href: "/shop" },
+    { icon: Settings, label: "Settings", section: "profile" },
+  ];
+
+  const quickActions = [
+    { icon: Package, label: "My Orders", sub: "Track and manage your orders", href: "/track" },
+    { icon: RefreshCcw, label: "Returns", sub: "Request return or check status", href: "/returns" },
+    { icon: CreditCard, label: "Get Now Plans", sub: "Buy now, pay later plans", href: "/get-now" },
+    { icon: MapPin, label: "Pickup Stations", sub: "Find and manage pickup locations", href: "/pickup-stations" },
+    { icon: Settings, label: "Edit Profile", sub: "Manage your account details", section: "profile" as ActiveSection },
+  ];
+
+  const handleNav = (item: { section?: ActiveSection; href?: string }) => {
+    setSidebarOpen(false);
+    if (item.section) {
+      setActiveSection(item.section);
+      if (item.section === "addresses") {
+        setTimeout(() => addressesRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else if (item.href) {
+      setLocation(item.href);
+    }
+  };
+
+  const SidebarContent = () => (
+    <div className="flex flex-col h-full bg-background">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-[var(--kryros-header-navy)]">
+        <Link href="/">
+          <span className="flex items-center text-white cursor-pointer">
+            <img
+              src="/kryros-logo.png"
+              alt="KRYROS"
+              className="w-10 h-10 object-contain"
+            />
+            <span className="ml-2 text-xl font-black tracking-tight uppercase">KRYROS</span>
+          </span>
+        </Link>
+        <button
+          className="w-7 h-7 flex items-center justify-center hover:bg-white/10 rounded-full transition-colors text-white"
+          onClick={() => setSidebarOpen(false)}
+        >
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+
+      <nav className="flex-1 p-2 overflow-y-auto">
+        {sidebarItems.map(({ icon: Icon, label, section, href }) => {
+          const isActive = section ? activeSection === section : false;
+          return (
+            <button
+              key={label}
+              onClick={() => handleNav({ section, href })}
+              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl cursor-pointer transition-all mb-0.5 text-left
+                ${isActive ? "bg-primary/10 text-primary" : "hover:bg-muted text-foreground"}`}
+            >
+              <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
+              <span className={`text-sm font-medium ${isActive ? "font-semibold text-primary" : ""}`}>{label}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </div>
+  );
+
+  const ProfileSection = () => (
+    <div className="max-w-2xl">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-black text-foreground">Profile Settings</h1>
+          <p className="text-sm text-muted-foreground">Manage your personal information</p>
+        </div>
+        {!editMode ? (
+          <button
+            onClick={() => setEditMode(true)}
+            className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-colors"
+          >
+            <Edit2 className="w-3.5 h-3.5" /> Edit Profile
+          </button>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              onClick={() => { setEditMode(false); setEditError(""); }}
+              className="px-4 py-2 border border-border rounded-xl text-xs font-bold text-foreground hover:bg-muted transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveProfile}
+              disabled={editSaving}
+              className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-colors disabled:opacity-60"
+            >
+              {editSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+              Save Changes
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="bg-card border border-border rounded-2xl p-6">
+        <div className="flex items-center gap-4 mb-6 pb-6 border-b border-border">
+          <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center flex-shrink-0 ring-4 ring-primary/20 text-white text-2xl font-black">
+            {initials}
+          </div>
+          <div>
+            <p className="text-base font-black text-foreground">{displayName}</p>
+            <p className="text-xs text-muted-foreground">{user?.email ?? "No email set"}</p>
+            <span className="inline-block mt-1 px-2 py-0.5 bg-primary/10 text-primary text-[9px] font-bold rounded-full uppercase tracking-wide">
+              {user?.role?.toLowerCase?.() ?? "customer"}
+            </span>
+          </div>
+        </div>
+
+        {editError && (
+          <div className="mb-4 px-4 py-2.5 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-600 font-medium">
+            {editError}
+          </div>
+        )}
+
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">First Name</label>
+              {editMode ? (
+                <input
+                  type="text"
+                  value={editForm.firstName}
+                  onChange={(e) => setEditForm((f) => ({ ...f, firstName: e.target.value }))}
+                  maxLength={100}
+                  className="w-full px-3 py-2 border border-border rounded-xl text-sm text-foreground bg-background focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              ) : (
+                <p className="text-sm font-semibold text-foreground px-3 py-2 bg-muted/40 rounded-xl">{profile?.firstName ?? user?.firstName ?? "—"}</p>
+              )}
+            </div>
+            <div>
+              <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">Last Name</label>
+              {editMode ? (
+                <input
+                  type="text"
+                  value={editForm.lastName}
+                  onChange={(e) => setEditForm((f) => ({ ...f, lastName: e.target.value }))}
+                  maxLength={100}
+                  className="w-full px-3 py-2 border border-border rounded-xl text-sm text-foreground bg-background focus:outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              ) : (
+                <p className="text-sm font-semibold text-foreground px-3 py-2 bg-muted/40 rounded-xl">{profile?.lastName ?? user?.lastName ?? "—"}</p>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">
+              <Mail className="inline w-3 h-3 mr-1" />Email Address
+            </label>
+            <p className="text-sm font-semibold text-foreground px-3 py-2 bg-muted/40 rounded-xl text-muted-foreground">
+              {profile?.email ?? user?.email ?? "Not set"}
+              <span className="ml-2 text-[9px] text-muted-foreground/60">(contact support to change)</span>
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5">
+              <Phone className="inline w-3 h-3 mr-1" />Phone Number
+            </label>
+            {editMode ? (
+              <input
+                type="tel"
+                value={editForm.phone}
+                onChange={(e) => setEditForm((f) => ({ ...f, phone: e.target.value }))}
+                maxLength={30}
+                placeholder="+260966423719"
+                className="w-full px-3 py-2 border border-border rounded-xl text-sm text-foreground bg-background focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+            ) : (
+              <p className="text-sm font-semibold text-foreground px-3 py-2 bg-muted/40 rounded-xl">{profile?.phone ?? "Not set"}</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 bg-card border border-border rounded-2xl p-5">
+        <h3 className="text-sm font-bold text-foreground mb-3">Account Actions</h3>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/track">
+            <button className="flex items-center gap-1.5 px-4 py-2 border border-border rounded-xl text-xs font-semibold text-foreground hover:bg-muted transition-colors">
+              <Package className="w-3.5 h-3.5" /> My Orders
+            </button>
+          </Link>
+          <Link href="/returns">
+            <button className="flex items-center gap-1.5 px-4 py-2 border border-border rounded-xl text-xs font-semibold text-foreground hover:bg-muted transition-colors">
+              <RefreshCcw className="w-3.5 h-3.5" /> Returns
+            </button>
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1.5 px-4 py-2 border border-destructive/20 rounded-xl text-xs font-semibold text-destructive hover:bg-destructive/10 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" /> Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const CreditSection = () => (
+    <div className="max-w-2xl">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-black text-foreground">My Credit Plans</h1>
+          <p className="text-sm text-muted-foreground">Manage your installment payments</p>
+        </div>
+        <Link href="/apply-credit">
+          <button className="flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground rounded-xl text-xs font-bold hover:bg-primary/90 transition-colors">
+            <Plus className="w-3.5 h-3.5" /> Apply for Credit
+          </button>
+        </Link>
+      </div>
+
+      <div className="bg-card border border-border rounded-2xl p-5">
+        <div className="flex flex-col items-center py-8 text-center">
+          <CreditCard className="w-12 h-12 text-muted-foreground/30 mb-3" />
+          <p className="text-sm font-medium text-muted-foreground">No active credit plans</p>
+          <p className="text-xs text-muted-foreground/70 mt-1">Apply for credit to start shopping with installment payments</p>
+          <Link href="/apply-credit">
+            <button className="mt-4 px-5 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-colors">
+              Apply Now
+            </button>
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-6 bg-primary/10 border border-primary/20 rounded-2xl p-5">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="text-sm font-bold text-primary mb-1">How Credit Works</h3>
+            <p className="text-xs text-primary/80 leading-relaxed">
+              Get approved instantly, shop now, and pay later with flexible monthly installments. No hidden fees, transparent pricing.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const WholesaleSection = () => (
+    <div className="max-w-2xl">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-black text-foreground">Wholesale Account</h1>
+          <p className="text-sm text-muted-foreground">Manage your bulk orders and wholesale benefits</p>
+        </div>
+        <Link href="/wholesale">
+          <button className="flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-colors">
+            <Plus className="w-3.5 h-3.5" /> Request Wholesale
+          </button>
+        </Link>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-4 mb-6">
+        {[
+          { label: "Account Status", value: "Not Activated", icon: Building2, color: "text-muted-foreground" },
+          { label: "Tier Level", value: "—", icon: Tag, color: "text-muted-foreground" },
+          { label: "Credit Limit", value: "—", icon: DollarSign, color: "text-muted-foreground" },
+          { label: "Total Orders", value: "0", icon: Package, color: "text-muted-foreground" },
+        ].map(({ label, value, icon: Icon, color }) => (
+          <div key={label} className="bg-card border border-border rounded-2xl p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center">
+                <Icon className={`w-4 h-4 ${color}`} />
+              </div>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">{label}</p>
+            </div>
+            <p className="text-lg font-black text-foreground">{value}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-card border border-border rounded-2xl p-5 mb-6">
+        <h3 className="text-sm font-bold text-foreground mb-3">Wholesale Benefits</h3>
+        <div className="space-y-2">
+          {[
+            "Tiered pricing with volume discounts",
+            "Extended payment terms",
+            "Dedicated account manager",
+            "Priority customer support",
+            "Exclusive wholesale deals",
+          ].map((benefit, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-primary flex-shrink-0" />
+              <p className="text-xs text-foreground">{benefit}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-primary/10 border border-primary/20 rounded-2xl p-5">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="text-sm font-bold text-primary mb-1">Get Wholesale Access</h3>
+            <p className="text-xs text-primary/80 leading-relaxed mb-3">
+              Apply for a wholesale account to unlock bulk pricing, extended payment terms, and exclusive deals.
+            </p>
+            <Link href="/wholesale">
+              <button className="px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold hover:bg-primary/90 transition-colors">
+                Apply for Wholesale
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const AddressesSection = () => {
+    const addresses = profile?.addresses ?? [];
+    return (
+      <div className="max-w-2xl" ref={addressesRef}>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h1 className="text-2xl font-black text-foreground">Saved Addresses</h1>
+            <p className="text-sm text-muted-foreground">Manage your delivery addresses</p>
+          </div>
+          <button
+            onClick={() => setActiveSection("overview")}
+            className="text-xs text-primary font-semibold hover:underline"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+        <div className="bg-card border border-border rounded-2xl p-5">
+          {profileLoading ? (
+            <div className="space-y-3">
+              {[1, 2].map((i) => (
+                <div key={i} className="flex items-start gap-3 p-3 bg-muted/40 rounded-xl animate-pulse">
+                  <div className="w-8 h-8 rounded-xl bg-muted flex-shrink-0" />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="h-3 bg-muted rounded w-1/4" />
+                    <div className="h-2.5 bg-muted rounded w-3/4" />
+                    <div className="h-2.5 bg-muted rounded w-1/2" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : addresses.length === 0 ? (
+            <div className="flex flex-col items-center py-8 text-center">
+              <MapPin className="w-10 h-10 text-muted-foreground/30 mb-2" />
+              <p className="text-sm font-medium text-muted-foreground">No saved addresses yet</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">Addresses will appear here after you place an order</p>
+              <Link href="/shop">
+                <button className="mt-4 px-5 py-2 bg-primary text-white rounded-xl text-xs font-bold hover:bg-primary/90 transition-colors">
+                  Start Shopping
+                </button>
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {addresses.map((addr, i) => {
+                const label = addr.label ?? (addr.isDefault ? "Default" : `Address ${i + 1}`);
+                const IconComp = label.toLowerCase().includes("home") ? Home : Building2;
+                const lines: string[] = [];
+                if (addr.street) lines.push(addr.street);
+                if (addr.city || addr.state) lines.push([addr.city, addr.state].filter(Boolean).join(", "));
+                if (addr.zip || addr.country) lines.push([addr.zip, addr.country].filter(Boolean).join(" "));
+                if (lines.length === 0) lines.push(JSON.stringify(addr));
+                return (
+                  <div key={addr.id ?? i} className="flex items-start gap-3 p-3 bg-muted/40 rounded-xl">
+                    <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <IconComp className="w-4 h-4 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <p className="text-xs font-bold text-foreground">{label}</p>
+                        {addr.isDefault && (
+                          <span className="px-1.5 py-0.5 bg-primary/10 text-primary text-[8px] font-bold rounded-full">Default</span>
+                        )}
+                      </div>
+                      {lines.map((line, li) => (
+                        <p key={li} className="text-[10px] text-muted-foreground leading-snug">{line}</p>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button className="text-[10px] text-primary font-semibold hover:underline">Edit</button>
+                      <MoreVertical className="w-3.5 h-3.5 text-muted-foreground cursor-pointer" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <button className="flex items-center gap-1.5 text-primary text-xs font-semibold hover:bg-primary/5 px-3 py-2 rounded-xl transition-colors mt-3">
+            <Plus className="w-3.5 h-3.5" />
+            + Add New Address
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const wishlistDisplay = wishlist.slice(0, 3);
+
+  return (
+    <div className="min-h-screen bg-background flex">
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:flex flex-col w-56 flex-shrink-0 border-r border-border sticky top-0 h-screen overflow-hidden">
+        <SidebarContent />
+      </aside>
+
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          <div className="absolute inset-0 bg-kryros-overlay-dark/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <div className="relative w-56 bg-background h-full flex flex-col shadow-2xl z-10 border-r border-border">
+            <SidebarContent />
+          </div>
+        </div>
+      )}
+
+      {/* Main */}
+      <main className="flex-1 min-w-0 overflow-y-auto">
+
+        {/* Top bar */}
+        <div className="sticky top-0 z-20 bg-[var(--kryros-header-navy)] border-b border-white/10 flex items-center justify-between px-4 md:px-6 py-3 shadow-sm">
+          <button
+            className="lg:hidden w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="w-5 h-5 text-white" />
+          </button>
+          <div className="hidden lg:block" />
+
+          <div className="flex items-center gap-3">
+            {/* Search */}
+            <Link href="/shop">
+              <button className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors">
+                <Search style={{ width: 18, height: 18 }} className="text-white" />
+              </button>
+            </Link>
+
+            {/* Wishlist */}
+            <Link href="/wishlist">
+              <button className="relative w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors">
+                <Heart style={{ width: 18, height: 18 }} className="text-white" />
+                {wishlist.length > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-white text-[8px] font-black flex items-center justify-center">
+                    {wishlist.length > 9 ? "9+" : wishlist.length}
+                  </span>
+                )}
+              </button>
+            </Link>
+
+            {/* Cart */}
+            <Link href="/cart">
+              <button className="relative w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors">
+                <ShoppingBag style={{ width: 18, height: 18 }} className="text-white" />
+              </button>
+            </Link>
+
+            {/* Notifications bell */}
+            <div className="relative">
+              <button
+                onClick={() => setNotifOpen((o) => !o)}
+                className={`relative w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors ${notifOpen ? 'bg-white/10' : ''}`}
+              >
+                <Bell style={{ width: 18, height: 18 }} className="text-white" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-white text-[8px] font-black flex items-center justify-center border-2 border-[var(--kryros-header-navy)]">
+                    {unreadCount > 9 ? "9+" : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Notification dropdown */}
+              {notifOpen && (
+                <>
+                  <div className="fixed inset-0 z-30" onClick={() => setNotifOpen(false)} />
+                  <div className="absolute right-0 mt-2 w-80 bg-card border border-border rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-4 border-b border-border flex items-center justify-between">
+                      <h3 className="text-sm font-bold flex items-center gap-2">
+                        <Bell className="w-3.5 h-3.5 text-primary" />
+                        Notifications
+                      </h3>
+                      {unreadCount > 0 && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); markAllAsRead(); }}
+                          className="text-[10px] font-bold text-primary hover:underline"
+                        >
+                          Mark all read
+                        </button>
+                      )}
+                    </div>
+                    <div className="max-h-[360px] overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className="py-10 px-4 text-center">
+                          <Bell className="w-8 h-8 text-muted-foreground/20 mx-auto mb-2" />
+                          <p className="text-xs text-muted-foreground">No notifications yet</p>
+                        </div>
+                      ) : (
+                        notifications.map((n) => (
+                          <div 
+                            key={n.id}
+                            onClick={() => {
+                              if (!n.isRead) markAsRead(n.id);
+                              if (n.data?.url) setLocation(n.data.url);
+                              setNotifOpen(false);
+                            }}
+                            className={`p-4 border-b border-border last:border-0 cursor-pointer hover:bg-muted transition-colors flex gap-3 items-start ${!n.isRead ? 'bg-primary/[0.03]' : ''}`}
+                          >
+                            <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${!n.isRead ? 'bg-primary' : 'bg-transparent'}`} />
+                            <div className="flex-1 min-w-0">
+                              <p className={`text-xs mb-0.5 truncate ${!n.isRead ? 'font-bold text-foreground' : 'font-medium text-muted-foreground'}`}>
+                                {n.title}
+                              </p>
+                              <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+                                {n.message}
+                              </p>
+                              <div className="flex items-center gap-1 mt-2 text-[9px] text-muted-foreground/60">
+                                <Clock className="w-2.5 h-2.5" />
+                                {new Date(n.createdAt).toLocaleDateString()}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                    <Link href="/track">
+                      <div 
+                        onClick={() => setNotifOpen(false)}
+                        className="p-3 bg-muted/30 text-center border-t border-border cursor-pointer hover:bg-muted transition-colors"
+                      >
+                        <span className="text-[11px] font-bold text-primary">View All History</span>
+                      </div>
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Avatar + profile */}
+            <div className="flex items-center gap-1.5">
+              <button onClick={() => { setActiveSection("profile"); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="flex items-center gap-1.5 cursor-pointer">
+                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0 ring-2 ring-primary/30 text-white text-xs font-black">
+                  {initials}
+                </div>
+                <span className="hidden md:block text-sm font-semibold text-white max-w-[100px] truncate">{displayName}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-white/70" />
+              </button>
+              <button onClick={handleLogout} className="p-1.5 rounded-lg hover:bg-white/10 text-white/70 hover:text-red-400 transition-colors" title="Logout">
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 pb-6 lg:pb-10">
+
+          {/* Profile Section */}
+          {activeSection === "profile" && <ProfileSection />}
+
+          {/* Addresses Section */}
+          {activeSection === "addresses" && <AddressesSection />}
+
+          {/* Credit Section */}
+          {activeSection === "credit" && <CreditSection />}
+
+          {/* Wholesale Section */}
+          {activeSection === "wholesale" && <WholesaleSection />}
+
+          {/* Overview Section */}
+          {activeSection === "overview" && (
+            <>
+              {/* Page header */}
+              <div className="mb-6">
+                <h1 className="text-2xl font-black text-foreground">Dashboard</h1>
+                <p className="text-sm text-muted-foreground">Welcome back, {firstName}!</p>
+              </div>
+
+              {/* 4 Stat cards */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                {[
+                  { icon: ShoppingBag, label: "Total Orders", value: ordersLoading ? "—" : String(recentOrders.length), href: "/track", iconBg: "var(--kryros-icon-bg-orders)", iconColor: "var(--kryros-primary)" },
+                  { icon: Heart, label: "Wishlist Items", value: wishlistLoading ? "—" : String(wishlist.length), href: "/wishlist", iconBg: "var(--kryros-icon-bg-wishlist)", iconColor: "var(--kryros-icon-color-wishlist)" },
+                  { icon: Zap, label: "Get Now Credit", value: "Apply", href: "/get-now", iconBg: "var(--kryros-icon-bg-credit)", iconColor: "var(--kryros-icon-color-credit)" },
+                  { icon: MapPin, label: "Addresses", value: profileLoading ? "—" : String(profile?.addresses?.length ?? 0), onClick: () => { setActiveSection("addresses"); window.scrollTo({ top: 0, behavior: "smooth" }); }, iconBg: "var(--kryros-icon-bg-address)", iconColor: "var(--kryros-icon-color-address)" },
+                ].map(({ icon: Icon, label, value, href, onClick, iconBg, iconColor }) => (
+                  <div key={label} onClick={onClick} className="cursor-pointer">
+                    {href ? (
+                      <Link href={href}>
+                        <div className="bg-card border border-border rounded-xl px-3 py-3 flex items-center gap-3 hover:shadow-sm hover:border-primary/20 transition-all">
+                          <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: iconBg }}>
+                            <Icon style={{ width: 18, height: 18, color: iconColor }} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-[10px] text-muted-foreground leading-tight truncate">{label}</p>
+                            <p className="text-base font-black text-foreground leading-tight">{value}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="bg-card border border-border rounded-xl px-3 py-3 flex items-center gap-3 hover:shadow-sm hover:border-primary/20 transition-all">
+                        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: iconBg }}>
+                          <Icon style={{ width: 18, height: 18, color: iconColor }} />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[10px] text-muted-foreground leading-tight truncate">{label}</p>
+                          <p className="text-base font-black text-foreground leading-tight">{value}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Recent Orders + Order Tracking */}
+              <div className="grid lg:grid-cols-2 gap-4 mb-4">
+
+                {/* Recent Orders */}
+                <div className="bg-card border border-border rounded-2xl p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-bold text-foreground">Recent Orders</h2>
+                    <Link href="/track">
+                      <span className="flex items-center gap-0.5 text-xs text-primary cursor-pointer hover:underline font-medium">
+                        View All Orders <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </Link>
+                  </div>
+                  <div className="space-y-1.5">
+                    {ordersLoading ? (
+                      [...Array(3)].map((_, i) => (
+                        <div key={i} className="flex items-center gap-3 rounded-xl p-2 animate-pulse">
+                          <div className="w-11 h-11 rounded-xl bg-muted flex-shrink-0" />
+                          <div className="flex-1 space-y-1.5">
+                            <div className="h-3 bg-muted rounded w-3/4" />
+                            <div className="h-2.5 bg-muted rounded w-1/2" />
+                          </div>
+                        </div>
+                      ))
+                    ) : recentOrders.length === 0 ? (
+                      <div className="flex flex-col items-center py-6 text-center">
+                        <Package className="w-10 h-10 text-muted-foreground/30 mb-2" />
+                        <p className="text-xs text-muted-foreground font-medium">No orders yet</p>
+                        <Link href="/shop">
+                          <span className="text-xs text-primary hover:underline cursor-pointer mt-1">Start shopping →</span>
+                        </Link>
+                      </div>
+                    ) : (
+                      recentOrders.map((order) => (
+                        <Link key={order.id} href="/track">
+                          <div className="flex items-center gap-3 rounded-xl p-2 hover:bg-muted/50 transition-all cursor-pointer">
+                            <img src={order.image} alt={order.name} className="w-11 h-11 object-cover rounded-xl bg-muted flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-semibold text-foreground truncate">{order.name}</p>
+                              <div className="flex items-center justify-between mt-0.5">
+                                <p className="text-[10px] text-muted-foreground font-medium">{order.orderId}</p>
+                                <p className="text-[10px] font-bold text-primary">{order.totalDisplay}</p>
+                              </div>
+                              <p className="text-[10px] text-muted-foreground mt-0.5">{order.date}</p>
+                            </div>
+                            <div className="flex items-center gap-1.5 flex-shrink-0">
+                              <span className={`text-[9px] font-bold px-2 py-1 rounded-full ${statusColors[order.status] ?? "bg-muted text-muted-foreground"}`}>
+                                {order.status}
+                              </span>
+                              <ChevronRight className="w-3 h-3 text-muted-foreground" />
+                            </div>
+                          </div>
+                        </Link>
+                      ))
+                    )}
+                  </div>
+                </div>
+
+                {/* Order Tracking */}
+                <div className="bg-card border border-border rounded-2xl p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-bold text-foreground">Order Tracking</h2>
+                    <Link href="/track">
+                      <span className="flex items-center gap-0.5 text-xs text-primary cursor-pointer hover:underline font-medium">
+                        Track Your Order <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </Link>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mb-2 font-medium">Latest Order</p>
+                  {recentOrders.length > 0 ? (
+                    <div className="flex items-center gap-3 mb-5 p-2 rounded-xl">
+                      <img src={recentOrders[0].image} alt={recentOrders[0].name} className="w-12 h-12 object-cover rounded-xl bg-muted flex-shrink-0" />
+                      <div>
+                        <p className="text-xs font-bold text-foreground">{recentOrders[0].name}</p>
+                        <p className="text-[10px] text-muted-foreground">Order ID: {recentOrders[0].orderId}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 mb-5 p-2 rounded-xl bg-muted/40">
+                      <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
+                        <Package className="w-5 h-5 text-muted-foreground/50" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-foreground">No orders yet</p>
+                        <p className="text-[10px] text-muted-foreground">Place an order to track it here</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-start mb-5 px-1">
+                    {liveTimeline.map((step, i) => (
+                      <div key={step.label} className="flex items-start flex-1">
+                        <div className="flex flex-col items-center flex-1">
+                          <div className="flex items-center w-full">
+                            {i > 0 && <div className={`flex-1 h-0.5 ${liveTimeline[i - 1].done ? "bg-primary" : "bg-border"}`} />}
+                            <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 z-10 border-2
+                              ${step.active ? "bg-primary border-primary ring-4 ring-primary/20"
+                                : step.done ? "bg-primary border-primary"
+                                : "bg-background border-border"}`}>
+                              {step.active && <Truck className="w-3.5 h-3.5 text-white" />}
+                              {step.done && !step.active && <Check className="w-3.5 h-3.5 text-white" />}
+                              {!step.done && !step.active && <MapPin className="w-3 h-3 text-muted-foreground" />}
+                            </div>
+                            {i < liveTimeline.length - 1 && <div className={`flex-1 h-0.5 ${step.done && !step.active ? "bg-primary" : "bg-border"}`} />}
+                          </div>
+                          <p className={`text-[9px] text-center mt-1.5 font-semibold leading-tight px-0.5
+                            ${step.active ? "text-primary" : step.done ? "text-foreground" : "text-muted-foreground"}`}>
+                            {step.label}
+                          </p>
+                          <p className="text-[8px] text-muted-foreground text-center mt-0.5">{step.date}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="bg-muted/40 rounded-2xl p-4 flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground mb-0.5">Estimated Delivery</p>
+                      <p className="text-lg font-black text-primary">
+                        {recentOrders.length > 0 ? recentOrders[0].estDelivery : "No active order"}
+                      </p>
+                    </div>
+                    <div className="flex-shrink-0 opacity-20">
+                      <svg viewBox="0 0 80 50" className="w-20 h-12" fill="none">
+                        <rect x="2" y="20" width="50" height="22" rx="3" fill="currentColor" className="text-foreground" />
+                        <polygon points="52,20 52,36 66,36 66,28" fill="currentColor" className="text-foreground" />
+                        <rect x="56" y="36" width="8" height="4" rx="2" fill="currentColor" className="text-muted-foreground" />
+                        <circle cx="14" cy="40" r="5" fill="currentColor" className="text-foreground" />
+                        <circle cx="14" cy="40" r="2" fill="white" />
+                        <circle cx="58" cy="40" r="5" fill="currentColor" className="text-foreground" />
+                        <circle cx="58" cy="40" r="2" fill="white" />
+                        <rect x="6" y="24" width="8" height="6" rx="1" fill="white" opacity="0.6" />
+                        <rect x="18" y="24" width="12" height="6" rx="1" fill="white" opacity="0.4" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Get Now Banner */}
+              <div
+                className="rounded-2xl overflow-hidden mb-4 relative"
+                style={{ background: "var(--kryros-get-now-gradient)" }}
+              >
+                <div className="flex items-center justify-between p-5 md:p-6">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-black text-white mb-1">Get More with Get Now</h3>
+                    <p className="text-white/60 text-xs mb-5 max-w-[220px] leading-relaxed">
+                      Shop now and pay later with flexible plans that suit you.
+                    </p>
+                    <Link href="/get-now">
+                      <button className="px-5 py-2.5 bg-white text-gray-900 rounded-xl font-bold text-sm hover:bg-white/90 transition-all">
+                        Explore Plans
+                      </button>
+                    </Link>
+                  </div>
+                  <div className="flex-shrink-0 relative hidden md:flex items-end gap-2" style={{ height: 120 }}>
+                    <div className="absolute -top-2 left-0 flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-xl px-2.5 py-1.5 backdrop-blur-sm z-10">
+                      <Check className="w-3 h-3 text-primary" />
+                      <span className="text-[10px] font-bold text-white">Instant Approval</span>
+                    </div>
+                    <div className="absolute -top-2 right-0 flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-xl px-2.5 py-1.5 backdrop-blur-sm z-10">
+                      <span className="text-[10px] font-bold text-white">0% Interest</span>
+                    </div>
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl flex-shrink-0 self-end">
+                      <div className="w-full h-full bg-primary/80 flex flex-col items-center justify-end pb-2">
+                        <ShoppingBag className="w-8 h-8 text-white/80 mb-1" />
+                        <span className="text-[8px] font-black text-white">KRYROS</span>
+                      </div>
+                    </div>
+                    <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-xl self-end flex-shrink-0">
+                      <img src="https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?w=100&q=80" alt="headphones" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="absolute bottom-0 right-0 flex items-center gap-1.5 bg-white/15 border border-white/20 rounded-xl px-2.5 py-1.5 backdrop-blur-sm z-10">
+                      <span className="text-[10px] font-bold text-white">Flexible Plans</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Wishlist + Saved Addresses */}
+              <div className="grid lg:grid-cols-2 gap-4 mb-6">
+
+                {/* Wishlist */}
+                <div className="bg-card border border-border rounded-2xl p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-bold text-foreground">Wishlist</h2>
+                    <Link href="/shop">
+                      <span className="flex items-center gap-0.5 text-xs text-primary cursor-pointer hover:underline font-medium">
+                        View All <ChevronRight className="w-3 h-3" />
+                      </span>
+                    </Link>
+                  </div>
+
+                  {wishlistLoading ? (
+                    <div className="flex gap-3 mb-4">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="flex flex-col items-center gap-1.5 flex-1 animate-pulse">
+                          <div className="w-full aspect-square rounded-xl bg-muted" />
+                          <div className="h-3 bg-muted rounded w-3/4" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : wishlistDisplay.length === 0 ? (
+                    <div className="flex flex-col items-center py-6 text-center mb-4">
+                      <Heart className="w-10 h-10 text-muted-foreground/30 mb-2" />
+                      <p className="text-xs text-muted-foreground font-medium">Your wishlist is empty</p>
+                      <p className="text-[10px] text-muted-foreground/70 mt-0.5">Save items you love while shopping</p>
+                    </div>
+                  ) : (
+                    <div className="flex gap-3 mb-4">
+                      {wishlistDisplay.map((item) => {
+                        const img = item.product?.images?.find((i) => i.isPrimary)?.url ?? item.product?.images?.[0]?.url;
+                        const price = item.product?.price != null
+                          ? format(Number(item.product.price))
+                          : "";
+                        return (
+                          <div key={item.id} className="flex flex-col items-center gap-1.5 flex-1">
+                            <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-muted">
+                              {img ? (
+                                <img src={img} alt={item.product?.name ?? "Product"} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <ShoppingBag className="w-6 h-6 text-muted-foreground/40" />
+                                </div>
+                              )}
+                              <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-white rounded-full flex items-center justify-center shadow-sm">
+                                <Heart className="w-3 h-3 fill-primary text-primary" />
+                              </div>
+                            </div>
+                            {price && <span className="text-[11px] font-bold text-foreground">{price}</span>}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  <Link href="/shop">
+                    <button className="w-full py-2.5 border border-border rounded-xl text-xs font-semibold text-foreground hover:bg-muted transition-colors">
+                      Go to Wishlist
+                    </button>
+                  </Link>
+                </div>
+
+                {/* Saved Addresses preview */}
+                <div className="bg-card border border-border rounded-2xl p-5">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-sm font-bold text-foreground">Saved Addresses</h2>
+                    <button
+                      onClick={() => { setActiveSection("addresses"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                      className="flex items-center gap-0.5 text-xs text-primary cursor-pointer hover:underline font-medium"
+                    >
+                      Manage All <ChevronRight className="w-3 h-3" />
+                    </button>
+                  </div>
+
+                  {profileLoading ? (
+                    <div className="space-y-3 mb-3">
+                      {[1, 2].map((i) => (
+                        <div key={i} className="flex items-start gap-3 p-3 bg-muted/40 rounded-xl animate-pulse">
+                          <div className="w-8 h-8 rounded-xl bg-muted flex-shrink-0" />
+                          <div className="flex-1 space-y-1.5">
+                            <div className="h-3 bg-muted rounded w-1/4" />
+                            <div className="h-2.5 bg-muted rounded w-3/4" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (profile?.addresses ?? []).length === 0 ? (
+                    <div className="flex flex-col items-center py-4 text-center mb-3">
+                      <MapPin className="w-8 h-8 text-muted-foreground/30 mb-1.5" />
+                      <p className="text-xs text-muted-foreground font-medium">No saved addresses</p>
+                      <p className="text-[10px] text-muted-foreground/70 mt-0.5">Added at checkout automatically</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3 mb-3">
+                      {(profile?.addresses ?? []).slice(0, 2).map((addr, i) => {
+                        const label = addr.label ?? (addr.isDefault ? "Default" : `Address ${i + 1}`);
+                        const IconComp = label.toLowerCase().includes("home") ? Home : Building2;
+                        const line1 = addr.street ?? "";
+                        const line2 = [addr.city, addr.state].filter(Boolean).join(", ");
+                        const line3 = [addr.zip, addr.country].filter(Boolean).join(" ");
+                        return (
+                          <div key={addr.id ?? i} className="flex items-start gap-3 p-3 bg-muted/40 rounded-xl">
+                            <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <IconComp className="w-4 h-4 text-primary" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-bold text-foreground mb-0.5">{label}</p>
+                              {[line1, line2, line3].filter(Boolean).map((ln, li) => (
+                                <p key={li} className="text-[10px] text-muted-foreground leading-snug">{ln}</p>
+                              ))}
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <button className="text-[10px] text-primary font-semibold hover:underline">Edit</button>
+                              <MoreVertical className="w-3.5 h-3.5 text-muted-foreground cursor-pointer" />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => { setActiveSection("addresses"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+                    className="flex items-center gap-1.5 text-primary text-xs font-semibold hover:bg-primary/5 px-3 py-2 rounded-xl transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    + Add New Address
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div>
+                <h2 className="text-sm font-bold text-foreground mb-3">Quick Actions</h2>
+                <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                  {quickActions.map(({ icon: Icon, label, sub, href, section }) => (
+                    <button
+                      key={label}
+                      onClick={() => {
+                        if (section) {
+                          setActiveSection(section);
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        } else if (href) {
+                          setLocation(href);
+                        }
+                      }}
+                      className="flex flex-col items-center text-center gap-2 p-3 bg-card border border-border rounded-2xl cursor-pointer hover:border-primary/30 hover:shadow-sm transition-all"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <Icon className="text-primary" style={{ width: 18, height: 18 }} />
+                      </div>
+                      <p className="text-[10px] font-bold text-foreground leading-tight">{label}</p>
+                      <p className="text-[9px] text-muted-foreground leading-tight hidden md:block">{sub}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+        </div>
+      </main>
+    </div>
+  );
+}

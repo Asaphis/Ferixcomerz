@@ -1,0 +1,42 @@
+name: ferixcomerz_admin_app
+description: "Ferixcomerz Admin Application"
+publish_to: 'none'
+version: 1.0.0+100
+
+environment:
+  sdk: '>=3.4.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  flutter_inappwebview: ^6.1.0
+  firebase_core: ^3.0.0
+  firebase_messaging: ^15.0.0
+  flutter_local_notifications: ^17.1.2
+  connectivity_plus: ^6.0.3
+  url_launcher: ^6.3.0
+  permission_handler: ^11.3.1
+  http: ^1.6.0
+  path_provider: ^2.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo_launcher.png"
+  adaptive_icon_background: "#C0151B"
+  adaptive_icon_foreground: "assets/k_foreground.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png
+    - assets/logo_circular.png
+    - assets/logo_launcher.png
+    - assets/k_foreground.png

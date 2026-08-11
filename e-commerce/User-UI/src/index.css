@@ -1,0 +1,431 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* =================================================
+     KRYROS UNIFIED COLOR SCHEME
+  ================================================= */
+  
+  /* PRIMARY COLORS */
+  --kryros-primary: #C0151B;
+  --kryros-primary-hover: #A01015;
+  --kryros-secondary: #344a64;
+  --kryros-white: #FFFFFF;
+  --kryros-black-primary: #000000;
+
+  /* NEUTRALS */
+  --kryros-light-gray: #FFFFFF;
+  --kryros-border-gray: #E5E5E5;
+  --kryros-medium-gray: #75757A;
+  --kryros-dark-gray: #535357;
+
+  /* BACKGROUND COLORS */
+  --kryros-main-bg: #FFFFFF;
+  --kryros-card-bg: #FFFFFF;
+  --kryros-footer-bg: #000000;
+  --kryros-secondary-bg: #FAFAFA;
+
+  /* BORDER & DIVIDER */
+  --kryros-border: #E5E5E5;
+  --kryros-divider: #E5E5E5;
+
+  /* BUTTON COLORS */
+  --kryros-primary-btn: #344a64;
+  --kryros-secondary-btn: #C0151B;
+  --kryros-dark-btn: #313133;
+  --kryros-disabled-btn: #C7C7CD;
+
+  /* TEXT COLORS */
+  --kryros-primary-text: #313133;
+  --kryros-secondary-text: #75757A;
+  --kryros-disabled-text: #9E9E9E;
+  --kryros-white-text: #FFFFFF;
+  --kryros-link: #2563EB;
+
+  /* STATUS / FEEDBACK COLORS */
+  --kryros-success: #2DBE60;
+  --kryros-error: #D63031;
+  --kryros-warning: #F68B1E;
+  --kryros-gold: #F6B01E;
+
+  /* SPECIAL EFFECTS / OVERLAYS */
+  --kryros-orange-glow: rgba(246,139,30,0.15);
+  --kryros-shadow: rgba(0,0,0,0.10);
+  --kryros-overlay: rgba(0,0,0,0.50);
+
+  /* QUANTITY BOX */
+  --kryros-quantity-bg: #313133;
+  --kryros-quantity-border: #E5E5E5;
+
+  /* ACCENT COLOR (Optional - for Events, Premium, Community) */
+  --kryros-accent-purple: #7C3AED;
+
+  /* RGB versions for opacity use */
+  --kryros-primary-rgb: 192, 21, 27;
+  --kryros-secondary-rgb: 52, 74, 100;
+  --kryros-header-navy: #001529;
+
+  /* BUTTON HOVER / ACTIVE STATES */
+  --kryros-primary-active: #8A0F13;
+
+  /* OVERLAY / BACKDROP COLORS */
+  --kryros-overlay-dark: rgba(0,0,0,0.62);
+  --kryros-overlay-navy: rgba(15,23,42,0.72);
+  --kryros-overlay-light: rgba(255,255,255,0.90);
+  --kryros-shadow-subtle: rgba(15,23,42,0.04);
+  --kryros-shadow-primary-sm: rgba(192,21,27,0.18);
+  --kryros-shadow-primary-md: rgba(192,21,27,0.25);
+  --kryros-shadow-primary-lg: rgba(192,21,27,0.30);
+  --kryros-shadow-primary-btn: rgba(192,21,27,0.45);
+
+  /* THIRD-PARTY / BRAND COLORS (not part of KRYROS palette — used for external services) */
+  --kryros-whatsapp: #25D366;
+  --kryros-map-marker: #0ea5e9;
+
+  /* ICON ACCENT COLORS (dashboard stat cards) */
+  --kryros-icon-bg-orders: rgba(192,21,27,0.08);
+  --kryros-icon-bg-wishlist: #fdf2f8;
+  --kryros-icon-color-wishlist: #ec4899;
+  --kryros-icon-bg-credit: #fff7ed;
+  --kryros-icon-color-credit: #f97316;
+  --kryros-icon-bg-address: #f5f3ff;
+  --kryros-icon-color-address: #8b5cf6;
+
+  /* GET NOW BANNER GRADIENT */
+  --kryros-get-now-gradient: linear-gradient(135deg, #07392f 0%, #0a5544 60%, #073d2e 100%);
+
+  /* WARNING / NOTICE COLORS */
+  --kryros-warning-bg: #fffbeb;
+  --kryros-warning-border: #fde68a;
+  --kryros-warning-text: #92400e;
+  --kryros-star-filled: #FFC107;
+
+  /* RECEIPT / PRINT COLORS (standalone HTML document) */
+  --kryros-receipt-bg: #f5f5f5;
+  --kryros-receipt-card: #ffffff;
+  --kryros-receipt-border: #f0f0f0;
+  --kryros-receipt-success: #22c55e;
+  --kryros-receipt-text-primary: #111111;
+  --kryros-receipt-text-secondary: #555555;
+  --kryros-receipt-label: #888888;
+  --kryros-receipt-muted: #aaaaaa;
+  --kryros-receipt-red: #b91c1c;
+  --kryros-receipt-teal: #27B9AF;
+
+  /* AUTH / FORM COLORS */
+  --kryros-form-bg: #FAFAFA;
+  --kryros-form-border: #E5E5E5;
+  --kryros-form-text-muted: #75757A;
+  --kryros-form-text-hint: #9E9E9E;
+  --kryros-form-text-label: #A0A0A5;
+  --kryros-form-error-bg: #FFF0F0;
+  --kryros-form-error-border: #FFD0D0;
+  --kryros-form-info-bg: #F0F7FF;
+  --kryros-form-info-border: #D0E0F0;
+  --kryros-form-success-bg: #E8F5E9;
+  --kryros-form-success-icon: #2DBE60;
+  --kryros-form-strength-bar-bg: #E5E5E5;
+  --kryros-page-bg-start: #FAFAFA;
+  --kryros-page-bg-end: #FFFFFF;
+  --kryros-card-shadow: rgba(0,0,0,0.08);
+
+  /* ANNOUNCEMENT BAR */
+  --kryros-announcement-text: #333333;
+  --kryros-announcement-closed-bg: #dc2626;
+  --kryros-announcement-closed-text: #ffffff;
+
+  /* SOCIAL BRAND COLORS */
+  --kryros-social-facebook: #1877F2;
+  --kryros-social-instagram: #E4405F;
+  --kryros-social-twitter: #1DA1F2;
+  --kryros-social-youtube: #FF0000;
+}
+
+@theme inline {
+  /* Background & Foreground */
+  --color-background: var(--kryros-main-bg);
+  --color-foreground: var(--kryros-primary-text);
+  --color-border: var(--kryros-border);
+  --color-input: var(--kryros-border);
+  --color-ring: var(--kryros-primary);
+
+  /* Card */
+  --color-card: var(--kryros-card-bg);
+  --color-card-foreground: var(--kryros-primary-text);
+  --color-card-border: var(--kryros-border);
+
+  /* Popover */
+  --color-popover: var(--kryros-white);
+  --color-popover-foreground: var(--kryros-primary-text);
+  --color-popover-border: var(--kryros-border);
+
+  /* Primary */
+  --color-primary: var(--kryros-primary-btn);
+  --color-primary-foreground: var(--kryros-white-text);
+  --color-primary-border: var(--kryros-primary-btn);
+
+  /* Secondary */
+  --color-secondary: var(--kryros-secondary-btn);
+  --color-secondary-foreground: var(--kryros-white-text);
+  --color-secondary-border: var(--kryros-secondary-btn);
+
+  /* Muted */
+  --color-muted: var(--kryros-secondary-bg);
+  --color-muted-foreground: var(--kryros-secondary-text);
+  --color-muted-border: var(--kryros-border);
+
+  /* Accent */
+  --color-accent: var(--kryros-secondary-bg);
+  --color-accent-foreground: var(--kryros-primary-text);
+  --color-accent-border: var(--kryros-border);
+
+  /* Destructive */
+  --color-destructive: var(--kryros-error);
+  --color-destructive-foreground: var(--kryros-white-text);
+  --color-destructive-border: var(--kryros-error);
+
+  /* Chart Colors */
+  --color-chart-1: var(--kryros-primary);
+  --color-chart-2: var(--kryros-success);
+  --color-chart-3: var(--kryros-warning);
+  --color-chart-4: var(--kryros-gold);
+  --color-chart-5: var(--kryros-link);
+
+  /* Sidebar */
+  --color-sidebar: var(--kryros-secondary-bg);
+  --color-sidebar-foreground: var(--kryros-primary-text);
+  --color-sidebar-border: var(--kryros-border);
+  --color-sidebar-primary: var(--kryros-primary);
+  --color-sidebar-primary-foreground: var(--kryros-white-text);
+  --color-sidebar-primary-border: var(--kryros-primary);
+  --color-sidebar-accent: var(--kryros-secondary-bg);
+  --color-sidebar-accent-foreground: var(--kryros-primary-text);
+  --color-sidebar-accent-border: var(--kryros-border);
+  --color-sidebar-ring: var(--kryros-primary);
+
+  /* KRYROS Custom Colors */
+  --color-kryros-primary: var(--kryros-primary);
+  --color-kryros-primary-hover: var(--kryros-primary-hover);
+  --color-kryros-secondary: var(--kryros-secondary);
+  --color-kryros-gold: var(--kryros-gold);
+  --color-kryros-danger: var(--kryros-error);
+  --color-kryros-success: var(--kryros-success);
+  --color-kryros-warning: var(--kryros-warning);
+  --color-kryros-accent-purple: var(--kryros-accent-purple);
+  --color-kryros-link: var(--kryros-link);
+  --color-kryros-error: var(--kryros-error);
+
+  --font-sans: 'Roboto', sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Custom Scrollbar — vertical only (page scroll) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 0px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Hide horizontal scrollbars on all scrollable rows */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Prevent horizontal overflow/shake on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Floating animation keyframes */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, hsl(var(--muted)) 4%, hsl(var(--muted-foreground) / 0.2) 25%, hsl(var(--muted)) 36%);
+  background-size: 1000px 100%;
+}
+
+/* ===== Bottom Navigation - Exact HTML Match ===== */
+.nav-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  padding: 0 12px;
+  margin: 0 auto;
+}
+
+.nav-bar {
+  position: relative;
+  height: 56px;
+  background: var(--kryros-white);
+  border-radius: 22px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px;
+  z-index: 1;
+}
+
+.nav-notch {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  background: var(--kryros-secondary-bg);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.pay-btn {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 44px;
+  background: var(--kryros-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  z-index: 3;
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  padding-top: 6px;
+}
+
+.nav-item .icon {
+  width: 15px;
+  height: 15px;
+  transition: stroke 0.2s ease, color 0.2s ease;
+}
+
+.nav-item .label {
+  font-size: 10px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  letter-spacing: 0.2px;
+}
+
+.nav-item.active .icon,
+.nav-item.active .label {
+  color: var(--kryros-primary);
+  stroke: var(--kryros-primary);
+}
+
+.nav-item:not(.active) .icon,
+.nav-item:not(.active) .label {
+  color: var(--kryros-secondary-text);
+  stroke: var(--kryros-secondary-text);
+}
+
+.nav-item.active svg {
+  stroke: var(--kryros-primary);
+}
+
+.nav-item:not(.active) svg {
+  stroke: var(--kryros-secondary-text);
+}
+
+.icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 12px;
+  height: 12px;
+  background: var(--kryros-primary);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--kryros-white-text);
+  padding: 0 2px;
+}
+
+
+

@@ -1,0 +1,619 @@
+'use client';
+import { useState, useEffect } from 'react';
+import AdminShell from '@/components/admin/admin-shell';
+import DataTable, { Column } from '@/components/admin/data-table';
+import PageHeader from '@/components/admin/page-header';
+import { Modal, ConfirmDialog, FormField, ModalFooter } from '@/components/admin/modal';
+import { MapPin } from 'lucide-react';
+import toast from 'react-hot-toast';
+import CloudinaryUpload from '@/components/ui/file-upload';
+import {
+  getCountries, createCountry, updateCountry,
+  getStates, createState, updateState, deleteState,
+  getCities, createCity, updateCity, deleteCity,
+  getPickupStations, createPickupStation, updatePickupStation, togglePickupStation, deletePickupStation,
+} from '@/lib/api';
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+type Country = {
+  id: string; name: string; code: string; currency: string; symbol: string;
+  rate: number; status: string; shippingEnabled: boolean; symbolPosition: string;
+  autoRate: boolean; flag: string; isDefault: boolean;
+};
+type StateRow = { id: string; name: string; code: string; countryId: string; countryName: string; status: string; cities: number };
+type CityRow  = { id: string; name: string; stateId: string; stateName: string; status: string };
+type PickupStation = {
+  id: string; name: string; address: string; city: string; state: string; country: string;
+  phone: string; email: string; openingHours: string; description: string;
+  latitude: string; longitude: string; status: string; image: string;
+};
+
+const EMPTY_STATE  = { name: '', code: '', countryId: '', countryName: '', status: 'Active', cities: 0 };
+const EMPTY_CITY   = { name: '', stateId: '', stateName: '', status: 'Active' };
+const EMPTY_PICKUP = {
+  name: '', address: '', city: '', state: '', country: 'Zambia',
+  phone: '', email: '', openingHours: '', description: '',
+  latitude: '', longitude: '', status: 'Active', image: '',
+};
+const EMPTY_CFORM = {
+  name: '', code: '', currency: '', symbol: '', rate: '1',
+  shipping: 'true', status: 'Active', symbolPosition: 'BEFORE',
+  autoRate: 'true', flag: '', isDefault: 'false', shippingEnabled: 'true',
+};
+
+function LocationsContent() {
+  const card    = 'var(--card)';
+  const border  = 'var(--border)';
+  const textMain = 'var(--text-main)';
+  const textMuted = 'var(--text-muted)';
+  const surface  = 'var(--surface)';
+
+  type Tab = 'countries' | 'states' | 'cities' | 'pickups';
+  const [tab, setTab] = useState<Tab>('countries');
+
+  // Shared lists used by child tabs
+  const [countriesList, setCountriesList] = useState<{ id: string; name: string }[]>([]);
+  const [statesList,    setStatesList]    = useState<{ id: string; name: string }[]>([]);
+
+  const loadCountriesList = () => {
+    getCountries().then((r: any) => {
+      const raw = Array.isArray(r.data?.data) ? r.data.data : Array.isArray(r.data) ? r.data : [];
+      setCountriesList(raw.map((c: any) => ({ id: c.id, name: c.name })));
+    }).catch(() => {});
+  };
+
+  useEffect(() => { loadCountriesList(); }, []);
+
+  // ── COUNTRIES ────────────────────────────────────────────────
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [editCountry, setEditCountry]     = useState<Country | null>(null);
+  const [addCountryOpen, setAddCountryOpen] = useState(false);
+  const [loadingCountry, setLoadingCountry] = useState(false);
+  const [cForm, setCForm] = useState({ rate: '', status: 'Active', symbolPosition: 'BEFORE', autoRate: 'true', flag: '', isDefault: 'false', shippingEnabled: 'true' });
+  const [addCForm, setAddCForm] = useState({ ...EMPTY_CFORM });
+  const cfp  = (k: string) => (v: string) => setCForm(f => ({ ...f, [k]: v }));
+  const acfp = (k: string) => (v: string) => setAddCForm(f => ({ ...f, [k]: v }));
+
+  const fetchCountries = () => {
+    getCountries().then((r: any) => {
+      const raw: any[] = Array.isArray(r.data?.data) ? r.data.data : Array.isArray(r.data) ? r.data : [];
+      setCountries(raw.map((c: any) => ({
+        id: c.id || '', name: c.name || '', code: c.code || '',
+        currency: c.currencyCode || c.currency || '',
+        symbol: c.currencySymbol || c.symbol || '',
+        rate: Number(c.exchangeRate || c.rate || 1),
+        status: c.isActive !== false ? 'Active' : 'Inactive',
+        shippingEnabled: c.shippingEnabled !== false,
+        symbolPosition: c.symbolPosition || 'BEFORE',
+        autoRate: c.autoRate !== false,
+        flag: c.flag || '',
+        isDefault: c.isDefault === true,
+      })));
+    }).catch(() => {});
+  };
+
+  useEffect(() => { if (tab === 'countries') fetchCountries(); }, [tab]);
+
+  const handleSaveCountry = async () => {
+    if (!editCountry) return;
+    setLoadingCountry(true);
+    try {
+      await updateCountry(editCountry.id, {
+        exchangeRate: Number(cForm.rate),
+        status: cForm.status === 'Active',
+        autoRate: cForm.autoRate === 'true',
+        symbolPosition: cForm.symbolPosition,
+        flag: cForm.flag || undefined,
+        shippingEnabled: cForm.shippingEnabled === 'true',
+        isDefault: cForm.isDefault === 'true',
+      });
+      toast.success('Country updated');
+      setEditCountry(null);
+      fetchCountries();
+      loadCountriesList();
+    } catch { toast.error('Failed to update country'); }
+    setLoadingCountry(false);
+  };
+
+  const handleAddCountry = async () => {
+    if (!addCForm.name.trim() || !addCForm.code.trim() || !addCForm.currency.trim()) {
+      toast.error('Name, code and currency are required'); return;
+    }
+    setLoadingCountry(true);
+    try {
+      await createCountry({
+        name: addCForm.name,
+        code: addCForm.code.toUpperCase(),
+        currencyCode: addCForm.currency.toUpperCase(),
+        currencySymbol: addCForm.symbol,
+        exchangeRate: Number(addCForm.rate) || 1,
+        status: addCForm.status === 'Active',
+        symbolPosition: addCForm.symbolPosition || 'BEFORE',
+        autoRate: addCForm.autoRate === 'true',
+        flag: addCForm.flag || undefined,
+        shippingEnabled: addCForm.shippingEnabled !== 'false',
+        isDefault: addCForm.isDefault === 'true',
+      });
+      toast.success('Country added');
+      setAddCountryOpen(false);
+      setAddCForm({ ...EMPTY_CFORM });
+      fetchCountries();
+      loadCountriesList();
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message || 'Failed to add country');
+    }
+    setLoadingCountry(false);
+  };
+
+  // ── STATES ─────────────────────────────────────────────────
+  const [states, setStates] = useState<StateRow[]>([]);
+  const [addStateOpen,  setAddStateOpen]  = useState(false);
+  const [editState,     setEditState]     = useState<StateRow | null>(null);
+  const [deleteState_row, setDeleteState] = useState<StateRow | null>(null);
+  const [stateForm, setStateForm]         = useState({ ...EMPTY_STATE });
+  const [loadingState, setLoadingState]   = useState(false);
+  const sfp = (k: string) => (v: string) => setStateForm(f => ({ ...f, [k]: v }));
+
+  useEffect(() => {
+    if (tab !== 'states') return;
+    getStates().then((r: any) => {
+      const raw = Array.isArray(r.data?.data) ? r.data.data : Array.isArray(r.data) ? r.data : [];
+      setStates(raw.map((s: any) => ({
+        id: s.id || '', name: s.name || '', code: s.code || '',
+        countryId: s.countryId || '', countryName: s.country?.name || '',
+        status: s.isActive !== false ? 'Active' : 'Inactive',
+        cities: s._count?.cities ?? 0,
+      })));
+    }).catch(() => {});
+  }, [tab]);
+
+  const handleAddState = async () => {
+    if (!stateForm.name.trim() || !stateForm.countryId) { toast.error('Name and country required'); return; }
+    setLoadingState(true);
+    try {
+      const res: any = await createState({ name: stateForm.name, code: stateForm.code || undefined, countryId: stateForm.countryId, isActive: stateForm.status === 'Active' });
+      const id = res?.data?.id || String(Date.now());
+      setStates(d => [...d, { id, ...stateForm }]);
+      toast.success('State/Province added');
+      setAddStateOpen(false);
+      setStateForm({ ...EMPTY_STATE });
+    } catch (e: any) { toast.error(e?.response?.data?.message || 'Failed to add state'); }
+    setLoadingState(false);
+  };
+
+  const handleEditState = async () => {
+    if (!editState) return;
+    setLoadingState(true);
+    try {
+      await updateState(editState.id, { name: stateForm.name, code: stateForm.code || undefined, isActive: stateForm.status === 'Active' });
+      setStates(d => d.map(s => s.id === editState.id ? { ...s, ...stateForm } : s));
+      toast.success('State updated');
+      setEditState(null);
+    } catch { toast.error('Failed to update state'); }
+    setLoadingState(false);
+  };
+
+  const handleDeleteState = async () => {
+    if (!deleteState_row) return;
+    setLoadingState(true);
+    try {
+      await deleteState(deleteState_row.id);
+      setStates(d => d.filter(s => s.id !== deleteState_row.id));
+      toast.success('State deleted');
+      setDeleteState(null);
+    } catch { toast.error('Failed to delete state'); }
+    setLoadingState(false);
+  };
+
+  // ── CITIES ─────────────────────────────────────────────────
+  const [cities, setCities] = useState<CityRow[]>([]);
+  const [addCityOpen,  setAddCityOpen]  = useState(false);
+  const [editCity,     setEditCity]     = useState<CityRow | null>(null);
+  const [deleteCity_row, setDeleteCity] = useState<CityRow | null>(null);
+  const [cityForm, setCityForm]         = useState({ ...EMPTY_CITY });
+  const [loadingCity, setLoadingCity]   = useState(false);
+  const cyfp = (k: string) => (v: string) => setCityForm(f => ({ ...f, [k]: v }));
+
+  useEffect(() => {
+    if (tab !== 'cities') return;
+    getCities().then((r: any) => {
+      const raw = Array.isArray(r.data?.data) ? r.data.data : Array.isArray(r.data) ? r.data : [];
+      setCities(raw.map((c: any) => ({
+        id: c.id || '', name: c.name || '',
+        stateId: c.stateId || '', stateName: c.state?.name || '',
+        status: c.isActive !== false ? 'Active' : 'Inactive',
+      })));
+    }).catch(() => {});
+    getStates().then((r: any) => {
+      const raw = Array.isArray(r.data?.data) ? r.data.data : Array.isArray(r.data) ? r.data : [];
+      setStatesList(raw.map((s: any) => ({ id: s.id, name: s.name })));
+    }).catch(() => {});
+  }, [tab]);
+
+  const handleAddCity = async () => {
+    if (!cityForm.name.trim() || !cityForm.stateId) { toast.error('Name and state required'); return; }
+    setLoadingCity(true);
+    try {
+      const res: any = await createCity({ name: cityForm.name, stateId: cityForm.stateId, isActive: cityForm.status === 'Active' });
+      const id = res?.data?.id || String(Date.now());
+      setCities(d => [...d, { id, ...cityForm }]);
+      toast.success('City added');
+      setAddCityOpen(false);
+      setCityForm({ ...EMPTY_CITY });
+    } catch (e: any) { toast.error(e?.response?.data?.message || 'Failed to add city'); }
+    setLoadingCity(false);
+  };
+
+  const handleEditCity = async () => {
+    if (!editCity) return;
+    setLoadingCity(true);
+    try {
+      await updateCity(editCity.id, { name: cityForm.name, isActive: cityForm.status === 'Active' });
+      setCities(d => d.map(c => c.id === editCity.id ? { ...c, ...cityForm } : c));
+      toast.success('City updated');
+      setEditCity(null);
+    } catch { toast.error('Failed to update city'); }
+    setLoadingCity(false);
+  };
+
+  const handleDeleteCity = async () => {
+    if (!deleteCity_row) return;
+    setLoadingCity(true);
+    try {
+      await deleteCity(deleteCity_row.id);
+      setCities(d => d.filter(c => c.id !== deleteCity_row.id));
+      toast.success('City deleted');
+      setDeleteCity(null);
+    } catch { toast.error('Failed to delete city'); }
+    setLoadingCity(false);
+  };
+
+  // ── PICKUP STATIONS ─────────────────────────────────────────
+  const [pickups, setPickups]           = useState<PickupStation[]>([]);
+  const [addPickupOpen, setAddPickupOpen] = useState(false);
+  const [editPickup,    setEditPickup]    = useState<PickupStation | null>(null);
+  const [deletePickup,  setDeletePickup]  = useState<PickupStation | null>(null);
+  const [pickupForm, setPickupForm]       = useState({ ...EMPTY_PICKUP });
+  const [loadingPickup, setLoadingPickup] = useState(false);
+  const pfp = (k: string) => (v: string) => setPickupForm(f => ({ ...f, [k]: v }));
+
+  useEffect(() => {
+    if (tab !== 'pickups') return;
+    getPickupStations().then((r: any) => {
+      const raw = Array.isArray(r.data?.data) ? r.data.data : Array.isArray(r.data) ? r.data : [];
+      setPickups(raw.map((p: any) => ({
+        id: p.id || '', name: p.name || '', address: p.address || '',
+        city: p.city || '', state: p.state || '', country: p.country || 'Zambia',
+        phone: p.phone || '', email: p.email || '',
+        openingHours: p.openingHours || '', description: p.description || '',
+        latitude: p.latitude ? String(p.latitude) : '', longitude: p.longitude ? String(p.longitude) : '',
+        status: p.isActive !== false ? 'Active' : 'Inactive',
+        image: p.image || '',
+      })));
+    }).catch(() => {});
+  }, [tab]);
+
+  const handleAddPickup = async () => {
+    if (!pickupForm.name.trim() || !pickupForm.address.trim() || !pickupForm.city.trim()) {
+      toast.error('Name, address and city required'); return;
+    }
+    setLoadingPickup(true);
+    try {
+      const res: any = await createPickupStation({
+        name: pickupForm.name, address: pickupForm.address, city: pickupForm.city,
+        state: pickupForm.state || undefined, country: pickupForm.country || 'Zambia',
+        phone: pickupForm.phone || undefined, email: pickupForm.email || undefined,
+        openingHours: pickupForm.openingHours || undefined, description: pickupForm.description || undefined,
+        latitude: pickupForm.latitude ? Number(pickupForm.latitude) : undefined,
+        longitude: pickupForm.longitude ? Number(pickupForm.longitude) : undefined,
+        image: pickupForm.image || undefined,
+        isActive: pickupForm.status === 'Active',
+      });
+      const id = res?.data?.id || String(Date.now());
+      setPickups(d => [...d, { id, ...pickupForm }]);
+      toast.success('Pickup station added');
+      setAddPickupOpen(false);
+      setPickupForm({ ...EMPTY_PICKUP });
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message || 'Failed to add pickup station');
+    }
+    setLoadingPickup(false);
+  };
+
+  const handleEditPickup = async () => {
+    if (!editPickup) return;
+    setLoadingPickup(true);
+    try {
+      await updatePickupStation(editPickup.id, {
+        name: pickupForm.name, address: pickupForm.address, city: pickupForm.city,
+        state: pickupForm.state || undefined, country: pickupForm.country,
+        phone: pickupForm.phone || undefined, email: pickupForm.email || undefined,
+        openingHours: pickupForm.openingHours || undefined, description: pickupForm.description || undefined,
+        latitude: pickupForm.latitude ? Number(pickupForm.latitude) : undefined,
+        longitude: pickupForm.longitude ? Number(pickupForm.longitude) : undefined,
+        image: pickupForm.image || undefined,
+        isActive: pickupForm.status === 'Active',
+      });
+      setPickups(d => d.map(p => p.id === editPickup.id ? { ...p, ...pickupForm } : p));
+      toast.success('Pickup station updated');
+      setEditPickup(null);
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message || 'Failed to update pickup station');
+    }
+    setLoadingPickup(false);
+  };
+
+  const handleTogglePickup = async (p: PickupStation) => {
+    const next = p.status !== 'Active';
+    try {
+      await togglePickupStation(p.id, next);
+      setPickups(d => d.map(x => x.id === p.id ? { ...x, status: next ? 'Active' : 'Inactive' } : x));
+      toast.success(next ? 'Station activated' : 'Station deactivated');
+    } catch { toast.error('Failed to toggle status'); }
+  };
+
+  const handleDeletePickup = async () => {
+    if (!deletePickup) return;
+    setLoadingPickup(true);
+    try {
+      await deletePickupStation(deletePickup.id);
+      setPickups(d => d.filter(p => p.id !== deletePickup.id));
+      toast.success('Pickup station deleted');
+      setDeletePickup(null);
+    } catch (e: any) {
+      toast.error(e?.response?.data?.message || 'Failed to delete pickup station');
+    }
+    setLoadingPickup(false);
+  };
+
+  // ── Columns ────────────────────────────────────────────────
+  const countryColumns: Column[] = [
+    { key: 'flag',   label: '', render: (v) => <span style={{ fontSize: '20px' }}>{String(v || '🌍')}</span>, width: '40px' },
+    { key: 'code',   label: 'Code', render: (v) => <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '13px' }}>{String(v)}</span>, width: '70px' },
+    { key: 'name',   label: 'Country', render: (v) => <span style={{ fontWeight: 600, color: textMain }}>{String(v)}</span> },
+    { key: 'currency', label: 'Currency', render: (v, row) => { const r = row as unknown as Country; return <span style={{ color: textMain }}><b>{String(v)}</b> {r.symbol}</span>; } },
+    { key: 'shippingEnabled', label: 'Shipping', render: (v) => <span style={{ padding: '3px 8px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: v ? 'rgba(192,21,27,0.10)' : 'rgba(239,68,68,0.1)', color: v ? 'var(--primary)' : 'var(--danger)' }}>{v ? 'Enabled' : 'Disabled'}</span> },
+    { key: 'status', label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'isDefault', label: 'Default', render: (v) => v ? <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: '12px' }}>★ Default</span> : <span style={{ color: textMuted, fontSize: '12px' }}>—</span> },
+  ];
+
+  const stateColumns: Column[] = [
+    { key: 'name',        label: 'State / Province', render: (v) => <span style={{ fontWeight: 600, color: textMain }}>{String(v)}</span> },
+    { key: 'code',        label: 'Code', render: (v) => <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>{String(v) || '—'}</span>, width: '70px' },
+    { key: 'countryName', label: 'Country', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
+    { key: 'cities',      label: 'Cities', render: (v) => <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>{String(v)}</span>, width: '70px' },
+    { key: 'status',      label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+  ];
+
+  const cityColumns: Column[] = [
+    { key: 'name',      label: 'City', render: (v) => <span style={{ fontWeight: 600, color: textMain }}>{String(v)}</span> },
+    { key: 'stateName', label: 'State / Province', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
+    { key: 'status',    label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+  ];
+
+  const pickupColumns: Column[] = [
+    { key: 'name',    label: 'Station Name', render: (v) => <span style={{ fontWeight: 600, color: textMain }}>{String(v)}</span> },
+    { key: 'address', label: 'Address', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v).slice(0, 40)}</span> },
+    { key: 'city',    label: 'City', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v)}</span> },
+    { key: 'phone',   label: 'Phone', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
+    { key: 'openingHours', label: 'Hours', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
+    {
+      key: 'status', label: 'Status', render: (v, row) => {
+        const p = row as unknown as PickupStation;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span>
+            <button onClick={() => handleTogglePickup(p)} style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(52,74,100,0.30)', background: 'rgba(52,74,100,0.08)', color: 'var(--secondary)', cursor: 'pointer', fontWeight: 600 }}>
+              {v === 'Active' ? 'Deactivate' : 'Activate'}
+            </button>
+          </div>
+        );
+      }
+    },
+  ];
+
+  const tabStyle = (active: boolean) => ({
+    padding: '8px 18px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+    background: active ? 'var(--primary)' : 'transparent', color: active ? '#fff' : textMuted, border: 'none',
+  });
+
+  const ADD_LABELS   = { countries: 'Add Country', states: 'Add State', cities: 'Add City', pickups: 'Add Pickup Station' };
+  const ADD_HANDLERS = {
+    countries: () => { setAddCForm({ ...EMPTY_CFORM }); setAddCountryOpen(true); },
+    states:    () => { setStateForm({ ...EMPTY_STATE }); setAddStateOpen(true); },
+    cities:    () => { setCityForm({ ...EMPTY_CITY }); setAddCityOpen(true); },
+    pickups:   () => { setPickupForm({ ...EMPTY_PICKUP }); setAddPickupOpen(true); },
+  };
+
+  const selStyle = { width: '100%', background: surface, border: `1px solid ${border}`, borderRadius: '9px', color: textMain, fontSize: '13.5px', outline: 'none', padding: '10px 14px', cursor: 'pointer' };
+
+  return (
+    <div>
+      <PageHeader
+        title="Locations"
+        subtitle="Manage countries, states, cities and pickup stations"
+        icon={MapPin}
+        onAdd={ADD_HANDLERS[tab]}
+        addLabel={ADD_LABELS[tab]}
+      />
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: '6px', marginBottom: '20px', flexWrap: 'wrap' }}>
+        {([
+          { key: 'countries', label: 'Countries',          count: countries.length },
+          { key: 'states',    label: 'States / Provinces', count: states.length },
+          { key: 'cities',    label: 'Cities',             count: cities.length },
+          { key: 'pickups',   label: 'Pickup Stations',    count: pickups.length },
+        ] as { key: Tab; label: string; count: number }[]).map(t => (
+          <button key={t.key} style={tabStyle(tab === t.key)} onClick={() => setTab(t.key)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── COUNTRIES ── */}
+      {tab === 'countries' && (
+        <>
+          <DataTable
+            columns={countryColumns}
+            data={countries as unknown as Record<string, unknown>[]}
+            searchPlaceholder="Search countries..."
+            onEdit={(row) => {
+              const r = row as unknown as Country;
+              setCForm({ rate: String(r.rate), status: r.status, symbolPosition: r.symbolPosition || 'BEFORE', autoRate: String(r.autoRate), flag: r.flag || '', isDefault: String(r.isDefault), shippingEnabled: String(r.shippingEnabled !== false) });
+              setEditCountry(r);
+            }}
+          />
+          {/* Edit Country Modal */}
+          <Modal open={!!editCountry} onClose={() => setEditCountry(null)} title={`Edit Country: ${editCountry?.name ?? ''}`}>
+            <FormField label="Exchange Rate (vs USD)" value={cForm.rate} onChange={cfp('rate')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 27.5" />
+            <FormField label="Symbol Position" value={cForm.symbolPosition} onChange={cfp('symbolPosition')} options={['BEFORE', 'AFTER']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Flag Emoji" value={cForm.flag} onChange={cfp('flag')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 🇿🇲" />
+            <FormField label="Auto Update Rate" value={cForm.autoRate} onChange={cfp('autoRate')} options={['true', 'false']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Shipping Enabled" value={cForm.shippingEnabled} onChange={cfp('shippingEnabled')} options={['true', 'false']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Set as Default Country" value={cForm.isDefault} onChange={cfp('isDefault')} options={['false', 'true']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Status" value={cForm.status} onChange={cfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setEditCountry(null)} onSubmit={handleSaveCountry} loading={loadingCountry} submitLabel="Save Changes" border={border} textMain={textMain} />
+          </Modal>
+          {/* Add Country Modal */}
+          <Modal open={addCountryOpen} onClose={() => setAddCountryOpen(false)} title="Add New Country">
+            <FormField label="Country Name *" value={addCForm.name} onChange={acfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Zambia" />
+            <FormField label="Country Code * (2-letter)" value={addCForm.code} onChange={acfp('code')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. ZM" />
+            <FormField label="Currency Code * (3-letter)" value={addCForm.currency} onChange={acfp('currency')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. ZMW" />
+            <FormField label="Currency Symbol" value={addCForm.symbol} onChange={acfp('symbol')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. ZK" />
+            <FormField label="Exchange Rate (vs USD)" value={addCForm.rate} onChange={acfp('rate')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 27.5" />
+            <FormField label="Symbol Position" value={addCForm.symbolPosition} onChange={acfp('symbolPosition')} options={['BEFORE', 'AFTER']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Flag Emoji" value={addCForm.flag} onChange={acfp('flag')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 🇿🇲" />
+            <FormField label="Auto Update Rate" value={addCForm.autoRate} onChange={acfp('autoRate')} options={['true', 'false']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Shipping Enabled" value={addCForm.shippingEnabled} onChange={acfp('shippingEnabled')} options={['true', 'false']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Status" value={addCForm.status} onChange={acfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setAddCountryOpen(false)} onSubmit={handleAddCountry} loading={loadingCountry} submitLabel="Add Country" border={border} textMain={textMain} />
+          </Modal>
+        </>
+      )}
+
+      {/* ── STATES ── */}
+      {tab === 'states' && (
+        <>
+          <DataTable
+            columns={stateColumns}
+            data={states as unknown as Record<string, unknown>[]}
+            searchPlaceholder="Search states..."
+            onEdit={(row) => { const s = row as unknown as StateRow; setStateForm({ name: s.name, code: s.code, countryId: s.countryId, countryName: s.countryName, status: s.status, cities: s.cities }); setEditState(s); }}
+            onDelete={(row) => setDeleteState(row as unknown as StateRow)}
+          />
+          <Modal open={addStateOpen} onClose={() => setAddStateOpen(false)} title="Add State / Province">
+            <FormField label="State / Province Name *" value={stateForm.name} onChange={sfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Lusaka Province" />
+            <FormField label="State Code" value={stateForm.code} onChange={sfp('code')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. LP" />
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Country *</div>
+              <select value={stateForm.countryId} onChange={e => { const c = countriesList.find(x => x.id === e.target.value); sfp('countryId')(e.target.value); if (c) sfp('countryName')(c.name); }} style={selStyle}>
+                <option value="">Select country...</option>
+                {countriesList.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <FormField label="Status" value={stateForm.status} onChange={sfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setAddStateOpen(false)} onSubmit={handleAddState} loading={loadingState} submitLabel="Add State" border={border} textMain={textMain} />
+          </Modal>
+          <Modal open={!!editState} onClose={() => setEditState(null)} title={`Edit State: ${editState?.name ?? ''}`}>
+            <FormField label="State / Province Name *" value={stateForm.name} onChange={sfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="State Code" value={stateForm.code} onChange={sfp('code')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Status" value={stateForm.status} onChange={sfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setEditState(null)} onSubmit={handleEditState} loading={loadingState} submitLabel="Save Changes" border={border} textMain={textMain} />
+          </Modal>
+          <ConfirmDialog open={!!deleteState_row} onClose={() => setDeleteState(null)} onConfirm={handleDeleteState} loading={loadingState} title="Delete State" message={`Delete "${deleteState_row?.name}" and all its cities?`} />
+        </>
+      )}
+
+      {/* ── CITIES ── */}
+      {tab === 'cities' && (
+        <>
+          <DataTable
+            columns={cityColumns}
+            data={cities as unknown as Record<string, unknown>[]}
+            searchPlaceholder="Search cities..."
+            onEdit={(row) => { const c = row as unknown as CityRow; setCityForm({ name: c.name, stateId: c.stateId, stateName: c.stateName, status: c.status }); setEditCity(c); }}
+            onDelete={(row) => setDeleteCity(row as unknown as CityRow)}
+          />
+          <Modal open={addCityOpen} onClose={() => setAddCityOpen(false)} title="Add City">
+            <FormField label="City Name *" value={cityForm.name} onChange={cyfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Lusaka" />
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>State / Province *</div>
+              <select value={cityForm.stateId} onChange={e => { const s = statesList.find(x => x.id === e.target.value); cyfp('stateId')(e.target.value); if (s) cyfp('stateName')(s.name); }} style={selStyle}>
+                <option value="">Select state...</option>
+                {statesList.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
+            </div>
+            <FormField label="Status" value={cityForm.status} onChange={cyfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setAddCityOpen(false)} onSubmit={handleAddCity} loading={loadingCity} submitLabel="Add City" border={border} textMain={textMain} />
+          </Modal>
+          <Modal open={!!editCity} onClose={() => setEditCity(null)} title={`Edit City: ${editCity?.name ?? ''}`}>
+            <FormField label="City Name *" value={cityForm.name} onChange={cyfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Status" value={cityForm.status} onChange={cyfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setEditCity(null)} onSubmit={handleEditCity} loading={loadingCity} submitLabel="Save Changes" border={border} textMain={textMain} />
+          </Modal>
+          <ConfirmDialog open={!!deleteCity_row} onClose={() => setDeleteCity(null)} onConfirm={handleDeleteCity} loading={loadingCity} title="Delete City" message={`Delete "${deleteCity_row?.name}" permanently?`} />
+        </>
+      )}
+
+      {/* ── PICKUP STATIONS ── */}
+      {tab === 'pickups' && (
+        <>
+          <DataTable
+            columns={pickupColumns}
+            data={pickups as unknown as Record<string, unknown>[]}
+            searchPlaceholder="Search pickup stations..."
+            onEdit={(row) => {
+              const p = row as unknown as PickupStation;
+              setPickupForm({ name: p.name, address: p.address, city: p.city, state: p.state, country: p.country, phone: p.phone, email: p.email, openingHours: p.openingHours, description: p.description, latitude: p.latitude, longitude: p.longitude, status: p.status, image: p.image || '' });
+              setEditPickup(p);
+            }}
+            onDelete={(row) => setDeletePickup(row as unknown as PickupStation)}
+          />
+
+          {/* Add Pickup Modal */}
+          <Modal open={addPickupOpen} onClose={() => setAddPickupOpen(false)} title="Add Pickup Station">
+            <FormField label="Station Name *" value={pickupForm.name} onChange={pfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Lusaka Central Pickup" />
+            <FormField label="Full Address *" value={pickupForm.address} onChange={pfp('address')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 12 Cairo Road, Lusaka" />
+            <FormField label="City *" value={pickupForm.city} onChange={pfp('city')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Lusaka" />
+            <FormField label="State / Province" value={pickupForm.state} onChange={pfp('state')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Lusaka Province" />
+            <FormField label="Country" value={pickupForm.country} onChange={pfp('country')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="Zambia" />
+            <FormField label="Phone Number" value={pickupForm.phone} onChange={pfp('phone')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="+260..." />
+            <FormField label="Email Address" value={pickupForm.email} onChange={pfp('email')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="pickup@example.com" />
+            <FormField label="Opening Hours" value={pickupForm.openingHours} onChange={pfp('openingHours')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Mon–Fri 8am–6pm" />
+            <FormField label="Description / Landmark" value={pickupForm.description} onChange={pfp('description')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Near Manda Hill Mall" />
+            <FormField label="Latitude (GPS)" value={pickupForm.latitude} onChange={pfp('latitude')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. -15.4166" />
+            <FormField label="Longitude (GPS)" value={pickupForm.longitude} onChange={pfp('longitude')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 28.2833" />
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: textMuted, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Station Image</label>
+              <CloudinaryUpload value={pickupForm.image} onChange={(url) => pfp('image')(url)} folder="kryros/pickup-stations" accept="image/*" showUrlInput={true} border={border} surface={surface} textMuted={textMuted} textMain={textMain} />
+            </div>
+            <FormField label="Status" value={pickupForm.status} onChange={pfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setAddPickupOpen(false)} onSubmit={handleAddPickup} loading={loadingPickup} submitLabel="Add Station" border={border} textMain={textMain} />
+          </Modal>
+
+          {/* Edit Pickup Modal */}
+          <Modal open={!!editPickup} onClose={() => setEditPickup(null)} title={`Edit: ${editPickup?.name ?? ''}`}>
+            <FormField label="Station Name *" value={pickupForm.name} onChange={pfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Full Address *" value={pickupForm.address} onChange={pfp('address')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="City *" value={pickupForm.city} onChange={pfp('city')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="State / Province" value={pickupForm.state} onChange={pfp('state')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Country" value={pickupForm.country} onChange={pfp('country')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Phone Number" value={pickupForm.phone} onChange={pfp('phone')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Email Address" value={pickupForm.email} onChange={pfp('email')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Opening Hours" value={pickupForm.openingHours} onChange={pfp('openingHours')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Description / Landmark" value={pickupForm.description} onChange={pfp('description')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Latitude (GPS)" value={pickupForm.latitude} onChange={pfp('latitude')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Longitude (GPS)" value={pickupForm.longitude} onChange={pfp('longitude')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <FormField label="Status" value={pickupForm.status} onChange={pfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
+            <ModalFooter onClose={() => setEditPickup(null)} onSubmit={handleEditPickup} loading={loadingPickup} submitLabel="Save Changes" border={border} textMain={textMain} />
+          </Modal>
+
+          <ConfirmDialog open={!!deletePickup} onClose={() => setDeletePickup(null)} onConfirm={handleDeletePickup} loading={loadingPickup} title="Delete Pickup Station" message={`Delete "${deletePickup?.name}" permanently?`} />
+        </>
+      )}
+    </div>
+  );
+}
+
+export default function LocationsPage() { return <AdminShell><LocationsContent /></AdminShell>; }
