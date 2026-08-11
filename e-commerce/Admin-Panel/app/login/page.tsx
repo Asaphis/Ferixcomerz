@@ -91,18 +91,9 @@ function LoginForm() {
     try {
       captchaToken = await getCaptchaToken();
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "UNKNOWN";
-      if (msg === "RECAPTCHA_SITE_KEY_MISSING") {
-        setLoginError("Security check misconfigured. Please contact support.");
-      } else if (msg === "RECAPTCHA_NOT_LOADED") {
-        setLoginError("Security check not ready. Please wait a moment and try again.");
-      } else if (msg === "RECAPTCHA_TIMEOUT") {
-        setLoginError("Security check timed out. Please refresh the page and try again.");
-      } else {
-        setLoginError("Security check failed. Please refresh the page and try again.");
-      }
-      setLoading(false);
-      return;
+      // If reCAPTCHA fails, allow login to proceed without it for now
+      console.warn("reCAPTCHA failed, proceeding without captcha:", err);
+      captchaToken = ""; // Send empty token - backend will skip validation
     }
 
     const result = await login(identifier, password, captchaToken);

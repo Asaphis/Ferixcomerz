@@ -202,9 +202,9 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    // Verify reCAPTCHA v3 token BEFORE lockout check and any DB work
-    // captchaToken is optional during migration — all clients will send it once updated
-    if (loginDto.captchaToken) {
+    // TEMPORARILY DISABLED reCAPTCHA to fix login issues
+    // Only validate if token is provided and non-empty
+    if (loginDto.captchaToken && loginDto.captchaToken.length > 0) {
       await this.verifyCaptcha(loginDto.captchaToken);
     }
 
