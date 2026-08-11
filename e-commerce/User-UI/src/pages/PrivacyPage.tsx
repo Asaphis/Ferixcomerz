@@ -20,7 +20,7 @@ export default function PrivacyPage() {
       .catch(() => {});
   }, []);
 
-  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@kryros.com";
+  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@ferixcomerz.com";
 
   const sections = [
     { title: "Information We Collect", content: "We collect information you provide directly to us, such as your name, email address, and payment details." },

@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>KRYROS | Simple. Reliable. Global.</title>
+    <title>Ferixcomerz | Simple. Reliable. Global.</title>
     <meta name="description" content="Shopping made easy with delivery everywhere." />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content="KRYROS | Simple. Reliable. Global." />
+    <meta property="og:title" content="Ferixcomerz | Simple. Reliable. Global." />
     <meta property="og:description" content="Shopping made easy with delivery everywhere." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="KRYROS | Simple. Reliable. Global." />
+    <meta name="twitter:title" content="Ferixcomerz | Simple. Reliable. Global." />
     <meta name="twitter:description" content="Shopping made easy with delivery everywhere." />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -18,7 +18,7 @@
     <meta name="theme-color" content="#050816" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="KRYROS" />
+    <meta name="apple-mobile-web-app-title" content="Ferixcomerz" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="color-scheme" content="dark light" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,25 +30,25 @@
       (function() {
         // In a real deployment, this would be injected by the build process
         // For now, we use a simple heuristic to detect if we need a refresh
-        const APP_BUILD_ID = "2026.07.28.01"; 
-        const storedVersion = localStorage.getItem('kryros_app_version');
-        
+        const APP_BUILD_ID = "2026.07.28.01";
+        const storedVersion = localStorage.getItem('ferixcomerz_app_version');
+
         if (storedVersion && storedVersion !== APP_BUILD_ID) {
           console.log("New version detected. Clearing storage and reloading...");
           // Don't clear EVERYTHING, just what might be stale
           sessionStorage.clear();
-          localStorage.setItem('kryros_app_version', APP_BUILD_ID);
+          localStorage.setItem('ferixcomerz_app_version', APP_BUILD_ID);
           window.location.reload(true);
           return;
         } else if (!storedVersion) {
-          localStorage.setItem('kryros_app_version', APP_BUILD_ID);
+          localStorage.setItem('ferixcomerz_app_version', APP_BUILD_ID);
         }
 
         // Detect if the app is running in a WebView
-        window.isKryrosApp = /KRYROS_(USER|ADMIN)_APP/i.test(navigator.userAgent);
-        
+        window.isFerixcomerzApp = /Ferixcomerz_(USER|ADMIN)_APP/i.test(navigator.userAgent);
+
         // Listen for force-refresh signals from the native app
-        window.addEventListener('kryros:force-refresh', function() {
+        window.addEventListener('ferixcomerz:force-refresh', function() {
           console.log("Force refresh requested by native app");
           localStorage.clear();
           sessionStorage.clear();

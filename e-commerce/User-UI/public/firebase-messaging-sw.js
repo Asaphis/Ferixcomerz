@@ -19,7 +19,7 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
     const notificationTitle = payload.notification?.title || 'Ferixcomerz';
     const notificationOptions = {
       body: payload.notification?.body || '',
-      icon: '/kryros-logo.png',
+      icon: '/ferixcomerz-logo.png',
       badge: '/favicon.svg',
       image: payload.notification?.image || payload.data?.imageUrl || '',
       data: payload.data || {},

@@ -76,7 +76,7 @@ export default function WholesaleCheckoutPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="sticky top-0 z-20 bg-[var(--kryros-header-navy)] border-b border-white/10 shadow-sm">
+      <div className="sticky top-0 z-20 bg-[var(--ferixcomerz-header-navy)] border-b border-white/10 shadow-sm">
         <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
           <button
             onClick={() => setLocation("/dashboard")}

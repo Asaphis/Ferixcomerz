@@ -30,7 +30,7 @@ export default function AboutPage() {
           <p className="text-xs text-muted-foreground mt-0.5">Your Trusted Shopping Partner</p>
         </div>
         <div className="flex-shrink-0 ml-2">
-          <img src="/kryros-logo.png" alt="Ferixcomerz" className="w-20 h-20 rounded-2xl shadow-lg" onError={(e) => { (e.target as HTMLImageElement).src = '/kryros-logo.svg'; }} />
+          <img src="/ferixcomerz-logo.png" alt="Ferixcomerz" className="w-20 h-20 rounded-2xl shadow-lg" onError={(e) => { (e.target as HTMLImageElement).src = '/ferixcomerz-logo.svg'; }} />
         </div>
       </div>
 
@@ -75,7 +75,7 @@ export default function AboutPage() {
           {[
             { label: "Registered", value: settings.companyName || "Ferixcomerz" },
             { label: "Address", value: settings.address || "Saving customer worldwide" },
-            { label: "Email", value: settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@kryros.com" },
+            { label: "Email", value: settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@ferixcomerz.com" },
             { label: "Phone", value: settings.contactPhone || import.meta.env.VITE_CONTACT_PHONE || "+260 97X XXX XXX" },
           ].map(({ label, value }) => (
             <div key={label} className="flex gap-3 text-xs">

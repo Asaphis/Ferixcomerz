@@ -20,7 +20,7 @@ export default function TermsPage() {
       .catch(() => {});
   }, []);
 
-  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@kryros.com";
+  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@ferixcomerz.com";
 
   const sections = [
     { title: "Acceptance of Terms", content: "By accessing or using our app, you agree to be bound by these terms." },
