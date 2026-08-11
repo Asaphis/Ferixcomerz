@@ -48,15 +48,15 @@ export async function POST(req: NextRequest) {
     }
 
     const res = NextResponse.json({ success: true, user: user ?? null });
-    res.cookies.set("kryros_token", accessToken, {
+    res.cookies.set("ferixcomerz_token", accessToken, {
       httpOnly: true, secure: isProd, sameSite: "strict", maxAge: 15 * 60, path: "/",
     });
     if (refreshToken) {
-      res.cookies.set("kryros_refresh", refreshToken, {
+      res.cookies.set("ferixcomerz_refresh", refreshToken, {
         httpOnly: true, secure: isProd, sameSite: "strict", maxAge: 7 * 24 * 60 * 60, path: "/",
       });
     }
-    res.cookies.set("kryros_admin_token", "", { maxAge: 0, path: "/" });
+    res.cookies.set("ferixcomerz_admin_token", "", { maxAge: 0, path: "/" });
     return res;
 
   } catch {

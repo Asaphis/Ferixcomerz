@@ -12,7 +12,7 @@ import { getBackendUrl } from "@/lib/bff-utils";
  * (which can be tampered with via devtools).
  */
 export async function GET(req: NextRequest) {
-  const accessToken = req.cookies.get("kryros_token")?.value;
+  const accessToken = req.cookies.get("ferixcomerz_token")?.value;
 
   if (!accessToken) {
     return NextResponse.json({ authenticated: false, reason: "no_token" }, { status: 401 });

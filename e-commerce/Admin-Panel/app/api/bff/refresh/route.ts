@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getBackendUrl, isProd } from "@/lib/bff-utils";
 
 export async function POST(req: NextRequest) {
-  const refreshToken = req.cookies.get("kryros_refresh")?.value;
+  const refreshToken = req.cookies.get("ferixcomerz_refresh")?.value;
 
   if (!refreshToken) {
     return NextResponse.json({ message: "No refresh token" }, { status: 401 });
@@ -17,18 +17,18 @@ export async function POST(req: NextRequest) {
 
     if (!upstream.ok) {
       const res = NextResponse.json({ message: "Session expired" }, { status: 401 });
-      res.cookies.set("kryros_token", "", { maxAge: 0, path: "/" });
-      res.cookies.set("kryros_refresh", "", { maxAge: 0, path: "/" });
+      res.cookies.set("ferixcomerz_token", "", { maxAge: 0, path: "/" });
+      res.cookies.set("ferixcomerz_refresh", "", { maxAge: 0, path: "/" });
       return res;
     }
 
     const { accessToken, refreshToken: newRefreshToken } = await upstream.json();
     const res = NextResponse.json({ success: true });
-    res.cookies.set("kryros_token", accessToken, {
+    res.cookies.set("ferixcomerz_token", accessToken, {
       httpOnly: true, secure: isProd, sameSite: "strict", maxAge: 15 * 60, path: "/",
     });
     if (newRefreshToken) {
-      res.cookies.set("kryros_refresh", newRefreshToken, {
+      res.cookies.set("ferixcomerz_refresh", newRefreshToken, {
         httpOnly: true, secure: isProd, sameSite: "strict", maxAge: 7 * 24 * 60 * 60, path: "/",
       });
     }

@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-const USER_KEY = "kryros_admin_user";
+const USER_KEY = "ferixcomerz_admin_user";
 
 export interface AdminUser {
   id: string;
@@ -27,10 +27,10 @@ export function getToken(): string | null {
 
 /** Clears the legacy client-accessible cookie (migration cleanup) and user data. */
 export function removeToken(): void {
-  Cookies.remove("kryros_admin_token"); // clear legacy cookie if present
+  Cookies.remove("ferixcomerz_admin_token"); // clear legacy cookie if present
   if (typeof window !== "undefined") {
     localStorage.removeItem(USER_KEY);
-    localStorage.removeItem("kryros_admin_refresh"); // clear old refresh token
+    localStorage.removeItem("ferixcomerz_admin_refresh"); // clear old refresh token
   }
 }
 
@@ -43,7 +43,7 @@ export function getRefreshToken(): string | null { return null; }
 /** Clears any legacy refresh token storage. */
 export function removeRefreshToken(): void {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("kryros_admin_refresh");
+    localStorage.removeItem("ferixcomerz_admin_refresh");
   }
 }
 
