@@ -16,7 +16,7 @@ declare global {
   }
 }
 
-const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? "";
+const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? process.env.RECAPTCHA_SITE_KEY ?? "";
 
 async function getCaptchaToken(): Promise<string> {
   // Guard: env var missing (build-time issue — redeploy needed)
