@@ -47,15 +47,15 @@ void main() async {
   if (Platform.isAndroid) {
     await Permission.notification.request();
   }
-  runApp(const KryrosUserApp());
+  runApp(const FerixcomerzUserApp());
 }
 
-class KryrosUserApp extends StatelessWidget {
-  const KryrosUserApp({super.key});
+class FerixcomerzUserApp extends StatelessWidget {
+  const FerixcomerzUserApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'KRYROS',
+      title: 'Ferixcomerz',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFFC0151B),
@@ -66,7 +66,7 @@ class KryrosUserApp extends StatelessWidget {
           surface: Colors.white,
         ),
       ),
-      home: const MainContainer(url: 'https://kryros.com'),
+      home: const MainContainer(url: 'https://ferixcomerz.com'),
     );
   }
 }
@@ -179,7 +179,7 @@ class _WebViewPageState extends State<WebViewPage> {
   String? _fcmToken;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   StreamSubscription<String>? _tokenRefreshSubscription;
-  static const _notificationTokenEndpoint = 'https://api.kryros.com/api/notifications/token/public';
+  static const _notificationTokenEndpoint = 'https://api.ferixcomerz.com/api/notifications/token/public';
 
   @override
   void initState() {
@@ -238,9 +238,9 @@ class _WebViewPageState extends State<WebViewPage> {
     );
 
     const AndroidNotificationChannel userChannel = AndroidNotificationChannel(
-      'kryros_notifications',
-      'KRYROS Notifications',
-      description: 'Notifications for KRYROS',
+      'ferixcomerz_notifications',
+      'Ferixcomerz Notifications',
+      description: 'Notifications for Ferixcomerz',
       importance: Importance.max,
       enableVibration: true,
       playSound: true,
@@ -275,8 +275,8 @@ class _WebViewPageState extends State<WebViewPage> {
           notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              'kryros_notifications',
-              'KRYROS Notifications',
+              'ferixcomerz_notifications',
+              'Ferixcomerz Notifications',
               importance: Importance.max,
               priority: Priority.high,
               icon: 'launcher_icon',
@@ -349,7 +349,7 @@ class _WebViewPageState extends State<WebViewPage> {
               supportZoom: true,
               useWideViewPort: true,
               loadWithOverviewMode: true,
-              userAgent: "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36 KRYROS_USER_APP",
+              userAgent: "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36 Ferixcomerz_USER_APP",
               mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
               safeBrowsingEnabled: false,
               allowFileAccessFromFileURLs: true,

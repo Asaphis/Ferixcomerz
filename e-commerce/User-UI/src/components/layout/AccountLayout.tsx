@@ -77,15 +77,15 @@ export default function AccountLayout({ children, showTopBar = true }: AccountLa
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-background">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-[var(--kryros-header-navy)]">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-[var(--ferixcomerz-header-navy)]">
         <Link href="/">
           <span className="flex items-center text-white cursor-pointer">
             <img
-              src="/kryros-logo.png"
-              alt="KRYROS"
+              src="/ferixcomerz-logo.png"
+              alt="Ferixcomerz"
               className="w-10 h-10 object-contain"
             />
-            <span className="ml-2 text-xl font-black tracking-tight uppercase">KRYROS</span>
+            <span className="ml-2 text-xl font-black tracking-tight uppercase">Ferixcomerz</span>
           </span>
         </Link>
         <button
@@ -126,7 +126,7 @@ export default function AccountLayout({ children, showTopBar = true }: AccountLa
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="absolute inset-0 bg-kryros-overlay-dark/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <div className="absolute inset-0 bg-ferixcomerz-overlay-dark/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <div className="relative w-56 bg-background h-full flex flex-col shadow-2xl z-10 border-r border-border">
             <SidebarContent />
           </div>
@@ -137,7 +137,7 @@ export default function AccountLayout({ children, showTopBar = true }: AccountLa
       <main className="flex-1 min-w-0 overflow-y-auto">
         {/* Top bar (optional) */}
         {showTopBar && (
-          <div className="sticky top-0 z-20 bg-[var(--kryros-header-navy)] border-b border-white/10 flex items-center justify-between px-4 md:px-6 py-3 shadow-sm">
+          <div className="sticky top-0 z-20 bg-[var(--ferixcomerz-header-navy)] border-b border-white/10 flex items-center justify-between px-4 md:px-6 py-3 shadow-sm">
             <button
               className="lg:hidden w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
               onClick={() => setSidebarOpen(true)}
@@ -173,7 +173,7 @@ export default function AccountLayout({ children, showTopBar = true }: AccountLa
                 >
                   <Bell style={{ width: 18, height: 18 }} className="text-white" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-[var(--kryros-header-navy)]">
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-[var(--ferixcomerz-header-navy)]">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}

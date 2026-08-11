@@ -1,4 +1,4 @@
-# KRYROS System Audit Findings
+# Ferixcomerz System Audit Findings
 
 ## 1. Routing & Navigation Issues
 - **Informational Pages**: Pages like About, Contact, FAQ, etc., were hardcoded static components in `App.tsx` instead of using `GenericCMSPage`. (Fixed in local session)

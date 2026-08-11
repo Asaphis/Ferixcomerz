@@ -137,14 +137,14 @@ export default function ForgotPasswordPage() {
   };
 
   const strengthColor = () =>
-    passwordEval.score <= 2 ? 'var(--kryros-error)' : passwordEval.score === 3 ? 'var(--kryros-warning)' : 'var(--kryros-success)';
+    passwordEval.score <= 2 ? 'var(--ferixcomerz-error)' : passwordEval.score === 3 ? 'var(--ferixcomerz-warning)' : 'var(--ferixcomerz-success)';
   const strengthWidth = () => (newPassword.length === 0 ? "0%" : `${(passwordEval.score / 5) * 100}%`);
 
   const ic =
-    "w-full h-[48px] border border-[var(--kryros-border)] rounded-[10px] bg-[var(--kryros-secondary-bg)] text-[var(--kryros-primary-text)] text-[14px] px-[14px] outline-none placeholder:text-[var(--kryros-disabled-text)] font-['Roboto'] focus:border-[var(--kryros-primary)] focus:bg-[var(--kryros-card-bg)] focus:ring-1 focus:ring-[var(--kryros-primary)]/20 transition-all duration-200";
+    "w-full h-[48px] border border-[var(--ferixcomerz-border)] rounded-[10px] bg-[var(--ferixcomerz-secondary-bg)] text-[var(--ferixcomerz-primary-text)] text-[14px] px-[14px] outline-none placeholder:text-[var(--ferixcomerz-disabled-text)] font-['Roboto'] focus:border-[var(--ferixcomerz-primary)] focus:bg-[var(--ferixcomerz-card-bg)] focus:ring-1 focus:ring-[var(--ferixcomerz-primary)]/20 transition-all duration-200";
   const bp =
-    "w-full h-[48px] border-none rounded-[10px] bg-[var(--kryros-primary)] text-white text-[14px] font-bold font-['Roboto'] cursor-pointer tracking-[0.02em] transition-all duration-200 hover:bg-[var(--kryros-primary-hover)] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2";
-  const lc = "block text-[12px] font-bold text-[var(--kryros-primary-text)] mb-[6px] uppercase tracking-[0.04em] font-['Roboto']";
+    "w-full h-[48px] border-none rounded-[10px] bg-[var(--ferixcomerz-primary)] text-white text-[14px] font-bold font-['Roboto'] cursor-pointer tracking-[0.02em] transition-all duration-200 hover:bg-[var(--ferixcomerz-primary-hover)] active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2";
+  const lc = "block text-[12px] font-bold text-[var(--ferixcomerz-primary-text)] mb-[6px] uppercase tracking-[0.04em] font-['Roboto']";
 
   const Spinner = () => (
     <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -156,8 +156,8 @@ export default function ForgotPasswordPage() {
   const Logo = () => (
     <div className="text-center mb-5">
       <h1 className="text-[24px] font-black tracking-[-0.5px] leading-none m-0 font-['Roboto']">
-        <span style={{ color:'var(--kryros-primary-text)' }}>KRY</span>
-        <span style={{ color:'var(--kryros-primary)' }}>ROS</span>
+        <span style={{ color:'var(--ferixcomerz-primary-text)' }}>KRY</span>
+        <span style={{ color:'var(--ferixcomerz-primary)' }}>ROS</span>
       </h1>
     </div>
   );
@@ -167,37 +167,37 @@ export default function ForgotPasswordPage() {
       type="button"
       onClick={onClick}
       className="absolute top-5 left-5 bg-transparent border-none cursor-pointer transition-colors p-1 flex items-center gap-1"
-      style={{ color:'var(--kryros-secondary-text)' }}
-      onMouseEnter={e=>(e.currentTarget.style.color='var(--kryros-primary-text)')}
-      onMouseLeave={e=>(e.currentTarget.style.color='var(--kryros-secondary-text)')}
+      style={{ color:'var(--ferixcomerz-secondary-text)' }}
+      onMouseEnter={e=>(e.currentTarget.style.color='var(--ferixcomerz-primary-text)')}
+      onMouseLeave={e=>(e.currentTarget.style.color='var(--ferixcomerz-secondary-text)')}
     >
       <ArrowLeft className="w-5 h-5" />
     </button>
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[var(--kryros-page-bg-start)] to-[var(--kryros-page-bg-end)] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-[var(--ferixcomerz-page-bg-start)] to-[var(--ferixcomerz-page-bg-end)] flex items-center justify-center p-4">
       <div className="w-full max-w-[380px] relative">
         {step !== "request" && <BackButton onClick={() => setLocation("/login")} />}
 
-        <div className="bg-white rounded-[16px] shadow-[0_4px_16px_var(--kryros-card-shadow)] p-8">
+        <div className="bg-white rounded-[16px] shadow-[0_4px_16px_var(--ferixcomerz-card-shadow)] p-8">
           <Logo />
 
           {/* Request Reset Step */}
           {step === "request" && (
             <>
-              <p className="text-center text-[13px] text-[var(--kryros-form-text-muted)] mb-6 font-['Roboto']">
+              <p className="text-center text-[13px] text-[var(--ferixcomerz-form-text-muted)] mb-6 font-['Roboto']">
                 Enter your email or phone number to receive a password reset link
               </p>
 
               {error && (
-                <div className="mb-4 px-4 py-3 rounded-[8px] text-[13px] leading-snug font-['Roboto'] bg-[var(--kryros-form-error-bg)] text-[var(--kryros-error)] border border-[var(--kryros-form-error-border)]">
+                <div className="mb-4 px-4 py-3 rounded-[8px] text-[13px] leading-snug font-['Roboto'] bg-[var(--ferixcomerz-form-error-bg)] text-[var(--ferixcomerz-error)] border border-[var(--ferixcomerz-form-error-border)]">
                   {error}
                 </div>
               )}
 
               {notice && (
-                <div className="mb-4 px-4 py-3 rounded-[8px] text-[13px] leading-snug font-['Roboto']" style={{ background:'var(--kryros-form-info-bg)', color:'var(--kryros-secondary)', border:'1px solid var(--kryros-form-info-border)' }}>
+                <div className="mb-4 px-4 py-3 rounded-[8px] text-[13px] leading-snug font-['Roboto']" style={{ background:'var(--ferixcomerz-form-info-bg)', color:'var(--ferixcomerz-secondary)', border:'1px solid var(--ferixcomerz-form-info-border)' }}>
                   {notice}
                 </div>
               )}
@@ -206,7 +206,7 @@ export default function ForgotPasswordPage() {
                 <div>
                   <label className={lc}>Email or Phone</label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--kryros-form-text-hint)] pointer-events-none" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--ferixcomerz-form-text-hint)] pointer-events-none" />
                     <input
                       type="text"
                       value={identifier}
@@ -229,13 +229,13 @@ export default function ForgotPasswordPage() {
                 </button>
               </form>
 
-              <div className="mt-6 pt-6 border-t border-[var(--kryros-form-border)] text-center">
-                <p className="text-[13px] text-[var(--kryros-form-text-muted)] font-['Roboto']">
+              <div className="mt-6 pt-6 border-t border-[var(--ferixcomerz-form-border)] text-center">
+                <p className="text-[13px] text-[var(--ferixcomerz-form-text-muted)] font-['Roboto']">
                   Remember your password?{" "}
                   <button
                     type="button"
                     onClick={() => setLocation("/login")}
-                    className="font-medium hover:underline bg-transparent border-none cursor-pointer" style={{ color:'var(--kryros-primary)' }}
+                    className="font-medium hover:underline bg-transparent border-none cursor-pointer" style={{ color:'var(--ferixcomerz-primary)' }}
                   >
                     Sign in
                   </button>
@@ -247,12 +247,12 @@ export default function ForgotPasswordPage() {
           {/* Reset Password Step */}
           {step === "reset" && (
             <>
-              <p className="text-center text-[13px] text-[var(--kryros-form-text-muted)] mb-6 font-['Roboto']">
+              <p className="text-center text-[13px] text-[var(--ferixcomerz-form-text-muted)] mb-6 font-['Roboto']">
                 Create a new password for your account
               </p>
 
               {error && (
-                <div className="mb-4 px-4 py-3 rounded-[8px] text-[13px] leading-snug font-['Roboto'] bg-[var(--kryros-form-error-bg)] text-[var(--kryros-error)] border border-[var(--kryros-form-error-border)]">
+                <div className="mb-4 px-4 py-3 rounded-[8px] text-[13px] leading-snug font-['Roboto'] bg-[var(--ferixcomerz-form-error-bg)] text-[var(--ferixcomerz-error)] border border-[var(--ferixcomerz-form-error-border)]">
                   {error}
                 </div>
               )}
@@ -261,7 +261,7 @@ export default function ForgotPasswordPage() {
                 <div>
                   <label className={lc}>New Password</label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--kryros-form-text-hint)] pointer-events-none" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--ferixcomerz-form-text-hint)] pointer-events-none" />
                     <input
                       type={showPassword ? "text" : "password"}
                       value={newPassword}
@@ -273,7 +273,7 @@ export default function ForgotPasswordPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style={{ color:'var(--kryros-disabled-text)' }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style={{ color:'var(--ferixcomerz-disabled-text)' }}
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -281,7 +281,7 @@ export default function ForgotPasswordPage() {
                   {newPassword && (
                     <div className="mt-2">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[11px] text-[var(--kryros-form-text-muted)] font-['Roboto']">Password strength</span>
+                        <span className="text-[11px] text-[var(--ferixcomerz-form-text-muted)] font-['Roboto']">Password strength</span>
                         <span
                           className="text-[11px] font-bold font-['Roboto']"
                           style={{ color: strengthColor() }}
@@ -289,7 +289,7 @@ export default function ForgotPasswordPage() {
                           {passwordEval.label}
                         </span>
                       </div>
-                      <div className="w-full h-1 bg-[var(--kryros-form-strength-bar-bg)] rounded-full overflow-hidden">
+                      <div className="w-full h-1 bg-[var(--ferixcomerz-form-strength-bar-bg)] rounded-full overflow-hidden">
                         <div
                           className="h-full transition-all duration-300"
                           style={{ width: strengthWidth(), backgroundColor: strengthColor() }}
@@ -302,7 +302,7 @@ export default function ForgotPasswordPage() {
                 <div>
                   <label className={lc}>Confirm Password</label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--kryros-form-text-hint)] pointer-events-none" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--ferixcomerz-form-text-hint)] pointer-events-none" />
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       value={confirmPassword}
@@ -314,7 +314,7 @@ export default function ForgotPasswordPage() {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style={{ color:'var(--kryros-disabled-text)' }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer" style={{ color:'var(--ferixcomerz-disabled-text)' }}
                     >
                       {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -338,12 +338,12 @@ export default function ForgotPasswordPage() {
           {step === "success" && (
             <div className="text-center">
               <div className="mb-6 flex justify-center">
-                <div className="w-16 h-16 bg-[var(--kryros-form-success-bg)] rounded-full flex items-center justify-center">
-                  <Check className="w-8 h-8 text-[var(--kryros-success)]" />
+                <div className="w-16 h-16 bg-[var(--ferixcomerz-form-success-bg)] rounded-full flex items-center justify-center">
+                  <Check className="w-8 h-8 text-[var(--ferixcomerz-success)]" />
                 </div>
               </div>
-              <h2 className="text-[18px] font-bold mb-2 font-['Roboto']" style={{ color:'var(--kryros-primary-text)' }}>Password Reset Successful</h2>
-              <p className="text-[13px] text-[var(--kryros-form-text-muted)] mb-6 font-['Roboto']">
+              <h2 className="text-[18px] font-bold mb-2 font-['Roboto']" style={{ color:'var(--ferixcomerz-primary-text)' }}>Password Reset Successful</h2>
+              <p className="text-[13px] text-[var(--ferixcomerz-form-text-muted)] mb-6 font-['Roboto']">
                 Your password has been reset. You can now sign in with your new password.
               </p>
               <button

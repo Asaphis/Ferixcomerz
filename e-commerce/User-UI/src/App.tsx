@@ -150,7 +150,7 @@ function SupportFloatingButtons() {
 
   if (hide) return null;
 
-  const message = encodeURIComponent("Hi KRYROS! I need some help 👋");
+  const message = encodeURIComponent("Hi Ferixcomerz! I need some help 👋");
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
   const buttonBaseClass =
     "w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110 active:scale-95";
@@ -165,7 +165,7 @@ function SupportFloatingButtons() {
         aria-label="Chat on WhatsApp"
         style={{
           background: "transparent",
-          color: "var(--kryros-header-navy)",
+          color: "var(--ferixcomerz-header-navy)",
           boxShadow: "0 10px 28px rgba(15, 23, 42, 0.14)",
           border: "0",
           backdropFilter: "none",

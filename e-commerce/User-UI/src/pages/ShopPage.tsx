@@ -27,7 +27,7 @@ export default function ShopPage() {
   const [sections, setSections] = useState<ApiCMSSection[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const cached = localStorage.getItem("kryros_sections_shop");
+        const cached = localStorage.getItem("ferixcomerz_sections_shop");
         if (cached) {
           return JSON.parse(cached);
         }
@@ -41,7 +41,7 @@ export default function ShopPage() {
   const [sectionsLoading, setSectionsLoading] = useState(() => {
     if (typeof window !== "undefined") {
       try {
-        const cached = localStorage.getItem("kryros_sections_shop");
+        const cached = localStorage.getItem("ferixcomerz_sections_shop");
         if (cached) {
           return false; // Skip loading if we have cached data for instant load
         }
@@ -87,7 +87,7 @@ export default function ShopPage() {
 
         setSections(activeSections);
         try {
-          localStorage.setItem("kryros_sections_shop", JSON.stringify(activeSections));
+          localStorage.setItem("ferixcomerz_sections_shop", JSON.stringify(activeSections));
         } catch (cacheErr) {
           console.error("Error saving shop cache:", cacheErr);
         }

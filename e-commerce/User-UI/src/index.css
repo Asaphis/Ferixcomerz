@@ -5,217 +5,217 @@
 
 :root {
   /* =================================================
-     KRYROS UNIFIED COLOR SCHEME
+     Ferixcomerz UNIFIED COLOR SCHEME
   ================================================= */
   
   /* PRIMARY COLORS */
-  --kryros-primary: #C0151B;
-  --kryros-primary-hover: #A01015;
-  --kryros-secondary: #344a64;
-  --kryros-white: #FFFFFF;
-  --kryros-black-primary: #000000;
+  --ferixcomerz-primary: #C0151B;
+  --ferixcomerz-primary-hover: #A01015;
+  --ferixcomerz-secondary: #344a64;
+  --ferixcomerz-white: #FFFFFF;
+  --ferixcomerz-black-primary: #000000;
 
   /* NEUTRALS */
-  --kryros-light-gray: #FFFFFF;
-  --kryros-border-gray: #E5E5E5;
-  --kryros-medium-gray: #75757A;
-  --kryros-dark-gray: #535357;
+  --ferixcomerz-light-gray: #FFFFFF;
+  --ferixcomerz-border-gray: #E5E5E5;
+  --ferixcomerz-medium-gray: #75757A;
+  --ferixcomerz-dark-gray: #535357;
 
   /* BACKGROUND COLORS */
-  --kryros-main-bg: #FFFFFF;
-  --kryros-card-bg: #FFFFFF;
-  --kryros-footer-bg: #000000;
-  --kryros-secondary-bg: #FAFAFA;
+  --ferixcomerz-main-bg: #FFFFFF;
+  --ferixcomerz-card-bg: #FFFFFF;
+  --ferixcomerz-footer-bg: #000000;
+  --ferixcomerz-secondary-bg: #FAFAFA;
 
   /* BORDER & DIVIDER */
-  --kryros-border: #E5E5E5;
-  --kryros-divider: #E5E5E5;
+  --ferixcomerz-border: #E5E5E5;
+  --ferixcomerz-divider: #E5E5E5;
 
   /* BUTTON COLORS */
-  --kryros-primary-btn: #344a64;
-  --kryros-secondary-btn: #C0151B;
-  --kryros-dark-btn: #313133;
-  --kryros-disabled-btn: #C7C7CD;
+  --ferixcomerz-primary-btn: #344a64;
+  --ferixcomerz-secondary-btn: #C0151B;
+  --ferixcomerz-dark-btn: #313133;
+  --ferixcomerz-disabled-btn: #C7C7CD;
 
   /* TEXT COLORS */
-  --kryros-primary-text: #313133;
-  --kryros-secondary-text: #75757A;
-  --kryros-disabled-text: #9E9E9E;
-  --kryros-white-text: #FFFFFF;
-  --kryros-link: #2563EB;
+  --ferixcomerz-primary-text: #313133;
+  --ferixcomerz-secondary-text: #75757A;
+  --ferixcomerz-disabled-text: #9E9E9E;
+  --ferixcomerz-white-text: #FFFFFF;
+  --ferixcomerz-link: #2563EB;
 
   /* STATUS / FEEDBACK COLORS */
-  --kryros-success: #2DBE60;
-  --kryros-error: #D63031;
-  --kryros-warning: #F68B1E;
-  --kryros-gold: #F6B01E;
+  --ferixcomerz-success: #2DBE60;
+  --ferixcomerz-error: #D63031;
+  --ferixcomerz-warning: #F68B1E;
+  --ferixcomerz-gold: #F6B01E;
 
   /* SPECIAL EFFECTS / OVERLAYS */
-  --kryros-orange-glow: rgba(246,139,30,0.15);
-  --kryros-shadow: rgba(0,0,0,0.10);
-  --kryros-overlay: rgba(0,0,0,0.50);
+  --ferixcomerz-orange-glow: rgba(246,139,30,0.15);
+  --ferixcomerz-shadow: rgba(0,0,0,0.10);
+  --ferixcomerz-overlay: rgba(0,0,0,0.50);
 
   /* QUANTITY BOX */
-  --kryros-quantity-bg: #313133;
-  --kryros-quantity-border: #E5E5E5;
+  --ferixcomerz-quantity-bg: #313133;
+  --ferixcomerz-quantity-border: #E5E5E5;
 
   /* ACCENT COLOR (Optional - for Events, Premium, Community) */
-  --kryros-accent-purple: #7C3AED;
+  --ferixcomerz-accent-purple: #7C3AED;
 
   /* RGB versions for opacity use */
-  --kryros-primary-rgb: 192, 21, 27;
-  --kryros-secondary-rgb: 52, 74, 100;
-  --kryros-header-navy: #001529;
+  --ferixcomerz-primary-rgb: 192, 21, 27;
+  --ferixcomerz-secondary-rgb: 52, 74, 100;
+  --ferixcomerz-header-navy: #001529;
 
   /* BUTTON HOVER / ACTIVE STATES */
-  --kryros-primary-active: #8A0F13;
+  --ferixcomerz-primary-active: #8A0F13;
 
   /* OVERLAY / BACKDROP COLORS */
-  --kryros-overlay-dark: rgba(0,0,0,0.62);
-  --kryros-overlay-navy: rgba(15,23,42,0.72);
-  --kryros-overlay-light: rgba(255,255,255,0.90);
-  --kryros-shadow-subtle: rgba(15,23,42,0.04);
-  --kryros-shadow-primary-sm: rgba(192,21,27,0.18);
-  --kryros-shadow-primary-md: rgba(192,21,27,0.25);
-  --kryros-shadow-primary-lg: rgba(192,21,27,0.30);
-  --kryros-shadow-primary-btn: rgba(192,21,27,0.45);
+  --ferixcomerz-overlay-dark: rgba(0,0,0,0.62);
+  --ferixcomerz-overlay-navy: rgba(15,23,42,0.72);
+  --ferixcomerz-overlay-light: rgba(255,255,255,0.90);
+  --ferixcomerz-shadow-subtle: rgba(15,23,42,0.04);
+  --ferixcomerz-shadow-primary-sm: rgba(192,21,27,0.18);
+  --ferixcomerz-shadow-primary-md: rgba(192,21,27,0.25);
+  --ferixcomerz-shadow-primary-lg: rgba(192,21,27,0.30);
+  --ferixcomerz-shadow-primary-btn: rgba(192,21,27,0.45);
 
-  /* THIRD-PARTY / BRAND COLORS (not part of KRYROS palette — used for external services) */
-  --kryros-whatsapp: #25D366;
-  --kryros-map-marker: #0ea5e9;
+  /* THIRD-PARTY / BRAND COLORS (not part of Ferixcomerz palette — used for external services) */
+  --ferixcomerz-whatsapp: #25D366;
+  --ferixcomerz-map-marker: #0ea5e9;
 
   /* ICON ACCENT COLORS (dashboard stat cards) */
-  --kryros-icon-bg-orders: rgba(192,21,27,0.08);
-  --kryros-icon-bg-wishlist: #fdf2f8;
-  --kryros-icon-color-wishlist: #ec4899;
-  --kryros-icon-bg-credit: #fff7ed;
-  --kryros-icon-color-credit: #f97316;
-  --kryros-icon-bg-address: #f5f3ff;
-  --kryros-icon-color-address: #8b5cf6;
+  --ferixcomerz-icon-bg-orders: rgba(192,21,27,0.08);
+  --ferixcomerz-icon-bg-wishlist: #fdf2f8;
+  --ferixcomerz-icon-color-wishlist: #ec4899;
+  --ferixcomerz-icon-bg-credit: #fff7ed;
+  --ferixcomerz-icon-color-credit: #f97316;
+  --ferixcomerz-icon-bg-address: #f5f3ff;
+  --ferixcomerz-icon-color-address: #8b5cf6;
 
   /* GET NOW BANNER GRADIENT */
-  --kryros-get-now-gradient: linear-gradient(135deg, #07392f 0%, #0a5544 60%, #073d2e 100%);
+  --ferixcomerz-get-now-gradient: linear-gradient(135deg, #07392f 0%, #0a5544 60%, #073d2e 100%);
 
   /* WARNING / NOTICE COLORS */
-  --kryros-warning-bg: #fffbeb;
-  --kryros-warning-border: #fde68a;
-  --kryros-warning-text: #92400e;
-  --kryros-star-filled: #FFC107;
+  --ferixcomerz-warning-bg: #fffbeb;
+  --ferixcomerz-warning-border: #fde68a;
+  --ferixcomerz-warning-text: #92400e;
+  --ferixcomerz-star-filled: #FFC107;
 
   /* RECEIPT / PRINT COLORS (standalone HTML document) */
-  --kryros-receipt-bg: #f5f5f5;
-  --kryros-receipt-card: #ffffff;
-  --kryros-receipt-border: #f0f0f0;
-  --kryros-receipt-success: #22c55e;
-  --kryros-receipt-text-primary: #111111;
-  --kryros-receipt-text-secondary: #555555;
-  --kryros-receipt-label: #888888;
-  --kryros-receipt-muted: #aaaaaa;
-  --kryros-receipt-red: #b91c1c;
-  --kryros-receipt-teal: #27B9AF;
+  --ferixcomerz-receipt-bg: #f5f5f5;
+  --ferixcomerz-receipt-card: #ffffff;
+  --ferixcomerz-receipt-border: #f0f0f0;
+  --ferixcomerz-receipt-success: #22c55e;
+  --ferixcomerz-receipt-text-primary: #111111;
+  --ferixcomerz-receipt-text-secondary: #555555;
+  --ferixcomerz-receipt-label: #888888;
+  --ferixcomerz-receipt-muted: #aaaaaa;
+  --ferixcomerz-receipt-red: #b91c1c;
+  --ferixcomerz-receipt-teal: #27B9AF;
 
   /* AUTH / FORM COLORS */
-  --kryros-form-bg: #FAFAFA;
-  --kryros-form-border: #E5E5E5;
-  --kryros-form-text-muted: #75757A;
-  --kryros-form-text-hint: #9E9E9E;
-  --kryros-form-text-label: #A0A0A5;
-  --kryros-form-error-bg: #FFF0F0;
-  --kryros-form-error-border: #FFD0D0;
-  --kryros-form-info-bg: #F0F7FF;
-  --kryros-form-info-border: #D0E0F0;
-  --kryros-form-success-bg: #E8F5E9;
-  --kryros-form-success-icon: #2DBE60;
-  --kryros-form-strength-bar-bg: #E5E5E5;
-  --kryros-page-bg-start: #FAFAFA;
-  --kryros-page-bg-end: #FFFFFF;
-  --kryros-card-shadow: rgba(0,0,0,0.08);
+  --ferixcomerz-form-bg: #FAFAFA;
+  --ferixcomerz-form-border: #E5E5E5;
+  --ferixcomerz-form-text-muted: #75757A;
+  --ferixcomerz-form-text-hint: #9E9E9E;
+  --ferixcomerz-form-text-label: #A0A0A5;
+  --ferixcomerz-form-error-bg: #FFF0F0;
+  --ferixcomerz-form-error-border: #FFD0D0;
+  --ferixcomerz-form-info-bg: #F0F7FF;
+  --ferixcomerz-form-info-border: #D0E0F0;
+  --ferixcomerz-form-success-bg: #E8F5E9;
+  --ferixcomerz-form-success-icon: #2DBE60;
+  --ferixcomerz-form-strength-bar-bg: #E5E5E5;
+  --ferixcomerz-page-bg-start: #FAFAFA;
+  --ferixcomerz-page-bg-end: #FFFFFF;
+  --ferixcomerz-card-shadow: rgba(0,0,0,0.08);
 
   /* ANNOUNCEMENT BAR */
-  --kryros-announcement-text: #333333;
-  --kryros-announcement-closed-bg: #dc2626;
-  --kryros-announcement-closed-text: #ffffff;
+  --ferixcomerz-announcement-text: #333333;
+  --ferixcomerz-announcement-closed-bg: #dc2626;
+  --ferixcomerz-announcement-closed-text: #ffffff;
 
   /* SOCIAL BRAND COLORS */
-  --kryros-social-facebook: #1877F2;
-  --kryros-social-instagram: #E4405F;
-  --kryros-social-twitter: #1DA1F2;
-  --kryros-social-youtube: #FF0000;
+  --ferixcomerz-social-facebook: #1877F2;
+  --ferixcomerz-social-instagram: #E4405F;
+  --ferixcomerz-social-twitter: #1DA1F2;
+  --ferixcomerz-social-youtube: #FF0000;
 }
 
 @theme inline {
   /* Background & Foreground */
-  --color-background: var(--kryros-main-bg);
-  --color-foreground: var(--kryros-primary-text);
-  --color-border: var(--kryros-border);
-  --color-input: var(--kryros-border);
-  --color-ring: var(--kryros-primary);
+  --color-background: var(--ferixcomerz-main-bg);
+  --color-foreground: var(--ferixcomerz-primary-text);
+  --color-border: var(--ferixcomerz-border);
+  --color-input: var(--ferixcomerz-border);
+  --color-ring: var(--ferixcomerz-primary);
 
   /* Card */
-  --color-card: var(--kryros-card-bg);
-  --color-card-foreground: var(--kryros-primary-text);
-  --color-card-border: var(--kryros-border);
+  --color-card: var(--ferixcomerz-card-bg);
+  --color-card-foreground: var(--ferixcomerz-primary-text);
+  --color-card-border: var(--ferixcomerz-border);
 
   /* Popover */
-  --color-popover: var(--kryros-white);
-  --color-popover-foreground: var(--kryros-primary-text);
-  --color-popover-border: var(--kryros-border);
+  --color-popover: var(--ferixcomerz-white);
+  --color-popover-foreground: var(--ferixcomerz-primary-text);
+  --color-popover-border: var(--ferixcomerz-border);
 
   /* Primary */
-  --color-primary: var(--kryros-primary-btn);
-  --color-primary-foreground: var(--kryros-white-text);
-  --color-primary-border: var(--kryros-primary-btn);
+  --color-primary: var(--ferixcomerz-primary-btn);
+  --color-primary-foreground: var(--ferixcomerz-white-text);
+  --color-primary-border: var(--ferixcomerz-primary-btn);
 
   /* Secondary */
-  --color-secondary: var(--kryros-secondary-btn);
-  --color-secondary-foreground: var(--kryros-white-text);
-  --color-secondary-border: var(--kryros-secondary-btn);
+  --color-secondary: var(--ferixcomerz-secondary-btn);
+  --color-secondary-foreground: var(--ferixcomerz-white-text);
+  --color-secondary-border: var(--ferixcomerz-secondary-btn);
 
   /* Muted */
-  --color-muted: var(--kryros-secondary-bg);
-  --color-muted-foreground: var(--kryros-secondary-text);
-  --color-muted-border: var(--kryros-border);
+  --color-muted: var(--ferixcomerz-secondary-bg);
+  --color-muted-foreground: var(--ferixcomerz-secondary-text);
+  --color-muted-border: var(--ferixcomerz-border);
 
   /* Accent */
-  --color-accent: var(--kryros-secondary-bg);
-  --color-accent-foreground: var(--kryros-primary-text);
-  --color-accent-border: var(--kryros-border);
+  --color-accent: var(--ferixcomerz-secondary-bg);
+  --color-accent-foreground: var(--ferixcomerz-primary-text);
+  --color-accent-border: var(--ferixcomerz-border);
 
   /* Destructive */
-  --color-destructive: var(--kryros-error);
-  --color-destructive-foreground: var(--kryros-white-text);
-  --color-destructive-border: var(--kryros-error);
+  --color-destructive: var(--ferixcomerz-error);
+  --color-destructive-foreground: var(--ferixcomerz-white-text);
+  --color-destructive-border: var(--ferixcomerz-error);
 
   /* Chart Colors */
-  --color-chart-1: var(--kryros-primary);
-  --color-chart-2: var(--kryros-success);
-  --color-chart-3: var(--kryros-warning);
-  --color-chart-4: var(--kryros-gold);
-  --color-chart-5: var(--kryros-link);
+  --color-chart-1: var(--ferixcomerz-primary);
+  --color-chart-2: var(--ferixcomerz-success);
+  --color-chart-3: var(--ferixcomerz-warning);
+  --color-chart-4: var(--ferixcomerz-gold);
+  --color-chart-5: var(--ferixcomerz-link);
 
   /* Sidebar */
-  --color-sidebar: var(--kryros-secondary-bg);
-  --color-sidebar-foreground: var(--kryros-primary-text);
-  --color-sidebar-border: var(--kryros-border);
-  --color-sidebar-primary: var(--kryros-primary);
-  --color-sidebar-primary-foreground: var(--kryros-white-text);
-  --color-sidebar-primary-border: var(--kryros-primary);
-  --color-sidebar-accent: var(--kryros-secondary-bg);
-  --color-sidebar-accent-foreground: var(--kryros-primary-text);
-  --color-sidebar-accent-border: var(--kryros-border);
-  --color-sidebar-ring: var(--kryros-primary);
+  --color-sidebar: var(--ferixcomerz-secondary-bg);
+  --color-sidebar-foreground: var(--ferixcomerz-primary-text);
+  --color-sidebar-border: var(--ferixcomerz-border);
+  --color-sidebar-primary: var(--ferixcomerz-primary);
+  --color-sidebar-primary-foreground: var(--ferixcomerz-white-text);
+  --color-sidebar-primary-border: var(--ferixcomerz-primary);
+  --color-sidebar-accent: var(--ferixcomerz-secondary-bg);
+  --color-sidebar-accent-foreground: var(--ferixcomerz-primary-text);
+  --color-sidebar-accent-border: var(--ferixcomerz-border);
+  --color-sidebar-ring: var(--ferixcomerz-primary);
 
-  /* KRYROS Custom Colors */
-  --color-kryros-primary: var(--kryros-primary);
-  --color-kryros-primary-hover: var(--kryros-primary-hover);
-  --color-kryros-secondary: var(--kryros-secondary);
-  --color-kryros-gold: var(--kryros-gold);
-  --color-kryros-danger: var(--kryros-error);
-  --color-kryros-success: var(--kryros-success);
-  --color-kryros-warning: var(--kryros-warning);
-  --color-kryros-accent-purple: var(--kryros-accent-purple);
-  --color-kryros-link: var(--kryros-link);
-  --color-kryros-error: var(--kryros-error);
+  /* Ferixcomerz Custom Colors */
+  --color-ferixcomerz-primary: var(--ferixcomerz-primary);
+  --color-ferixcomerz-primary-hover: var(--ferixcomerz-primary-hover);
+  --color-ferixcomerz-secondary: var(--ferixcomerz-secondary);
+  --color-ferixcomerz-gold: var(--ferixcomerz-gold);
+  --color-ferixcomerz-danger: var(--ferixcomerz-error);
+  --color-ferixcomerz-success: var(--ferixcomerz-success);
+  --color-ferixcomerz-warning: var(--ferixcomerz-warning);
+  --color-ferixcomerz-accent-purple: var(--ferixcomerz-accent-purple);
+  --color-ferixcomerz-link: var(--ferixcomerz-link);
+  --color-ferixcomerz-error: var(--ferixcomerz-error);
 
   --font-sans: 'Roboto', sans-serif;
   --font-serif: Georgia, serif;
@@ -311,7 +311,7 @@ html {
 .nav-bar {
   position: relative;
   height: 56px;
-  background: var(--kryros-white);
+  background: var(--ferixcomerz-white);
   border-radius: 22px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
   display: flex;
@@ -328,7 +328,7 @@ html {
   transform: translateX(-50%);
   width: 36px;
   height: 36px;
-  background: var(--kryros-secondary-bg);
+  background: var(--ferixcomerz-secondary-bg);
   border-radius: 50%;
   z-index: 1;
 }
@@ -340,7 +340,7 @@ html {
   transform: translateX(-50%);
   width: 44px;
   height: 44px;
-  background: var(--kryros-primary);
+  background: var(--ferixcomerz-primary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -383,22 +383,22 @@ html {
 
 .nav-item.active .icon,
 .nav-item.active .label {
-  color: var(--kryros-primary);
-  stroke: var(--kryros-primary);
+  color: var(--ferixcomerz-primary);
+  stroke: var(--ferixcomerz-primary);
 }
 
 .nav-item:not(.active) .icon,
 .nav-item:not(.active) .label {
-  color: var(--kryros-secondary-text);
-  stroke: var(--kryros-secondary-text);
+  color: var(--ferixcomerz-secondary-text);
+  stroke: var(--ferixcomerz-secondary-text);
 }
 
 .nav-item.active svg {
-  stroke: var(--kryros-primary);
+  stroke: var(--ferixcomerz-primary);
 }
 
 .nav-item:not(.active) svg {
-  stroke: var(--kryros-secondary-text);
+  stroke: var(--ferixcomerz-secondary-text);
 }
 
 .icon-wrapper {
@@ -416,14 +416,14 @@ html {
   right: -4px;
   min-width: 12px;
   height: 12px;
-  background: var(--kryros-primary);
+  background: var(--ferixcomerz-primary);
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 7px;
   font-weight: 700;
-  color: var(--kryros-white-text);
+  color: var(--ferixcomerz-white-text);
   padding: 0 2px;
 }
 

@@ -361,7 +361,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'kryros-auth',
+      name: 'ferixcomerz-auth',
       partialize: (state) => ({
         token: state.token,
         refreshToken: state.refreshToken,

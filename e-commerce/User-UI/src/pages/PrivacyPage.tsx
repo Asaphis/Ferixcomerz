@@ -34,7 +34,7 @@ export default function PrivacyPage() {
       <h1 className="text-2xl font-black text-foreground mb-0.5">Privacy Policy</h1>
       <p className="text-xs text-muted-foreground mb-3">Last updated: May 20, 2026</p>
       <p className="text-xs text-muted-foreground leading-relaxed mb-5">
-        At KRYROS, we respect your privacy and are committed to protecting your personal data.
+        At Ferixcomerz, we respect your privacy and are committed to protecting your personal data.
       </p>
 
       <div className="space-y-3 mb-5">

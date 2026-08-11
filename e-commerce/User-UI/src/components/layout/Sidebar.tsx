@@ -127,17 +127,17 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
             className="fixed left-0 top-0 bottom-0 z-50 w-[88vw] md:w-[400px] bg-card flex flex-col overflow-hidden shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-border bg-[var(--kryros-header-navy)]">
+            <div className="flex items-center justify-between p-5 border-b border-border bg-[var(--ferixcomerz-header-navy)]">
               <Link href="/" onClick={onClose}>
                 <span className="flex items-center gap-2">
                   <img
-                    src="/kryros-logo.png"
-                    alt="KRYROS"
+                    src="/ferixcomerz-logo.png"
+                    alt="Ferixcomerz"
                     className="w-10 h-10 object-contain"
                     loading="eager"
                     decoding="async"
                   />
-                  <span className="text-xl font-black text-white tracking-tight uppercase">KRYROS</span>
+                  <span className="text-xl font-black text-white tracking-tight uppercase">Ferixcomerz</span>
                 </span>
               </Link>
               <button
@@ -155,22 +155,22 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
                 {/* APP DOWNLOAD Section (Pinned at top) */}
                 <div className="border-b border-border/50 mb-1">
                   <a 
-                    href="/downloads/KRYROS_User_App.apk"
+                    href="/downloads/Ferixcomerz_User_App.apk"
                     download
                     onClick={onClose}
                     className="w-full flex items-center justify-between px-4 py-4 bg-primary/[0.03] hover:bg-primary/[0.08] transition-colors group rounded-xl"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-[var(--kryros-header-navy)] flex items-center justify-center p-1.5 shadow-sm group-hover:scale-110 transition-transform">
+                      <div className="w-8 h-8 rounded-full bg-[var(--ferixcomerz-header-navy)] flex items-center justify-center p-1.5 shadow-sm group-hover:scale-110 transition-transform">
                         <img 
-                          src="/kryros-logo.png" 
+                          src="/ferixcomerz-logo.png" 
                           alt="" 
                           className="w-full h-full object-contain brightness-0 invert" 
                         />
                       </div>
                       <div className="flex flex-col">
                         <span className="text-sm font-black text-primary uppercase tracking-tight">Download App</span>
-                        <span className="text-[10px] text-muted-foreground font-medium">Get KRYROS Android APK</span>
+                        <span className="text-[10px] text-muted-foreground font-medium">Get Ferixcomerz Android APK</span>
                       </div>
                     </div>
                     <Smartphone className="w-5 h-5 text-primary" />

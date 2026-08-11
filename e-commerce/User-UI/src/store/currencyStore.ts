@@ -198,7 +198,7 @@ export const useCurrencyStore = create<CurrencyState>()(
       },
     }),
     {
-      name: 'kryros-currency',
+      name: 'ferixcomerz-currency',
       partialize: (state) => ({ selected: state.selected }),
     }
   )

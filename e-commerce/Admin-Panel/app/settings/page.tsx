@@ -26,8 +26,8 @@ function SettingsContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
   const [activeTab, setActiveTab] = useState<Tab>('general');
-  const [storeName, setStoreName] = useState('Kryros Mobile');
-  const [storeEmail, setStoreEmail] = useState(process.env.NEXT_PUBLIC_STORE_EMAIL || 'info@kryros.com');
+  const [storeName, setStoreName] = useState('Ferixcomerz Mobile');
+  const [storeEmail, setStoreEmail] = useState(process.env.NEXT_PUBLIC_STORE_EMAIL || 'info@ferixcomerz.com');
   const [storePhone, setStorePhone] = useState('+260 97X XXX XXX');
   const [timezone, setTimezone] = useState('Africa/Lusaka');
   const [emailNotif, setEmailNotif] = useState(true);
@@ -493,7 +493,7 @@ function SettingsContent() {
                               maxWidth: '100%',
                               whiteSpace: 'nowrap'
                             }}>
-                              {twoFAQr.split(',')[1] ? atob(twoFAQr.split(',')[1]).split('?')[0] + '?' + atob(twoFAQr.split(',')[1]).split('?')[1] : 'otpauth://totp/KRYROS%20Admin:...'}
+                              {twoFAQr.split(',')[1] ? atob(twoFAQr.split(',')[1]).split('?')[0] + '?' + atob(twoFAQr.split(',')[1]).split('?')[1] : 'otpauth://totp/Ferixcomerz%20Admin:...'}
                             </code>
                             <button
                               onClick={() => {

@@ -1,4 +1,4 @@
-# KRYROS Homepage Update — Deployment Instructions (Batch 2)
+# Ferixcomerz Homepage Update — Deployment Instructions (Batch 2)
 
 ## Overview
 

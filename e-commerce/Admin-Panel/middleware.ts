@@ -71,8 +71,8 @@ function isTokenExpired(token: string): boolean {
 
 // Helper to inject Authorization header if a token cookie exists
 function injectAuthHeader(request: NextRequest, response: NextResponse): NextResponse {
-  const httpOnlyToken = request.cookies.get("kryros_token")?.value;
-  const legacyToken = request.cookies.get("kryros_admin_token")?.value;
+  const httpOnlyToken = request.cookies.get("ferixcomerz_token")?.value;
+  const legacyToken = request.cookies.get("ferixcomerz_admin_token")?.value;
   const bearerToken = httpOnlyToken || legacyToken;
 
   if (bearerToken) {
@@ -96,13 +96,13 @@ export function middleware(request: NextRequest) {
     return addSecurityHeaders(NextResponse.next(), request);
   }
 
-  // ── KRYROS Admin Route Protection ────────────────────────────────────────
+  // ── Ferixcomerz Admin Route Protection ────────────────────────────────────────
   const ADMIN_PUBLIC = ["/login", "/api/", "/_next", "/favicon"];
   const needsAdminAuth = !ADMIN_PUBLIC.some((p) => pathname.startsWith(p));
   if (needsAdminAuth) {
     const adminToken =
-      request.cookies.get("kryros_token")?.value ||
-      request.cookies.get("kryros_admin_token")?.value;
+      request.cookies.get("ferixcomerz_token")?.value ||
+      request.cookies.get("ferixcomerz_admin_token")?.value;
     if (!adminToken || isTokenExpired(adminToken)) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("from", encodeURIComponent(pathname));
@@ -233,7 +233,7 @@ export function middleware(request: NextRequest) {
 
   const accept = request.headers.get("accept") || "";
   const userAgent = request.headers.get("user-agent") || "";
-  const isMobileApp = userAgent.includes("KRYROS_ADMIN_APP") || userAgent.includes("KRYROS_USER_APP") || userAgent.includes("KRYROS_MOBILE_APP");
+  const isMobileApp = userAgent.includes("FERIXCOMERZ_ADMIN_APP") || userAgent.includes("FERIXCOMERZ_USER_APP") || userAgent.includes("FERIXCOMERZ_MOBILE_APP");
   const isIframe = request.headers.get("sec-fetch-dest") === "iframe" && !isMobileApp;
 
   if (isIframe) {
@@ -267,7 +267,7 @@ function addSecurityHeaders(response: NextResponse, request: NextRequest): NextR
   }
 
   const userAgent = request.headers.get("user-agent") || "";
-  const isMobileApp = userAgent.includes("KRYROS_ADMIN_APP") || userAgent.includes("KRYROS_USER_APP") || userAgent.includes("KRYROS_MOBILE_APP");
+  const isMobileApp = userAgent.includes("FERIXCOMERZ_ADMIN_APP") || userAgent.includes("FERIXCOMERZ_USER_APP") || userAgent.includes("FERIXCOMERZ_MOBILE_APP");
   
   if (isMobileApp) {
     response.headers.set("Content-Security-Policy", "frame-ancestors *");

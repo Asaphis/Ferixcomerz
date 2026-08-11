@@ -218,7 +218,7 @@ export default function ProductPage() {
         className="w-12 h-12 rounded-full animate-spin"
         style={{
           border: "4px solid var(--border)",
-          borderTop: "4px solid var(--kryros-primary)",
+          borderTop: "4px solid var(--ferixcomerz-primary)",
         }}
       />
     </div>
@@ -513,7 +513,7 @@ export default function ProductPage() {
 
         {/* Condition row */}
         <div className="py-3 border-t border-border">
-          <span className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-bold shadow-sm" style={{ background:'var(--kryros-primary)', color:'var(--kryros-white-text)' }}>
+          <span className="inline-flex items-center rounded-full px-4 py-1.5 text-xs font-bold shadow-sm" style={{ background:'var(--ferixcomerz-primary)', color:'var(--ferixcomerz-white-text)' }}>
             {product.condition || "New"}
           </span>
         </div>
@@ -660,7 +660,7 @@ export default function ProductPage() {
                       <span className="text-sm font-bold text-foreground">{product.rating}</span>
                       <div className="flex items-center gap-0.5">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5" style={{ fill: i < Math.floor(product.rating) ? "var(--kryros-star-filled)" : "var(--kryros-border)", color: i < Math.floor(product.rating) ? "var(--kryros-star-filled)" : "var(--kryros-border)" }} />
+                          <Star key={i} className="w-3.5 h-3.5" style={{ fill: i < Math.floor(product.rating) ? "var(--ferixcomerz-star-filled)" : "var(--ferixcomerz-border)", color: i < Math.floor(product.rating) ? "var(--ferixcomerz-star-filled)" : "var(--ferixcomerz-border)" }} />
                         ))}
                       </div>
                     </>

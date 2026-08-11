@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   KRYROS GLOBAL THEME — Single source of truth for all colors
+   Ferixcomerz GLOBAL THEME — Single source of truth for all colors
    To change any color in the entire admin panel, edit only this file.
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -18,7 +18,7 @@
   --surface:              #FAFAFA;
   --footer-bg:            #000000;
   --header-navy:          #001529;
-  --kryros-primary-rgb:   192, 21, 27;
+  --ferixcomerz-primary-rgb:   192, 21, 27;
 
   /* ── NEUTRAL / GRAY SCALE ───────────────────────────────────────────────── */
   --light-gray:           #FFFFFF;

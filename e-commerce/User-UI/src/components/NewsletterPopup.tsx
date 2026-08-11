@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { X, CheckCircle, Loader2 } from "lucide-react";
 import { api, EFFECTIVE_API_BASE } from "@/lib/api";
 
-const STORAGE_KEY = "kryros_nl_subscribed";
+const STORAGE_KEY = "ferixcomerz_nl_subscribed";
 
 /** CMS config shape from GET /api/cms/homepage-sections?type=Newsletter */
 interface NLConfig {
@@ -87,7 +87,7 @@ export default function NewsletterPopup() {
   const handleDismiss = () => {
     // X button -> dismiss for this session only
     setVisible(false);
-    sessionStorage.setItem("kryros_nl_dismissed", "1");
+    sessionStorage.setItem("ferixcomerz_nl_dismissed", "1");
   };
 
   if (!visible || !config) return null;
@@ -95,7 +95,7 @@ export default function NewsletterPopup() {
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-      style={{ background: "var(--kryros-overlay-dark)", backdropFilter: "blur(4px)" }}
+      style={{ background: "var(--ferixcomerz-overlay-dark)", backdropFilter: "blur(4px)" }}
       onClick={handleDismiss}
     >
       <div
@@ -114,7 +114,7 @@ export default function NewsletterPopup() {
           style={{
             position: "absolute", top: 12, right: 12,
             width: 38, height: 38,
-            background: "var(--kryros-overlay-navy)",
+            background: "var(--ferixcomerz-overlay-navy)",
             backdropFilter: "blur(4px)",
             borderRadius: 10,
             border: "none",
@@ -135,7 +135,7 @@ export default function NewsletterPopup() {
           <div style={{ padding: "48px 24px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
             <div style={{
               width: 64, height: 64, borderRadius: "50%",
-              background: "linear-gradient(135deg,var(--kryros-primary),var(--kryros-primary-hover))",
+              background: "linear-gradient(135deg,var(--ferixcomerz-primary),var(--ferixcomerz-primary-hover))",
               display: "flex", alignItems: "center", justifyContent: "center",
               marginBottom: 16,
             }}>
@@ -145,7 +145,7 @@ export default function NewsletterPopup() {
               You're subscribed!
             </h3>
             <p style={{ fontSize: 14, color: "hsl(var(--muted-foreground))", lineHeight: 1.55 }}>
-              Welcome to KRYROS updates. Check your inbox for a welcome email!
+              Welcome to Ferixcomerz updates. Check your inbox for a welcome email!
             </p>
           </div>
         ) : (
@@ -163,7 +163,7 @@ export default function NewsletterPopup() {
               /* Gradient placeholder when no image configured */
               <div style={{
                 width: "100%", height: 240,
-                background: "linear-gradient(135deg,var(--kryros-primary) 0%,var(--kryros-primary-hover) 55%,var(--kryros-dark-card) 100%)",
+                background: "linear-gradient(135deg,var(--ferixcomerz-primary) 0%,var(--ferixcomerz-primary-hover) 55%,var(--ferixcomerz-dark-card) 100%)",
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2">
@@ -205,7 +205,7 @@ export default function NewsletterPopup() {
                   borderRadius: 10,
                   outline: "none",
                   background: "hsl(var(--background))",
-                  boxShadow: "0 1px 2px var(--kryros-shadow-subtle)",
+                  boxShadow: "0 1px 2px var(--ferixcomerz-shadow-subtle)",
                   fontFamily: "inherit",
                   boxSizing: "border-box",
                   marginBottom: error ? 6 : 10,
@@ -213,7 +213,7 @@ export default function NewsletterPopup() {
               />
 
               {error && (
-                <p style={{ fontSize: 12, color: "var(--kryros-danger)", marginBottom: 8 }}>{error}</p>
+                <p style={{ fontSize: 12, color: "var(--ferixcomerz-danger)", marginBottom: 8 }}>{error}</p>
               )}
 
               {/* Submit button — full width below input */}
@@ -227,7 +227,7 @@ export default function NewsletterPopup() {
                   gap: 6,
                   width: "100%",
                   padding: "13px 20px",
-                  background: "var(--kryros-primary)",
+                  background: "var(--ferixcomerz-primary)",
                   color: "white",
                   fontSize: 14, fontWeight: 700,
                   border: "none",
@@ -238,10 +238,10 @@ export default function NewsletterPopup() {
                   transition: "background 0.2s",
                   marginBottom: 10,
                   boxSizing: "border-box",
-                  boxShadow: "0 10px 24px rgba(var(--kryros-primary-rgb), 0.24)",
+                  boxShadow: "0 10px 24px rgba(var(--ferixcomerz-primary-rgb), 0.24)",
                 }}
-                onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "var(--kryros-primary-hover)")}
-                onMouseLeave={(e) => (e.currentTarget.style.background = "var(--kryros-primary)")}
+                onMouseEnter={(e) => !loading && (e.currentTarget.style.background = "var(--ferixcomerz-primary-hover)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "var(--ferixcomerz-primary)")}
               >
                 {loading && <Loader2 size={14} className="animate-spin" />}
                 {config.button_text || "Submit"}

@@ -284,8 +284,8 @@ class _WebViewPageState extends State<WebViewPage> {
           notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              'kryros_notifications',
-              'KRYROS Notifications',
+              'ferixcomerz_notifications',
+              'Ferixcomerz Notifications',
               importance: Importance.max,
               priority: Priority.high,
               icon: 'launcher_icon',
@@ -358,7 +358,7 @@ class _WebViewPageState extends State<WebViewPage> {
               supportZoom: true,
               useWideViewPort: true,
               loadWithOverviewMode: true,
-              userAgent: "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36 KRYROS_ADMIN_APP",
+              userAgent: "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Mobile Safari/537.36 Ferixcomerz_ADMIN_APP",
               mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
               safeBrowsingEnabled: false,
               allowFileAccessFromFileURLs: true,

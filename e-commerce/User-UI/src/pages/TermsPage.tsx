@@ -34,7 +34,7 @@ export default function TermsPage() {
       <h1 className="text-2xl font-black text-foreground mb-0.5">Terms & Conditions</h1>
       <p className="text-xs text-muted-foreground mb-3">Last updated: May 20, 2026</p>
       <p className="text-xs text-muted-foreground leading-relaxed mb-5">
-        Please read these terms and conditions carefully before using KRYROS.
+        Please read these terms and conditions carefully before using Ferixcomerz.
       </p>
 
       <div className="space-y-3 mb-5">

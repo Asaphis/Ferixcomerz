@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext } from "react";
 
-// ── Theme context — KRYROS uses a single fixed light theme.
+// ── Theme context — Ferixcomerz uses a single fixed light theme.
 // Dark/light mode has been removed. This context is kept as a no-op stub
 // so that any existing imports of useTheme / ThemeProvider continue to compile
 // without changes. All color decisions are made in globals.css via CSS variables.

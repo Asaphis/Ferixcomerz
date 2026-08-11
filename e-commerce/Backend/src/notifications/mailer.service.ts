@@ -65,7 +65,7 @@ export class MailerService {
       this.logger.error(`Email FAILED (SMTP not configured): ${subject} → ${to}`);
       throw new Error('SMTP service not configured. Please contact administrator.');
     }
-    const from = this.configService.get('MAIL_FROM') || '"KRYROS Mobile" <kryrosmobile@gmail.com>';
+    const from = this.configService.get('MAIL_FROM') || '"Ferixcomerz Mobile" <ferixcomerzmobile@gmail.com>';
     try {
       const info = await this.transporter.sendMail({ from, to, subject, text, html });
       this.logger.log(`Email sent successfully: ${info.messageId} → ${to}`);
@@ -89,7 +89,7 @@ export class MailerService {
   }): string {
     const { firstName, orderNumber, total, currency, paymentMethod, shippingAddress, trackingUrl } = params;
     const appUrl = this.configService.get('FRONTEND_URL');
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Order Received - KRYROS</title><style>${BASE_STYLES}</style></head>
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Order Received - Ferixcomerz</title><style>${BASE_STYLES}</style></head>
 <body><div class="wrapper"><div class="card">
   <div class="header">
     <div class="logo">KR<span>YROS</span></div>
@@ -97,7 +97,7 @@ export class MailerService {
   </div>
   <div class="body">
     <div class="greeting">Order Received! 🎉</div>
-    <p class="text">Hi <strong>${firstName}</strong>, thank you for shopping with KRYROS! Your order has been received and this email serves as your order summary / invoice.</p>
+    <p class="text">Hi <strong>${firstName}</strong>, thank you for shopping with Ferixcomerz! Your order has been received and this email serves as your order summary / invoice.</p>
     <div class="order-box">
       <div class="order-row"><span class="order-label">Order Number</span><span class="order-value">#${orderNumber}</span></div>
       <div class="order-row"><span class="order-label">Total Amount</span><span class="order-value">${currency} ${total}</span></div>
@@ -108,9 +108,9 @@ export class MailerService {
     <p class="text">If payment still needs verification, we will automatically send your final payment receipt once it is confirmed. You can also track your order any time using the button below.</p>
     <a href="${trackingUrl || appUrl}" class="cta-btn">Track My Order →</a>
     <div class="divider"></div>
-    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Reply to this email or contact our support team at +260 969 597 029 or support@kryros.com</p>
+    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Reply to this email or contact our support team at +260 969 597 029 or support@ferixcomerz.com</p>
   </div>
-  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">KRYROS Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@kryros.com | 🌐 www.kryros.com</p></div>
+  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">Ferixcomerz Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@ferixcomerz.com | 🌐 www.ferixcomerz.com</p></div>
 </div></div></body></html>`;
   }
 
@@ -126,7 +126,7 @@ export class MailerService {
   }): string {
     const { firstName, orderNumber, status, statusMessage, statusEmoji, statusColor, trackingUrl } = params;
     const appUrl = this.configService.get('FRONTEND_URL');
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Order Update - KRYROS</title><style>${BASE_STYLES}</style></head>
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Order Update - Ferixcomerz</title><style>${BASE_STYLES}</style></head>
 <body><div class="wrapper"><div class="card">
   <div class="header">
     <div class="logo">KR<span>YROS</span></div>
@@ -142,9 +142,9 @@ export class MailerService {
     <p class="text">${statusMessage}</p>
     <a href="${trackingUrl || appUrl}" class="cta-btn">View Order Details →</a>
     <div class="divider"></div>
-    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Reply to this email or contact our support team at +260 969 597 029 or support@kryros.com</p>
+    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Reply to this email or contact our support team at +260 969 597 029 or support@ferixcomerz.com</p>
   </div>
-  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">KRYROS Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@kryros.com | 🌐 www.kryros.com</p></div>
+  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">Ferixcomerz Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@ferixcomerz.com | 🌐 www.ferixcomerz.com</p></div>
 </div></div></body></html>`;
   }
 
@@ -159,11 +159,11 @@ export class MailerService {
   }): string {
     const { firstName, subject, headline, bodyHtml, ctaText, ctaUrl } = params;
     const appUrl = this.configService.get('FRONTEND_URL');
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${subject} - KRYROS</title><style>${BASE_STYLES}</style></head>
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${subject} - Ferixcomerz</title><style>${BASE_STYLES}</style></head>
 <body><div class="wrapper"><div class="card">
   <div class="header">
     <div class="logo">KR<span>YROS</span></div>
-    <div class="tagline">From the KRYROS Team</div>
+    <div class="tagline">From the Ferixcomerz Team</div>
   </div>
   <div class="body">
     <div class="greeting">${headline}</div>
@@ -171,9 +171,9 @@ export class MailerService {
     <div style="font-size:14px;color:#475569;line-height:1.8;margin-bottom:20px">${bodyHtml}</div>
     ${ctaText ? `<a href="${ctaUrl || appUrl}" class="cta-btn">${ctaText} →</a>` : ''}
     <div class="divider"></div>
-    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Contact us at +260 969 597 029 or support@kryros.com</p>
+    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Contact us at +260 969 597 029 or support@ferixcomerz.com</p>
   </div>
-  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">KRYROS Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@kryros.com | 🌐 www.kryros.com</p></div>
+  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">Ferixcomerz Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@ferixcomerz.com | 🌐 www.ferixcomerz.com</p></div>
 </div></div></body></html>`;
   }
 
@@ -191,7 +191,7 @@ export class MailerService {
     const html = this.buildOrderConfirmationHtml(params);
     return this.sendMail(
       params.to,
-      `Order Received #${params.orderNumber} - KRYROS`,
+      `Order Received #${params.orderNumber} - Ferixcomerz`,
       `Hi ${params.firstName}, your order #${params.orderNumber} has been received. Total: ${params.currency} ${params.total}.`,
       html,
     );
@@ -206,7 +206,7 @@ export class MailerService {
     trackingUrl?: string;
   }) {
     const statusMap: Record<string, { label: string; message: string; emoji: string; color: string }> = {
-      CONFIRMED:  { label: 'Order Confirmed',      emoji: '✅', color: '#C0151B', message: 'Your order has been confirmed and our team is preparing it for dispatch. Thank you for choosing KRYROS!' },
+      CONFIRMED:  { label: 'Order Confirmed',      emoji: '✅', color: '#C0151B', message: 'Your order has been confirmed and our team is preparing it for dispatch. Thank you for choosing Ferixcomerz!' },
       PROCESSING: { label: 'Processing Your Order', emoji: '📦', color: '#6366f1', message: 'We\'re currently processing your order with care. You\'ll hear from us as soon as it ships.' },
       SHIPPED:    { label: 'Order Shipped',         emoji: '🚚', color: '#3b82f6', message: 'Great news! Your order is on its way to you. We\'ll update you when it\'s close to delivery.' },
       OUT_FOR_DELIVERY: { label: 'Out for Delivery', emoji: '🏃', color: '#f59e0b', message: 'Your order is out for delivery today. Please be available to receive it. We\'re excited to get this to you!' },
@@ -256,7 +256,7 @@ export class MailerService {
   // ─── Newsletter: Welcome Email ────────────────────────────────────────────
   async sendNewsletterWelcome(email: string): Promise<void> {
     const appUrl = this.configService.get('FRONTEND_URL');
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Welcome to KRYROS Newsletter</title><style>${BASE_STYLES}
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Welcome to Ferixcomerz Newsletter</title><style>${BASE_STYLES}
   .nl-highlight { background: linear-gradient(135deg, #C0151B22, #A0101511); border: 1px solid #C0151B44; border-radius: 10px; padding: 16px 20px; margin: 16px 0; }
   .nl-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #475569; margin-bottom: 10px; }
   .nl-item:last-child { margin-bottom: 0; }
@@ -268,25 +268,25 @@ export class MailerService {
     <div class="tagline">You're on the list!</div>
   </div>
   <div class="body">
-    <div class="greeting">Welcome to KRYROS Updates!</div>
-    <p class="text">You've successfully subscribed to the <strong>KRYROS Newsletter</strong>. You'll be the first to know about exclusive deals, new arrivals, and special offers.</p>
+    <div class="greeting">Welcome to Ferixcomerz Updates!</div>
+    <p class="text">You've successfully subscribed to the <strong>Ferixcomerz Newsletter</strong>. You'll be the first to know about exclusive deals, new arrivals, and special offers.</p>
     <div class="nl-highlight">
       <div class="nl-item"><div class="nl-dot"></div><span>Early access to flash sales &amp; promotions</span></div>
       <div class="nl-item"><div class="nl-dot"></div><span>New product announcements</span></div>
       <div class="nl-item"><div class="nl-dot"></div><span>Exclusive subscriber-only discounts</span></div>
       <div class="nl-item"><div class="nl-dot"></div><span>Tech tips and buying guides</span></div>
     </div>
-    <a href="${appUrl}" class="cta-btn">Shop KRYROS Now →</a>
+    <a href="${appUrl}" class="cta-btn">Shop Ferixcomerz Now →</a>
     <div class="divider"></div>
-    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Contact us at +260 969 597 029 or support@kryros.com</p>
+    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Contact us at +260 969 597 029 or support@ferixcomerz.com</p>
   </div>
-  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">KRYROS Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@kryros.com | 🌐 www.kryros.com</p></div>
+  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">Ferixcomerz Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@ferixcomerz.com | 🌐 www.ferixcomerz.com</p></div>
 </div></div></body></html>`;
 
     await this.sendMail(
       email,
-      'Welcome to KRYROS Newsletter!',
-      'You have successfully subscribed to the KRYROS Newsletter. Stay tuned for the latest deals and updates.',
+      'Welcome to Ferixcomerz Newsletter!',
+      'You have successfully subscribed to the Ferixcomerz Newsletter. Stay tuned for the latest deals and updates.',
       html,
     );
   }
@@ -301,20 +301,20 @@ export class MailerService {
       .map((line) => `<p class="text">${line}</p>`)
       .join('');
 
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${subject} - KRYROS</title><style>${BASE_STYLES}</style></head>
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${subject} - Ferixcomerz</title><style>${BASE_STYLES}</style></head>
 <body><div class="wrapper"><div class="card">
   <div class="header">
     <div class="logo">KR<span>YROS</span></div>
-    <div class="tagline">KRYROS Newsletter</div>
+    <div class="tagline">Ferixcomerz Newsletter</div>
   </div>
   <div class="body">
     <div class="greeting">${subject}</div>
     ${bodyHtml}
     <a href="${appUrl}" class="cta-btn">Shop Now →</a>
     <div class="divider"></div>
-    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Contact us at +260 969 597 029 or support@kryros.com</p>
+    <p class="text" style="font-size:12px;color:#94a3b8">Questions? We're here to help! Contact us at +260 969 597 029 or support@ferixcomerz.com</p>
   </div>
-  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">KRYROS Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@kryros.com | 🌐 www.kryros.com</p></div>
+  <div class="footer"><p class="footer-text">© 2026 <span class="footer-brand">Ferixcomerz Mobile Tech Limited</span><br>Secure · Trusted · Fast</p><p class="contact-info">📞 +260 969 597 029 | 📧 support@ferixcomerz.com | 🌐 www.ferixcomerz.com</p></div>
 </div></div></body></html>`;
 
     await this.sendMail(to, subject, body, html);

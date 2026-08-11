@@ -48,18 +48,18 @@ export default function NewsletterSection({
 
   if (done) {
     return (
-      <section className="py-8 md:py-12 text-center" style={{ background: bgColor || 'var(--kryros-secondary-bg)' }}>
+      <section className="py-8 md:py-12 text-center" style={{ background: bgColor || 'var(--ferixcomerz-secondary-bg)' }}>
         <div className="max-w-lg mx-auto px-4">
           <CheckCircle className="w-10 h-10 mx-auto mb-3 text-primary" />
           <h3 className="text-lg font-bold mb-1">You're subscribed!</h3>
-          <p className="text-sm text-muted-foreground">Welcome to KRYROS updates. Check your inbox!</p>
+          <p className="text-sm text-muted-foreground">Welcome to Ferixcomerz updates. Check your inbox!</p>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-8 md:py-12 relative overflow-hidden" style={{ background: bgColor || 'var(--kryros-secondary-bg)', color: textColor }}>
+    <section className="py-8 md:py-12 relative overflow-hidden" style={{ background: bgColor || 'var(--ferixcomerz-secondary-bg)', color: textColor }}>
       {backgroundImage && <img src={backgroundImage} alt="" className="absolute inset-0 w-full h-full object-cover opacity-10" />}
       <div className="max-w-lg mx-auto px-4 text-center relative z-10">
         <h2 className="text-2xl font-black mb-2">{title}</h2>

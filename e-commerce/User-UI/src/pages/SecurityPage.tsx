@@ -45,7 +45,7 @@ export default function SecurityPage() {
       </div>
 
       <div className="bg-primary/5 border border-primary/20 rounded-2xl p-4 text-center">
-        <p className="text-xs font-semibold text-primary">Shop with confidence. You're safe with KRYROS.</p>
+        <p className="text-xs font-semibold text-primary">Shop with confidence. You're safe with Ferixcomerz.</p>
       </div>
     </div>
   );

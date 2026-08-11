@@ -22,7 +22,7 @@ async function loadOtplib(): Promise<typeof import('otplib')> {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const CIPHER_ALGORITHM = 'aes-256-gcm';
-const SALT = 'kryros-totp-v1';
+const SALT = 'ferixcomerz-totp-v1';
 
 function getDerivedKey(): Buffer {
   const raw = process.env.TOTP_ENCRYPTION_KEY || process.env.JWT_SECRET;
@@ -70,7 +70,7 @@ function decryptSecret(encryptedValue: string): string {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function buildOtpauthUrl(email: string, secret: string): string {
-  const issuer = 'KRYROS Admin';
+  const issuer = 'Ferixcomerz Admin';
   return `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(email)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}`;
 }
 

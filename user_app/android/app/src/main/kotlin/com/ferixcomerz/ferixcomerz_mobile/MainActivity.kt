@@ -1,4 +1,4 @@
-package com.kryros.kryros_mobile
+package com.ferixcomerz.ferixcomerz_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

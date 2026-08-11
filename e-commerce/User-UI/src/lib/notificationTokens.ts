@@ -2,15 +2,15 @@ import { initFirebase, requestNotificationPermission } from "@/lib/firebase";
 
 declare global {
   interface Window {
-    kryrosNativeFcmToken?: string;
-    kryrosNativeFcmPlatform?: string;
+    ferixcomerzNativeFcmToken?: string;
+    ferixcomerzNativeFcmPlatform?: string;
   }
 }
 
 export function getNativeFcmToken(): string | null {
   if (typeof window === "undefined") return null;
 
-  const token = window.kryrosNativeFcmToken?.trim();
+  const token = window.ferixcomerzNativeFcmToken?.trim();
   return token || null;
 }
 

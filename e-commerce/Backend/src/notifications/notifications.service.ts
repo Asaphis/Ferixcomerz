@@ -136,7 +136,7 @@ export class NotificationsService implements OnModuleInit {
         android: { 
           priority: 'high', 
           notification: { 
-            channelId: 'kryros_notifications', 
+            channelId: 'ferixcomerz_notifications', 
             clickAction: 'FLUTTER_NOTIFICATION_CLICK', 
             sound: 'default',
             title,
@@ -261,14 +261,14 @@ export class NotificationsService implements OnModuleInit {
     // 1. Notify Admins
     await this.sendToAdmins(
       'New User Registered! 🆕',
-      `${user.firstName} ${user.lastName} has joined KRYROS.`,
+      `${user.firstName} ${user.lastName} has joined Ferixcomerz.`,
       { type: 'USER_REGISTER', userId: user.id, url: `/users?id=${user.id}` }
     );
 
     // 2. Welcome Notification to User
     await this.sendToUser(
       user.id,
-      'Welcome to KRYROS! 🎉',
+      'Welcome to Ferixcomerz! 🎉',
       `Hi ${user.firstName}, thank you for joining us. Start exploring our products today!`,
       { type: 'WELCOME', userId: user.id }
     );
@@ -538,7 +538,7 @@ export class NotificationsService implements OnModuleInit {
     }
     
     const auth = Buffer.from(`${apiKey}:${secretKey}`).toString('base64');
-    const sourceAddr = this.configService.get('BEEM_SOURCE_ADDR', 'KRYROS');
+    const sourceAddr = this.configService.get('BEEM_SOURCE_ADDR', 'Ferixcomerz');
     
     try {
       this.logger.log(`Attempting to send SMS to ${cleanPhone} via Beem...`);

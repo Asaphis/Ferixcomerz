@@ -1,8 +1,8 @@
 {
-  "name": "kryros-backend",
+  "name": "ferixcomerz-backend",
   "version": "1.0.0",
-  "description": "KRYROS Mobile Tech Backend API",
-  "author": "KRYROS MOBILE TECH LIMITED",
+  "description": "Ferixcomerz Mobile Tech Backend API",
+  "author": "Ferixcomerz MOBILE TECH LIMITED",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

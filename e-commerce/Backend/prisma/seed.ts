@@ -83,12 +83,12 @@ async function main() {
       sortOrder: 0,
       isEnabled: true,
       config: {
-        accountName: 'KRYROS LIMITED',
+        accountName: 'Ferixcomerz LIMITED',
         accountNumber: '91200012345667',
       },
     },
   });
-  console.log('  ✔ Bank Transfer (Stanbic Bank Zambia - KRYROS LIMITED)');
+  console.log('  ✔ Bank Transfer (Stanbic Bank Zambia - Ferixcomerz LIMITED)');
 
   // ── 4. Cash on Delivery ──────────────────────────────────────────────────
   await prisma.checkoutMethod.upsert({

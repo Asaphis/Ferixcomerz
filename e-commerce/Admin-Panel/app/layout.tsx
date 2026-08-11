@@ -12,8 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Kryros Admin Portal",
-  description: "KRYROS - Admin Dashboard",
+  title: "Ferixcomerz Admin Portal",
+  description: "Ferixcomerz - Admin Dashboard",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

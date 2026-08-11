@@ -51,7 +51,7 @@ export default function CartPage() {
   }, []);
 
   const TopBar = () => (
-    <div className="md:hidden sticky top-0 z-10 bg-[var(--kryros-header-navy)] border-b border-white/10 px-4 py-3 flex items-center gap-3 shadow-sm">
+    <div className="md:hidden sticky top-0 z-10 bg-[var(--ferixcomerz-header-navy)] border-b border-white/10 px-4 py-3 flex items-center gap-3 shadow-sm">
       <Link href={displayBasePath}>
         <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors text-white">
           <ChevronLeft className="w-5 h-5" />
@@ -59,8 +59,8 @@ export default function CartPage() {
       </Link>
       <span className="flex items-center">
         <img
-          src="/kryros-logo.png"
-          alt="KRYROS"
+          src="/ferixcomerz-logo.png"
+          alt="Ferixcomerz"
           className="w-9 h-9 object-contain"
         />
       </span>

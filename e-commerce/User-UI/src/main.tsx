@@ -17,14 +17,14 @@ initFirebase().catch(() => undefined);
 function linkNativeFcmToken(rawToken: unknown) {
   if (typeof rawToken !== "string" || !rawToken.trim()) return;
 
-  window.kryrosNativeFcmToken = rawToken.trim();
-  void registerNativeTokenWithSession(window.kryrosNativeFcmToken);
+  window.ferixcomerzNativeFcmToken = rawToken.trim();
+  void registerNativeTokenWithSession(window.ferixcomerzNativeFcmToken);
 }
 
 const initialNativeFcmToken = getNativeFcmToken();
 if (initialNativeFcmToken) linkNativeFcmToken(initialNativeFcmToken);
 
-window.addEventListener("kryros:native-fcm-token", (event: Event) => {
+window.addEventListener("ferixcomerz:native-fcm-token", (event: Event) => {
   linkNativeFcmToken((event as CustomEvent<string>).detail);
 });
 
@@ -54,10 +54,10 @@ window.addEventListener("error", (event) => {
   ) {
     console.warn("Chunk load error detected. Attempting to recover...");
     // Only reload if we haven't already reloaded recently to avoid loops
-    const lastReload = sessionStorage.getItem("kryros_last_chunk_reload");
+    const lastReload = sessionStorage.getItem("ferixcomerz_last_chunk_reload");
     const now = Date.now();
     if (!lastReload || now - parseInt(lastReload) > 10000) {
-      sessionStorage.setItem("kryros_last_chunk_reload", now.toString());
+      sessionStorage.setItem("ferixcomerz_last_chunk_reload", now.toString());
       window.location.reload();
     }
   }

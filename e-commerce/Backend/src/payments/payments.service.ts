@@ -313,7 +313,7 @@ export class PaymentsService {
   async process543Payment(orderId: string, phone: string, amountZMW: number, countryCode?: string) {
     const username = this.configService.get('CGRATE_USERNAME');
     const password = this.configService.get('CGRATE_PASSWORD');
-    const transactionId = this.generateGatewayReference('KRYROS', orderId);
+    const transactionId = this.generateGatewayReference('Ferixcomerz', orderId);
     const paymentNumber = `ORD-${Date.now().toString(36).toUpperCase()}`;
 
     this.logger.log('=== Starting 543 Payment Process ===');
@@ -324,7 +324,7 @@ export class PaymentsService {
     this.logger.log(`Transaction ID: ${transactionId}`);
 
     if (!username || !password) {
-      const errorMsg = 'Payment service is not configured. Please contact KRYROS support.';
+      const errorMsg = 'Payment service is not configured. Please contact Ferixcomerz support.';
       this.logger.error('CGRATE_USERNAME or CGRATE_PASSWORD not configured in environment variables!');
       throw new HttpException({ message: errorMsg }, HttpStatus.SERVICE_UNAVAILABLE);
     }
@@ -489,7 +489,7 @@ export class PaymentsService {
   private async initiate543Direct(paymentId: string, phone: string, amountZMW: number, countryCode?: string) {
     const username = this.configService.get('CGRATE_USERNAME');
     const password = this.configService.get('CGRATE_PASSWORD');
-    const transactionId = this.generateGatewayReference('KRYROS_DP', paymentId);
+    const transactionId = this.generateGatewayReference('Ferixcomerz_DP', paymentId);
 
     if (!username || !password) {
       throw new HttpException('Payment service not configured', HttpStatus.SERVICE_UNAVAILABLE);

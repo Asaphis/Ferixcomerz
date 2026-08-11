@@ -3,7 +3,7 @@
  *
  * Fetches the platform's theme color CSS variables from the backend
  * (GET /api/settings/theme) and applies them to document.documentElement
- * so that all --kryros-* CSS variables are updated dynamically.
+ * so that all --ferixcomerz-* CSS variables are updated dynamically.
  *
  * This is called once at app boot time (before the first render) so that
  * the correct brand colors are in place immediately.

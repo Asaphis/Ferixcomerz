@@ -20,7 +20,7 @@ export default function RefundPage() {
       .catch(() => {});
   }, []);
 
-  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@kryros.com";
+  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@ferixcomerz.com";
 
   const sections = [
     {

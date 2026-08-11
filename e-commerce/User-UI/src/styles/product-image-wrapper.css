@@ -1,7 +1,7 @@
 /**
  * product-image-wrapper.css
  * =============================================================================
- * BEM-flavored Vanilla CSS for the KRYROS product card image wrapper.
+ * BEM-flavored Vanilla CSS for the Ferixcomerz product card image wrapper.
  * This is the CSS-only reference/equivalent of the Tailwind implementation
  * in UnifiedProductCard.tsx.
  *
@@ -48,7 +48,7 @@
 
   /* ── Aesthetics ── */
   border-radius: 12px;         /* Clean, consistent corner radius on this layer */
-  background-color: var(--kryros-secondary-bg); /* KRYROS Secondary Background */
+  background-color: var(--ferixcomerz-secondary-bg); /* Ferixcomerz Secondary Background */
 }
 
 /* =============================================================================
@@ -122,7 +122,7 @@
   line-height: 1;
   padding: 3px 6px;
   border-radius: 8px;
-  color: var(--kryros-white-text);
+  color: var(--ferixcomerz-white-text);
   white-space: nowrap;
   pointer-events: none;        /* Badges don't block clicks through to the card */
 }
@@ -131,15 +131,15 @@
 .product-image-wrapper__badge--discount {
   top: 12px;
   left: 12px;
-  background-color: var(--kryros-error); /* KRYROS Sale/Error Red */
-  box-shadow: 0 1px 3px var(--kryros-shadow);
+  background-color: var(--ferixcomerz-error); /* Ferixcomerz Sale/Error Red */
+  box-shadow: 0 1px 3px var(--ferixcomerz-shadow);
 }
 
 /* ── Modifier: wholesale tag — top-left corner (same position as discount) ── */
 .product-image-wrapper__badge--wholesale {
   top: 12px;
   left: 12px;
-  background-color: var(--kryros-link); /* KRYROS Link Blue */
+  background-color: var(--ferixcomerz-link); /* Ferixcomerz Link Blue */
   font-size: 9px;
 }
 
@@ -147,7 +147,7 @@
 .product-image-wrapper__badge--extra {
   bottom: 12px;
   left: 12px;
-  background-color: var(--kryros-primary); /* KRYROS Primary Red */
+  background-color: var(--ferixcomerz-primary); /* Ferixcomerz Primary Red */
   font-size: 9px;
 }
 
@@ -195,8 +195,8 @@
 
 /* ── Wishlisted state (add .is-wishlisted to the button element via JS) ── */
 .product-image-wrapper__wishlist.is-wishlisted .product-image-wrapper__wishlist-icon {
-  fill: var(--kryros-error);
-  color: var(--kryros-error);
+  fill: var(--ferixcomerz-error);
+  color: var(--ferixcomerz-error);
 }
 
 /* =============================================================================

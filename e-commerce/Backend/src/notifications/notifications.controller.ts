@@ -294,13 +294,13 @@ export class NotificationsController {
   async sendTestEmail(@Body() body: { email: string; subject?: string; message?: string; firstName?: string }) {
     const html = this.mailerService.buildAnnouncementHtml({
       firstName: body.firstName || 'Admin',
-      subject: body.subject || 'KRYROS Test Email',
+      subject: body.subject || 'Ferixcomerz Test Email',
       headline: '📧 Test Email — SMTP Working!',
-      bodyHtml: `<p>${body.message || 'This is a test email sent from your KRYROS Admin Panel. Your SMTP connection is working correctly.'}</p>`,
+      bodyHtml: `<p>${body.message || 'This is a test email sent from your Ferixcomerz Admin Panel. Your SMTP connection is working correctly.'}</p>`,
     });
     return this.mailerService.sendMail(
       body.email,
-      body.subject || 'KRYROS Test Email — SMTP Verified ✅',
+      body.subject || 'Ferixcomerz Test Email — SMTP Verified ✅',
       body.message || 'This is a test email. Your SMTP is working.',
       html,
     );
@@ -394,11 +394,11 @@ export class NotificationsController {
     if (isZambia && body.phone?.trim()) {
       try {
         const smsText =
-          `${statusEmoji} KRYROS Payment ${statusLabel}\n` +
+          `${statusEmoji} Ferixcomerz Payment ${statusLabel}\n` +
           `Ref: ${body.orderRef}\n` +
           `Amount: ${body.currency} ${body.amount}\n` +
           `Method: ${paymentMethod}\n` +
-          `Thank you, ${customerName}! Shop again at KRYROS.`;
+          `Thank you, ${customerName}! Shop again at Ferixcomerz.`;
         await this.notificationsService.sendSMS(body.phone.trim(), smsText);
         smsSent = true;
       } catch { smsSent = false; }
@@ -407,7 +407,7 @@ export class NotificationsController {
     // All countries: Email for payment receipts (primary for non-Zambia, secondary for Zambia)
     if (body.email?.trim()) {
       try {
-        const subject = `${statusEmoji} KRYROS Payment ${statusLabel} — ${body.orderRef}`;
+        const subject = `${statusEmoji} Ferixcomerz Payment ${statusLabel} — ${body.orderRef}`;
         const html = `
           <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;max-width:480px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08)">
             <div style="background:#10b981;padding:32px 24px;text-align:center">
@@ -423,9 +423,9 @@ export class NotificationsController {
                 <tr><td style="padding:12px 0;color:#6b7280;font-size:13px">Status</td><td style="padding:12px 0;font-weight:600;font-size:13px;text-align:right;color:${status === 'failed' ? '#ef4444' : '#10b981'}">${statusLabel}</td></tr>
               </table>
             </div>
-            <div style="padding:16px 24px;text-align:center;background:#f9fafb;font-size:11px;color:#9ca3af">Powered by <strong style="color:#10b981">KRYROS</strong> &bull; Secure &bull; Encrypted &bull; Safe</div>
+            <div style="padding:16px 24px;text-align:center;background:#f9fafb;font-size:11px;color:#9ca3af">Powered by <strong style="color:#10b981">Ferixcomerz</strong> &bull; Secure &bull; Encrypted &bull; Safe</div>
           </div>`;
-        const plain = `KRYROS Payment ${statusLabel} | Ref: ${body.orderRef} | Amount: ${body.currency} ${body.amount} | Method: ${paymentMethod}`;
+        const plain = `Ferixcomerz Payment ${statusLabel} | Ref: ${body.orderRef} | Amount: ${body.currency} ${body.amount} | Method: ${paymentMethod}`;
         await this.mailerService.sendMail(body.email.trim(), subject, plain, html);
         emailSent = true;
       } catch { emailSent = false; }

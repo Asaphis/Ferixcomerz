@@ -41,17 +41,17 @@ export default function MobileBottomNav() {
                   size={20} 
                   strokeWidth={isActive ? 2.5 : 2}
                   className="transition-colors duration-200"
-                  style={{ color: isActive ? 'var(--kryros-primary)' : 'var(--kryros-secondary-text)' }}
+                  style={{ color: isActive ? 'var(--ferixcomerz-primary)' : 'var(--ferixcomerz-secondary-text)' }}
                 />
                 {item.count !== undefined && item.count > 0 && (
-                  <span className="absolute -top-1.5 -right-2 text-[9px] font-bold min-w-[15px] h-[15px] rounded-full flex items-center justify-center px-0.5 border border-white" style={{ background:'var(--kryros-primary)', color:'var(--kryros-white-text)' }}>
+                  <span className="absolute -top-1.5 -right-2 text-[9px] font-bold min-w-[15px] h-[15px] rounded-full flex items-center justify-center px-0.5 border border-white" style={{ background:'var(--ferixcomerz-primary)', color:'var(--ferixcomerz-white-text)' }}>
                     {item.count > 9 ? "9+" : item.count}
                   </span>
                 )}
               </div>
               <span 
                 className="text-[10px] font-bold transition-colors duration-200"
-                style={{ color: isActive ? 'var(--kryros-primary)' : 'var(--kryros-secondary-text)' }}
+                style={{ color: isActive ? 'var(--ferixcomerz-primary)' : 'var(--ferixcomerz-secondary-text)' }}
               >
                 {item.label}
               </span>

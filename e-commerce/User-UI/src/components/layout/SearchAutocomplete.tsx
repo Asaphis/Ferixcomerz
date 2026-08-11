@@ -134,9 +134,9 @@ export default function SearchAutocomplete({
           <button
             type="submit"
             className="px-4 py-2.5 transition-colors text-sm font-medium"
-            style={{ background:'var(--kryros-primary)', color:'var(--kryros-white-text)' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--kryros-primary-hover)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--kryros-primary)')}
+            style={{ background:'var(--ferixcomerz-primary)', color:'var(--ferixcomerz-white-text)' }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'var(--ferixcomerz-primary-hover)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'var(--ferixcomerz-primary)')}
           >
             <Search className="w-4 h-4" />
           </button>

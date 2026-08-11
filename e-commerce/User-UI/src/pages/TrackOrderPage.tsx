@@ -9,16 +9,16 @@ import { formatDeliveryDate, formatDeliveryWindow, resolveDeliveryWindowFromItem
 import { formatSpecs } from "@/lib/utils";
 
 const statusColors: Record<string, string> = {
-  "Pending":          "bg-kryros-warning/10 text-kryros-warning border-kryros-warning/20",
-  "Processing":       "bg-kryros-link/10 text-kryros-link border-kryros-link/20",
-  "Paid":             "bg-kryros-accent-purple/10 text-kryros-accent-purple border-kryros-accent-purple/20",
-  "Shipped":          "bg-kryros-link/10 text-kryros-link border-kryros-link/20",
-  "In Transit":       "bg-kryros-primary/10 text-kryros-primary border-kryros-primary/20",
-  "Delivered":        "bg-kryros-success/10 text-kryros-success border-kryros-success/20",
-  "Collected":        "bg-kryros-success/10 text-kryros-success border-kryros-success/20",
-  "Cancelled":        "bg-kryros-error/10 text-kryros-error border-kryros-error/20",
-  "Refunded":         "bg-kryros-gold/10 text-kryros-gold border-kryros-gold/20",
-  "Returned":         "bg-kryros-error/10 text-kryros-error border-kryros-error/20",
+  "Pending":          "bg-ferixcomerz-warning/10 text-ferixcomerz-warning border-ferixcomerz-warning/20",
+  "Processing":       "bg-ferixcomerz-link/10 text-ferixcomerz-link border-ferixcomerz-link/20",
+  "Paid":             "bg-ferixcomerz-accent-purple/10 text-ferixcomerz-accent-purple border-ferixcomerz-accent-purple/20",
+  "Shipped":          "bg-ferixcomerz-link/10 text-ferixcomerz-link border-ferixcomerz-link/20",
+  "In Transit":       "bg-ferixcomerz-primary/10 text-ferixcomerz-primary border-ferixcomerz-primary/20",
+  "Delivered":        "bg-ferixcomerz-success/10 text-ferixcomerz-success border-ferixcomerz-success/20",
+  "Collected":        "bg-ferixcomerz-success/10 text-ferixcomerz-success border-ferixcomerz-success/20",
+  "Cancelled":        "bg-ferixcomerz-error/10 text-ferixcomerz-error border-ferixcomerz-error/20",
+  "Refunded":         "bg-ferixcomerz-gold/10 text-ferixcomerz-gold border-ferixcomerz-gold/20",
+  "Returned":         "bg-ferixcomerz-error/10 text-ferixcomerz-error border-ferixcomerz-error/20",
 };
 
 const filterTabs = ["All Orders", "Paid", "Shipped", "In Transit", "Delivered", "Collected", "Cancelled"];
@@ -420,7 +420,7 @@ export default function TrackOrderPage() {
                       <p className="text-[9px] text-muted-foreground mt-1.5">
                         {order.status === "Delivered" ? "Delivered on" : order.status === "Cancelled" ? "Cancelled" : "Est. Delivery"}
                       </p>
-                      <p className={`text-[10px] font-bold ${order.status === "Cancelled" ? "text-kryros-error" : "text-primary"}`}>{order.estDelivery}</p>
+                      <p className={`text-[10px] font-bold ${order.status === "Cancelled" ? "text-ferixcomerz-error" : "text-primary"}`}>{order.estDelivery}</p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   </motion.div>
@@ -431,8 +431,8 @@ export default function TrackOrderPage() {
         )}
 
         {/* Need Help */}
-        <div className="bg-kryros-primary/5 border border-kryros-primary/20 rounded-2xl p-4 flex items-center gap-3 mt-4">
-          <div className="w-10 h-10 rounded-xl bg-kryros-primary/10 flex items-center justify-center flex-shrink-0">
+        <div className="bg-ferixcomerz-primary/5 border border-ferixcomerz-primary/20 rounded-2xl p-4 flex items-center gap-3 mt-4">
+          <div className="w-10 h-10 rounded-xl bg-ferixcomerz-primary/10 flex items-center justify-center flex-shrink-0">
             <Headphones className="w-5 h-5 text-primary" />
           </div>
           <div className="flex-1">

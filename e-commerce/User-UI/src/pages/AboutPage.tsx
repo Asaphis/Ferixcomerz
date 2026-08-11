@@ -30,13 +30,13 @@ export default function AboutPage() {
           <p className="text-xs text-muted-foreground mt-0.5">Your Trusted Shopping Partner</p>
         </div>
         <div className="flex-shrink-0 ml-2">
-          <img src="/kryros-logo.png" alt="KRYROS" className="w-20 h-20 rounded-2xl shadow-lg" onError={(e) => { (e.target as HTMLImageElement).src = '/kryros-logo.svg'; }} />
+          <img src="/kryros-logo.png" alt="Ferixcomerz" className="w-20 h-20 rounded-2xl shadow-lg" onError={(e) => { (e.target as HTMLImageElement).src = '/kryros-logo.svg'; }} />
         </div>
       </div>
 
       {/* Description */}
       <p className="text-xs text-muted-foreground leading-relaxed mb-5">
-        KRYROS is your one-stop destination for premium products, unbeatable deals, and exceptional service. We are committed to bringing you the best shopping experience with trust, convenience, and innovation at our core.
+        Ferixcomerz is your one-stop destination for premium products, unbeatable deals, and exceptional service. We are committed to bringing you the best shopping experience with trust, convenience, and innovation at our core.
       </p>
 
       {/* Mission / Vision / Values */}
@@ -73,7 +73,7 @@ export default function AboutPage() {
         <h3 className="text-sm font-bold text-foreground mb-3">Company Information</h3>
         <div className="space-y-2">
           {[
-            { label: "Registered", value: settings.companyName || "KRYROS" },
+            { label: "Registered", value: settings.companyName || "Ferixcomerz" },
             { label: "Address", value: settings.address || "Saving customer worldwide" },
             { label: "Email", value: settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@kryros.com" },
             { label: "Phone", value: settings.contactPhone || import.meta.env.VITE_CONTACT_PHONE || "+260 97X XXX XXX" },

@@ -8,7 +8,7 @@ interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
 }
 
-const STORAGE_KEY = "kryros_pwa_prompt_dismissed";
+const STORAGE_KEY = "ferixcomerz_pwa_prompt_dismissed";
 const MANUAL_DISMISS_MS = 1000 * 60 * 60 * 24 * 3;
 const INSTALL_DISMISS_MS = 1000 * 60 * 60 * 24 * 30;
 
@@ -35,7 +35,7 @@ export default function PwaInstallPrompt() {
   const [dismissed, setDismissed] = useState(true);
   const [engaged, setEngaged] = useState(false);
   const [shownOnce, setShownOnce] = useState(false);
-  const [siteHost, setSiteHost] = useState("kryros.com");
+  const [siteHost, setSiteHost] = useState("ferixcomerz.com");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -137,12 +137,12 @@ export default function PwaInstallPrompt() {
         <div className="flex items-center gap-3 px-4 py-3.5">
           <img
             src="/apple-touch-icon.png"
-            alt="KRYROS app icon"
+            alt="Ferixcomerz app icon"
             className="h-14 w-14 flex-shrink-0 rounded-[1.15rem] border border-border bg-card object-cover shadow-sm"
           />
           <div className="min-w-0 flex-1">
             <p className="truncate text-[1.35rem] leading-none font-medium tracking-[-0.03em] text-foreground">
-              Install KRYROS
+              Install Ferixcomerz
             </p>
             <p className="mt-1 truncate text-[1rem] leading-none text-muted-foreground">
               {siteHost}

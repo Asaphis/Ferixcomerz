@@ -71,17 +71,17 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
         display: "flex", alignItems: "center",
         justifyContent: collapsed ? "center" : "space-between",
         flexShrink: 0,
-        background: "var(--kryros-header-navy)",
+        background: "var(--ferixcomerz-header-navy)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <img
-            src="/kryros-logo.png"
-            alt="KRYROS"
+            src="/ferixcomerz-logo.png"
+            alt="Ferixcomerz"
             style={{ width: 34, height: 34, objectFit: "contain", flexShrink: 0 }}
           />
           {!collapsed && (
             <span style={{ fontSize: 15, fontWeight: 800, color: "white", letterSpacing: "-0.3px" }}>
-              KR<span style={{ color: "var(--primary)" }}>YROS</span>
+              Ferixcomerz
             </span>
           )}
         </div>

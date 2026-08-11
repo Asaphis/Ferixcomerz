@@ -16,7 +16,7 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
   const messaging = firebase.messaging();
 
   messaging.onBackgroundMessage((payload) => {
-    const notificationTitle = payload.notification?.title || 'KRYROS';
+    const notificationTitle = payload.notification?.title || 'Ferixcomerz';
     const notificationOptions = {
       body: payload.notification?.body || '',
       icon: '/kryros-logo.png',

@@ -11,10 +11,10 @@ const DIAL_CODES = ["+260", "+263", "+27", "+254", "+234", "+233", "+255", "+256
 
 // Icon circle background per method type
 const ICON_BG: Record<string, string> = {
-  phone:    "rgba(var(--kryros-primary-rgb), 0.12)",
-  card:     "rgba(var(--kryros-primary-rgb), 0.10)",
-  whatsapp: "rgba(var(--kryros-primary-rgb), 0.12)",
-  bank:     "rgba(var(--kryros-primary-rgb), 0.10)",
+  phone:    "rgba(var(--ferixcomerz-primary-rgb), 0.12)",
+  card:     "rgba(var(--ferixcomerz-primary-rgb), 0.10)",
+  whatsapp: "rgba(var(--ferixcomerz-primary-rgb), 0.12)",
+  bank:     "rgba(var(--ferixcomerz-primary-rgb), 0.10)",
 };
 
 type MethodIconType = "phone" | "card" | "whatsapp" | "bank";
@@ -109,11 +109,11 @@ function getMethodSummary(method: PaymentConfigMethod) {
 }
 
 function MethodIconInner({ type }: { type: string }) {
-  if (type === "phone") return <Smartphone className="w-6 h-6" style={{ color: "var(--kryros-primary)" }} />;
+  if (type === "phone") return <Smartphone className="w-6 h-6" style={{ color: "var(--ferixcomerz-primary)" }} />;
   if (type === "card")  return <CreditCard  className="w-6 h-6 text-blue-500" />;
   if (type === "bank")  return <Building2   className="w-6 h-6 text-slate-500" />;
   if (type === "whatsapp") return (
-    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="var(--kryros-whatsapp)">
+    <svg viewBox="0 0 24 24" className="w-6 h-6" fill="var(--ferixcomerz-whatsapp)">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
     </svg>
   );
@@ -125,8 +125,8 @@ function CopyBtn({ text }: { text: string }) {
   return (
     <button
       onClick={() => { navigator.clipboard?.writeText(text).catch(() => {}); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
-      className="text-xs font-semibold border px-3 py-1 rounded-lg transition-colors text-[var(--kryros-primary)]"
-      style={{ borderColor: "var(--kryros-primary)" }}
+      className="text-xs font-semibold border px-3 py-1 rounded-lg transition-colors text-[var(--ferixcomerz-primary)]"
+      style={{ borderColor: "var(--ferixcomerz-primary)" }}
     >
       {copied ? "Copied" : "Copy"}
     </button>
@@ -143,24 +143,24 @@ function ReceiptScreen({ receipt, onClose }: { receipt: ReceiptData; onClose: ()
   const receiptRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = () => {
-    // Read live CSS variable values so the receipt reflects the current KRYROS theme
+    // Read live CSS variable values so the receipt reflects the current Ferixcomerz theme
     const cs = getComputedStyle(document.documentElement);
-    const rcBg      = cs.getPropertyValue("--kryros-receipt-bg").trim()      || "#f5f5f5";
-    const rcCard    = cs.getPropertyValue("--kryros-receipt-card").trim()    || "#ffffff";
-    const rcBorder  = cs.getPropertyValue("--kryros-receipt-border").trim()  || "#f0f0f0";
-    const rcSuccess = cs.getPropertyValue("--kryros-receipt-success").trim() || "#22c55e";
-    const rcPrimary = cs.getPropertyValue("--kryros-receipt-text-primary").trim() || "#111111";
-    const rcSecond  = cs.getPropertyValue("--kryros-receipt-text-secondary").trim() || "#555555";
-    const rcLabel   = cs.getPropertyValue("--kryros-receipt-label").trim()   || "#888888";
-    const rcMuted   = cs.getPropertyValue("--kryros-receipt-muted").trim()   || "#aaaaaa";
-    const rcRed     = cs.getPropertyValue("--kryros-receipt-red").trim()     || "#b91c1c";
-    const rcTeal    = cs.getPropertyValue("--kryros-receipt-teal").trim()    || "#27B9AF";
-    const rcWhite   = cs.getPropertyValue("--kryros-white-text").trim()       || "#ffffff";
-    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>KRYROS Receipt - ${receipt.reference}</title>
-<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:${rcBg};display:flex;justify-content:center;padding:40px 16px}.card{background:${rcCard};border-radius:16px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.12)}.header{background:${rcCard};padding:32px 24px 20px;text-align:center;border-bottom:1px solid ${rcBorder}}.icon-wrap{width:64px;height:64px;border-radius:50%;background:${rcSuccess};display:flex;align-items:center;justify-content:center;margin:0 auto 16px}.checkmark{color:${rcWhite};font-size:28px;font-weight:700}.title{font-size:20px;font-weight:700;color:${rcPrimary};margin-bottom:6px}.subtitle{font-size:13px;color:${rcSecond};line-height:1.5}.body{padding:20px 24px}.row{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0;border-bottom:1px solid ${rcBorder}}.row:last-child{border-bottom:none}.label{font-size:13px;color:${rcLabel};flex:1}.value{font-size:13px;font-weight:600;color:${rcPrimary};text-align:right;flex:1}.value.red{color:${rcRed}}.footer{padding:16px 24px;text-align:center;background:${rcBg};border-top:1px solid ${rcBorder};font-size:11px;color:${rcMuted}}.kryros{font-weight:700;color:${rcTeal}}</style>
+    const rcBg      = cs.getPropertyValue("--ferixcomerz-receipt-bg").trim()      || "#f5f5f5";
+    const rcCard    = cs.getPropertyValue("--ferixcomerz-receipt-card").trim()    || "#ffffff";
+    const rcBorder  = cs.getPropertyValue("--ferixcomerz-receipt-border").trim()  || "#f0f0f0";
+    const rcSuccess = cs.getPropertyValue("--ferixcomerz-receipt-success").trim() || "#22c55e";
+    const rcPrimary = cs.getPropertyValue("--ferixcomerz-receipt-text-primary").trim() || "#111111";
+    const rcSecond  = cs.getPropertyValue("--ferixcomerz-receipt-text-secondary").trim() || "#555555";
+    const rcLabel   = cs.getPropertyValue("--ferixcomerz-receipt-label").trim()   || "#888888";
+    const rcMuted   = cs.getPropertyValue("--ferixcomerz-receipt-muted").trim()   || "#aaaaaa";
+    const rcRed     = cs.getPropertyValue("--ferixcomerz-receipt-red").trim()     || "#b91c1c";
+    const rcTeal    = cs.getPropertyValue("--ferixcomerz-receipt-teal").trim()    || "#27B9AF";
+    const rcWhite   = cs.getPropertyValue("--ferixcomerz-white-text").trim()       || "#ffffff";
+    const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>Ferixcomerz Receipt - ${receipt.reference}</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:${rcBg};display:flex;justify-content:center;padding:40px 16px}.card{background:${rcCard};border-radius:16px;max-width:420px;width:100%;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.12)}.header{background:${rcCard};padding:32px 24px 20px;text-align:center;border-bottom:1px solid ${rcBorder}}.icon-wrap{width:64px;height:64px;border-radius:50%;background:${rcSuccess};display:flex;align-items:center;justify-content:center;margin:0 auto 16px}.checkmark{color:${rcWhite};font-size:28px;font-weight:700}.title{font-size:20px;font-weight:700;color:${rcPrimary};margin-bottom:6px}.subtitle{font-size:13px;color:${rcSecond};line-height:1.5}.body{padding:20px 24px}.row{display:flex;justify-content:space-between;align-items:flex-start;padding:14px 0;border-bottom:1px solid ${rcBorder}}.row:last-child{border-bottom:none}.label{font-size:13px;color:${rcLabel};flex:1}.value{font-size:13px;font-weight:600;color:${rcPrimary};text-align:right;flex:1}.value.red{color:${rcRed}}.footer{padding:16px 24px;text-align:center;background:${rcBg};border-top:1px solid ${rcBorder};font-size:11px;color:${rcMuted}}.ferixcomerz{font-weight:700;color:${rcTeal}}</style>
 </head><body><div class="card"><div class="header"><div class="icon-wrap"><span class="checkmark">✓</span></div>
 <div class="title">Transaction Successful</div>
-<div class="subtitle"><strong>${receipt.currency} ${receipt.amount.toFixed(2)}</strong> sent to KRYROS MOBILE TECH LIMITED (${receipt.recipientNumber}).</div></div>
+<div class="subtitle"><strong>${receipt.currency} ${receipt.amount.toFixed(2)}</strong> sent to Ferixcomerz MOBILE TECH LIMITED (${receipt.recipientNumber}).</div></div>
 <div class="body">
 <div class="row"><span class="label">Recipient Number</span><span class="value">${receipt.recipientNumber}</span></div>
 <div class="row"><span class="label">Recipient Name</span><span class="value">${receipt.recipientName}</span></div>
@@ -169,11 +169,11 @@ function ReceiptScreen({ receipt, onClose }: { receipt: ReceiptData; onClose: ()
 <div class="row"><span class="label">Date &amp; Time</span><span class="value">${receipt.dateTime}</span></div>
 <div class="row"><span class="label">Fee</span><span class="value red">${receipt.currency} ${receipt.convenienceCharges.toFixed(2)}</span></div>
 <div class="row"><span class="label">Amount</span><span class="value red">${receipt.currency} ${receipt.amount.toFixed(2)}</span></div>
-</div><div class="footer">Powered by <span class="kryros">KRYROS</span> · Secure · Encrypted · Safe</div></div></body></html>`;
+</div><div class="footer">Powered by <span class="ferixcomerz">Ferixcomerz</span> · Secure · Encrypted · Safe</div></div></body></html>`;
     const blob = new Blob([html], { type: "text/html" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = `KRYROS-Receipt-${receipt.reference}.html`;
+    a.href = url; a.download = `Ferixcomerz-Receipt-${receipt.reference}.html`;
     document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
   };
 
@@ -182,13 +182,13 @@ function ReceiptScreen({ receipt, onClose }: { receipt: ReceiptData; onClose: ()
       <div className="w-full max-w-sm space-y-4">
         <div ref={receiptRef} className="bg-card rounded-3xl overflow-hidden shadow-xl border border-card-border">
           <div className="px-6 pt-8 pb-6 text-center border-b border-card-border">
-            <div className="w-16 h-16 rounded-full bg-kryros-success flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-full bg-ferixcomerz-success flex items-center justify-center mx-auto mb-4">
               <Check className="w-8 h-8 text-white" strokeWidth={3} />
             </div>
             <h2 className="text-xl font-bold text-foreground mb-1.5">Transaction Successful</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              <span className="text-kryros-error font-bold">{receipt.currency} {receipt.amount.toFixed(2)}</span>
-              {" "}has been successfully sent to<br />KRYROS MOBILE TECH LIMITED ({receipt.recipientNumber}).
+              <span className="text-ferixcomerz-error font-bold">{receipt.currency} {receipt.amount.toFixed(2)}</span>
+              {" "}has been successfully sent to<br />Ferixcomerz MOBILE TECH LIMITED ({receipt.recipientNumber}).
             </p>
           </div>
           <div className="px-6 py-2">
@@ -208,7 +208,7 @@ function ReceiptScreen({ receipt, onClose }: { receipt: ReceiptData; onClose: ()
             ))}
           </div>
         </div>
-        <button onClick={handleDownload} className="w-full py-4 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 active:scale-95 transition-all bg-[var(--kryros-primary)] hover:bg-[var(--kryros-primary-hover)]">
+        <button onClick={handleDownload} className="w-full py-4 rounded-2xl font-bold text-sm text-white flex items-center justify-center gap-2 active:scale-95 transition-all bg-[var(--ferixcomerz-primary)] hover:bg-[var(--ferixcomerz-primary-hover)]">
           <Download className="w-4 h-4" /> Download Receipt
         </button>
         <Link href="/">
@@ -609,7 +609,7 @@ export default function PayPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-md mx-auto px-0 pb-10">
-        <div className="flex items-center justify-between px-5 pt-5 pb-4 bg-[var(--kryros-header-navy)] border-b border-white/10">
+        <div className="flex items-center justify-between px-5 pt-5 pb-4 bg-[var(--ferixcomerz-header-navy)] border-b border-white/10">
           <button onClick={() => (step === 2 ? setStep(1) : navigate("/"))} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors">
             <ChevronLeft className="w-5 h-5 text-white" strokeWidth={2.5} />
           </button>
@@ -629,10 +629,10 @@ export default function PayPage() {
                     type="button"
                     onClick={() => !isLinkedPayment && setShowCurrencyDrop((prev) => !prev)}
                     disabled={isLinkedPayment}
-                    className="w-full h-full px-4 flex items-center justify-between font-bold text-kryros-primary text-base disabled:opacity-50"
+                    className="w-full h-full px-4 flex items-center justify-between font-bold text-ferixcomerz-primary text-base disabled:opacity-50"
                   >
                     <span>{currency}</span>
-                    <ChevronDown className={`w-4 h-4 text-kryros-primary transition-transform ${showCurrencyDrop ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`w-4 h-4 text-ferixcomerz-primary transition-transform ${showCurrencyDrop ? "rotate-180" : ""}`} />
                   </button>
 
                   {!isLinkedPayment && showCurrencyDrop && (
@@ -645,7 +645,7 @@ export default function PayPage() {
                             setGlobalCurrency(c.code);
                             setShowCurrencyDrop(false);
                           }}
-                          className={`w-full px-4 py-3 text-left text-sm font-semibold transition-colors hover:bg-muted ${currency === c.code ? "text-kryros-primary" : "text-foreground"}`}
+                          className={`w-full px-4 py-3 text-left text-sm font-semibold transition-colors hover:bg-muted ${currency === c.code ? "text-ferixcomerz-primary" : "text-foreground"}`}
                         >
                           <span className="text-lg mr-2">{c.symbol}</span>
                           <span className="text-xs text-muted-foreground">{c.code}</span>
@@ -731,7 +731,7 @@ export default function PayPage() {
                     <button
                       key={method.id}
                       onClick={() => setOpenMethod(method.type)}
-                      className={`flex flex-col items-center justify-center gap-2.5 py-5 px-2 rounded-2xl border bg-card transition-all active:scale-95 ${openMethod === method.type ? "border-primary shadow-[0_0_0_1px_var(--kryros-primary)]" : "border-border"}`}
+                      className={`flex flex-col items-center justify-center gap-2.5 py-5 px-2 rounded-2xl border bg-card transition-all active:scale-95 ${openMethod === method.type ? "border-primary shadow-[0_0_0_1px_var(--ferixcomerz-primary)]" : "border-border"}`}
                     >
                       <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: ICON_BG[iconType] }}>
                         <MethodIconInner type={iconType} />
@@ -790,7 +790,7 @@ export default function PayPage() {
                     <span className="font-semibold text-foreground">{payRef}</span>
                   </div>
                 </div>
-                <button onClick={handleWhatsAppPay} disabled={payLoading} className="w-full h-[52px] rounded-xl text-white font-bold transition-all active:scale-95 disabled:opacity-50" style={{ backgroundColor: "var(--kryros-whatsapp)" }}>{payLoading ? "Preparing..." : "Pay via WhatsApp"}</button>
+                <button onClick={handleWhatsAppPay} disabled={payLoading} className="w-full h-[52px] rounded-xl text-white font-bold transition-all active:scale-95 disabled:opacity-50" style={{ backgroundColor: "var(--ferixcomerz-whatsapp)" }}>{payLoading ? "Preparing..." : "Pay via WhatsApp"}</button>
               </div>
             )}
             {selectedMethod?.type === "bank" && (

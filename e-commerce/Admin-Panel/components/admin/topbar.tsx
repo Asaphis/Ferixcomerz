@@ -168,12 +168,12 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           <Menu size={20} />
         </button>
         <img
-          src="/kryros-logo.png"
-          alt="KRYROS"
+          src="/ferixcomerz-logo.png"
+          alt="Ferixcomerz"
           style={{ width: 30, height: 30, objectFit: "contain", flexShrink: 0 }}
         />
         <span style={{ fontSize: 15, fontWeight: 800, color: textMain, letterSpacing: "-0.3px", whiteSpace: "nowrap", flexShrink: 0 }}>
-          KR<span style={{ color: "var(--primary)" }}>YROS</span>
+          Ferixcomerz
         </span>
         <span style={{ fontSize: 11, color: textMuted, marginLeft: 2, whiteSpace: "nowrap", flexShrink: 0 }}>Admin Dashboard</span>
         <div style={{ flex: 1 }} />
@@ -205,8 +205,8 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           <Menu size={22} />
         </button>
         <img
-          src="/kryros-logo.png"
-          alt="KRYROS"
+          src="/ferixcomerz-logo.png"
+          alt="Ferixcomerz"
           style={{ width: 28, height: 28, objectFit: "contain", flexShrink: 0 }}
         />
         <span style={{ fontSize: 16, fontWeight: 800, color: textMain, letterSpacing: "-0.3px" }}>
@@ -261,7 +261,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
                 onClick={() => handleNotifClick(n)}
                 style={{
                   padding: "12px 16px", borderBottom: `1px solid ${border}`,
-                  background: n.isRead ? "transparent" : "rgba(var(--kryros-primary-rgb), 0.04)",
+                  background: n.isRead ? "transparent" : "rgba(var(--ferixcomerz-primary-rgb), 0.04)",
                   display: "flex", gap: 10, alignItems: "flex-start",
                   cursor: "pointer",
                 }}>

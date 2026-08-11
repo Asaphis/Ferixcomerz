@@ -152,8 +152,8 @@ export default function BannerCarousel({
             <span
               className="inline-flex min-w-[120px] max-w-full translate-y-3 items-center justify-center rounded-md px-3 py-1.5 text-center text-[11px] font-bold uppercase tracking-wide pointer-events-auto sm:min-w-[130px] sm:px-4 sm:py-2 sm:text-xs"
               style={{
-                backgroundColor: slide.buttonColor || 'var(--kryros-white)',
-                color: slide.buttonTextColor || 'var(--kryros-black-primary)',
+                backgroundColor: slide.buttonColor || 'var(--ferixcomerz-white)',
+                color: slide.buttonTextColor || 'var(--ferixcomerz-black-primary)',
               }}
             >
               {slide.ctaText}

@@ -170,7 +170,7 @@ function LoginForm() {
       <div style={{ textAlign: "center", marginBottom: "22px" }}>
         <div style={{ display: "inline-flex", alignItems: "center", position: "relative" }}>
           <div style={{ width: "10px", height: "10px", background: "var(--gold)", borderRadius: "2px", position: "absolute", top: "2px", left: "-4px" }} />
-          <span style={{ fontSize: "38px", fontWeight: 800, color: "var(--primary)", letterSpacing: "-0.5px", lineHeight: 1 }}>KRYROS</span>
+          <span style={{ fontSize: "38px", fontWeight: 800, color: "var(--primary)", letterSpacing: "-0.5px", lineHeight: 1 }}>Ferixcomerz</span>
         </div>
         <p style={{ fontSize: "10.5px", color: "var(--text-muted)", letterSpacing: "3.5px", textTransform: "uppercase", marginTop: "5px" }}>
           Admin Portal
@@ -234,7 +234,7 @@ function LoginForm() {
           </div>
           <h1 style={{ fontSize: "22px", fontWeight: 700, color: "var(--text-main)", margin: "0 0 8px" }}>Two-Factor Authentication</h1>
           <p style={{ fontSize: "13.5px", color: "var(--text-muted)", margin: "0 0 28px", lineHeight: 1.6 }}>
-            Open your authenticator app (Google Authenticator, Authy) and enter the 6-digit code for <strong style={{ color: "var(--text-main)" }}>KRYROS</strong>.
+            Open your authenticator app (Google Authenticator, Authy) and enter the 6-digit code for <strong style={{ color: "var(--text-main)" }}>Ferixcomerz</strong>.
           </p>
 
           <input

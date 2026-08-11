@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "652920725106",
-    "project_id": "kryros-notification",
-    "storage_bucket": "kryros-notification.firebasestorage.app"
+    "project_id": "ferixcomerz-notification",
+    "storage_bucket": "ferixcomerz-notification.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:652920725106:android:895e60ff8311ee61e16ceb",
         "android_client_info": {
-          "package_name": "com.kryros.kryros_mobile"
+          "package_name": "com.ferixcomerz.ferixcomerz_mobile"
         }
       },
       "oauth_client": [],

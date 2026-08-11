@@ -1,5 +1,5 @@
 /**
- * KRYROS — One-time migration: base64 avatars → Cloudinary URLs
+ * Ferixcomerz — One-time migration: base64 avatars → Cloudinary URLs
  *
  * Run with:
  *   npx ts-node -r tsconfig-paths/register src/scripts/migrate-avatars-to-cloudinary.ts
@@ -27,7 +27,7 @@ const BATCH_SIZE = 20;
 
 async function uploadToCloudinary(base64: string, userId: string): Promise<string> {
   const result = await cloudinary.uploader.upload(base64, {
-    folder: 'kryros/avatars',
+    folder: 'ferixcomerz/avatars',
     public_id: `user_${userId}`,
     overwrite: true,
     resource_type: 'image',

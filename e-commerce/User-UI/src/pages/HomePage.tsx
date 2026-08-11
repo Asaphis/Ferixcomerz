@@ -24,7 +24,7 @@ export default function HomePage() {
   const [sections, setSections] = useState<ApiCMSSection[]>(() => {
     if (typeof window !== "undefined") {
       try {
-        const cached = localStorage.getItem("kryros_sections_homepage");
+        const cached = localStorage.getItem("ferixcomerz_sections_homepage");
         if (cached) {
           return JSON.parse(cached);
         }
@@ -37,7 +37,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(() => {
     if (typeof window !== "undefined") {
       try {
-        const cached = localStorage.getItem("kryros_sections_homepage");
+        const cached = localStorage.getItem("ferixcomerz_sections_homepage");
         if (cached) {
           return false; // Skip showing skeleton if we have cached data for instant load
         }
@@ -82,7 +82,7 @@ export default function HomePage() {
 
         setSections(activeSections);
         try {
-          localStorage.setItem("kryros_sections_homepage", JSON.stringify(activeSections));
+          localStorage.setItem("ferixcomerz_sections_homepage", JSON.stringify(activeSections));
         } catch (cacheErr) {
           console.error("Error saving homepage cache:", cacheErr);
         }

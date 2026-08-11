@@ -140,7 +140,7 @@ export default function Header() {
       <div ref={headerRef} className="fixed top-0 left-0 right-0 z-40">
         <AnnouncementBar />
 
-        <header className="bg-[var(--kryros-header-navy)] border-b border-white/10 shadow-sm">
+        <header className="bg-[var(--ferixcomerz-header-navy)] border-b border-white/10 shadow-sm">
           {/* Main header row — lg: max-width centered so content doesn't stretch on ultrawide */}
         <div className="flex items-center gap-2 px-3 md:px-6 h-[52px] md:h-[68px] lg:max-w-screen-xl lg:mx-auto lg:px-8">
           {/* Hamburger */}
@@ -156,13 +156,13 @@ export default function Header() {
           <Link href="/">
             <span className="flex items-center gap-2 cursor-pointer flex-shrink-0">
               <img
-                src="/kryros-logo.png"
-                alt="KRYROS"
+                src="/ferixcomerz-logo.png"
+                alt="Ferixcomerz"
                 className="w-9 h-9 md:w-11 md:h-11 object-contain"
                 loading="eager"
                 decoding="async"
               />
-              <span className="text-xl md:text-2xl font-black text-white tracking-tight uppercase">KRYROS</span>
+              <span className="text-xl md:text-2xl font-black text-white tracking-tight uppercase">Ferixcomerz</span>
             </span>
           </Link>
 
@@ -315,7 +315,7 @@ export default function Header() {
                 >
                   <Bell className="w-5 h-5" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-[var(--kryros-header-navy)]">
+                    <span className="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-[var(--ferixcomerz-header-navy)]">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}
@@ -448,7 +448,7 @@ export default function Header() {
         </div>
 
         {/* Mobile: Always-visible search bar */}
-        <div className="md:hidden px-3 pb-2.5 bg-[var(--kryros-header-navy)] border-b border-white/10">
+        <div className="md:hidden px-3 pb-2.5 bg-[var(--ferixcomerz-header-navy)] border-b border-white/10">
           <SearchAutocomplete
             placeholder="Search for products, brands and more..."
             rightSlot={
@@ -460,7 +460,7 @@ export default function Header() {
         </div>
 
         {/* Desktop: Sub nav — lg: extra px so nav links sit inside max-width area */}
-        <div className="hidden md:flex items-center gap-1 px-6 py-1.5 border-t lg:px-8 xl:px-14" style={{ borderColor:'var(--kryros-border)', background:'var(--kryros-secondary-bg)' }}>
+        <div className="hidden md:flex items-center gap-1 px-6 py-1.5 border-t lg:px-8 xl:px-14" style={{ borderColor:'var(--ferixcomerz-border)', background:'var(--ferixcomerz-secondary-bg)' }}>
           {desktopNav.map(({ label, href }) => {
             const isActive = location === href || (href !== "/" && location.startsWith(href));
             return (
@@ -468,18 +468,18 @@ export default function Header() {
                 <button
                   className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
                   style={isActive
-                    ? { background:'var(--kryros-primary)', color:'var(--kryros-white-text)' }
-                    : { color:'var(--kryros-primary-text)' }
+                    ? { background:'var(--ferixcomerz-primary)', color:'var(--ferixcomerz-white-text)' }
+                    : { color:'var(--ferixcomerz-primary-text)' }
                   }
-                  onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color='var(--kryros-primary)'; (e.currentTarget as HTMLButtonElement).style.background='var(--kryros-white)'; } }}
-                  onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color='var(--kryros-primary-text)'; (e.currentTarget as HTMLButtonElement).style.background='transparent'; } }}
+                  onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color='var(--ferixcomerz-primary)'; (e.currentTarget as HTMLButtonElement).style.background='var(--ferixcomerz-white)'; } }}
+                  onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.color='var(--ferixcomerz-primary-text)'; (e.currentTarget as HTMLButtonElement).style.background='transparent'; } }}
                 >
                   {label}
                 </button>
               </Link>
             );
           })}
-          <span className="ml-auto px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer transition-colors" style={{ background:'var(--kryros-primary)', color:'var(--kryros-white-text)' }}>
+          <span className="ml-auto px-3 py-1.5 rounded-lg text-sm font-semibold cursor-pointer transition-colors" style={{ background:'var(--ferixcomerz-primary)', color:'var(--ferixcomerz-white-text)' }}>
             Hot Deals
           </span>
         </div>

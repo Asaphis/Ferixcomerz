@@ -119,7 +119,7 @@ export class AuthService {
   }
 
   private async sendOtpViaSms(phone: string, otpCode: string): Promise<void> {
-    await this.notificationsService.sendSMS(phone, `Your KRYROS verification code is: ${otpCode}. Valid for 10 minutes.`);
+    await this.notificationsService.sendSMS(phone, `Your Ferixcomerz verification code is: ${otpCode}. Valid for 10 minutes.`);
   }
 
   private normalizeIdentifier(value: string): string {
@@ -630,7 +630,7 @@ export class AuthService {
     // Notify Admin of New User Registration
     this.notificationsService.sendToAdmins(
       'New User Registered! 🆕',
-      `${result.firstName} ${result.lastName} (${result.email || result.phone}) just joined KRYROS.`,
+      `${result.firstName} ${result.lastName} (${result.email || result.phone}) just joined Ferixcomerz.`,
       { type: 'USER_REGISTER', userId: result.id, url: `/users?search=${encodeURIComponent(result.email || result.phone || '')}` }
     ).catch(() => {});
 

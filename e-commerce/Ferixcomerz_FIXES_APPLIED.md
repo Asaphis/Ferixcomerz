@@ -1,4 +1,4 @@
-# KRYROS E-Commerce - Section Management System Fixes
+# Ferixcomerz E-Commerce - Section Management System Fixes
 
 ## Executive Summary
 

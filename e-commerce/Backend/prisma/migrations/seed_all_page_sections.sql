@@ -9,7 +9,7 @@
 DELETE FROM cms_sections WHERE "pageSlug" = 'shop';
 INSERT INTO cms_sections (id, type, title, subtitle, "isActive", "order", "pageSlug", config, "createdAt", "updatedAt")
 VALUES
-  (gen_random_uuid(), 'MembersBanner',  'Members Banner',  'Join KRYROS for exclusive deals', true, 1, 'shop', '{"source":"site-config","key":"members-banner"}'::jsonb, NOW(), NOW()),
+  (gen_random_uuid(), 'MembersBanner',  'Members Banner',  'Join Ferixcomerz for exclusive deals', true, 1, 'shop', '{"source":"site-config","key":"members-banner"}'::jsonb, NOW(), NOW()),
   (gen_random_uuid(), 'ShopFilters',    'Shop Filters',    'Filter & sort products',           true, 2, 'shop', '{}'::jsonb, NOW(), NOW()),
   (gen_random_uuid(), 'ProductGrid',    'Product Grid',    'All products listing',             true, 3, 'shop', '{"limit":20}'::jsonb, NOW(), NOW());
 

@@ -1,4 +1,4 @@
-# KRYROS E-commerce - Deployment Update Instructions
+# Ferixcomerz E-commerce - Deployment Update Instructions
 
 I have implemented the following changes:
 1. **Redesigned Mobile Sidebar**: Now matches the Jumia-style unified menu.

@@ -317,15 +317,15 @@ export default function DashboardPage() {
 
   const SidebarContent = () => (
     <div className="flex flex-col h-full bg-background">
-      <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-[var(--kryros-header-navy)]">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-[var(--ferixcomerz-header-navy)]">
         <Link href="/">
           <span className="flex items-center text-white cursor-pointer">
             <img
-              src="/kryros-logo.png"
-              alt="KRYROS"
+              src="/ferixcomerz-logo.png"
+              alt="Ferixcomerz"
               className="w-10 h-10 object-contain"
             />
-            <span className="ml-2 text-xl font-black tracking-tight uppercase">KRYROS</span>
+            <span className="ml-2 text-xl font-black tracking-tight uppercase">Ferixcomerz</span>
           </span>
         </Link>
         <button
@@ -703,7 +703,7 @@ export default function DashboardPage() {
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div className="absolute inset-0 bg-kryros-overlay-dark/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <div className="absolute inset-0 bg-ferixcomerz-overlay-dark/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <div className="relative w-56 bg-background h-full flex flex-col shadow-2xl z-10 border-r border-border">
             <SidebarContent />
           </div>
@@ -714,7 +714,7 @@ export default function DashboardPage() {
       <main className="flex-1 min-w-0 overflow-y-auto">
 
         {/* Top bar */}
-        <div className="sticky top-0 z-20 bg-[var(--kryros-header-navy)] border-b border-white/10 flex items-center justify-between px-4 md:px-6 py-3 shadow-sm">
+        <div className="sticky top-0 z-20 bg-[var(--ferixcomerz-header-navy)] border-b border-white/10 flex items-center justify-between px-4 md:px-6 py-3 shadow-sm">
           <button
             className="lg:hidden w-8 h-8 flex items-center justify-center rounded-xl hover:bg-white/10 transition-colors"
             onClick={() => setSidebarOpen(true)}
@@ -758,7 +758,7 @@ export default function DashboardPage() {
               >
                 <Bell style={{ width: 18, height: 18 }} className="text-white" />
                 {unreadCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-white text-[8px] font-black flex items-center justify-center border-2 border-[var(--kryros-header-navy)]">
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-primary text-white text-[8px] font-black flex items-center justify-center border-2 border-[var(--ferixcomerz-header-navy)]">
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
@@ -872,10 +872,10 @@ export default function DashboardPage() {
               {/* 4 Stat cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
                 {[
-                  { icon: ShoppingBag, label: "Total Orders", value: ordersLoading ? "—" : String(recentOrders.length), href: "/track", iconBg: "var(--kryros-icon-bg-orders)", iconColor: "var(--kryros-primary)" },
-                  { icon: Heart, label: "Wishlist Items", value: wishlistLoading ? "—" : String(wishlist.length), href: "/wishlist", iconBg: "var(--kryros-icon-bg-wishlist)", iconColor: "var(--kryros-icon-color-wishlist)" },
-                  { icon: Zap, label: "Get Now Credit", value: "Apply", href: "/get-now", iconBg: "var(--kryros-icon-bg-credit)", iconColor: "var(--kryros-icon-color-credit)" },
-                  { icon: MapPin, label: "Addresses", value: profileLoading ? "—" : String(profile?.addresses?.length ?? 0), onClick: () => { setActiveSection("addresses"); window.scrollTo({ top: 0, behavior: "smooth" }); }, iconBg: "var(--kryros-icon-bg-address)", iconColor: "var(--kryros-icon-color-address)" },
+                  { icon: ShoppingBag, label: "Total Orders", value: ordersLoading ? "—" : String(recentOrders.length), href: "/track", iconBg: "var(--ferixcomerz-icon-bg-orders)", iconColor: "var(--ferixcomerz-primary)" },
+                  { icon: Heart, label: "Wishlist Items", value: wishlistLoading ? "—" : String(wishlist.length), href: "/wishlist", iconBg: "var(--ferixcomerz-icon-bg-wishlist)", iconColor: "var(--ferixcomerz-icon-color-wishlist)" },
+                  { icon: Zap, label: "Get Now Credit", value: "Apply", href: "/get-now", iconBg: "var(--ferixcomerz-icon-bg-credit)", iconColor: "var(--ferixcomerz-icon-color-credit)" },
+                  { icon: MapPin, label: "Addresses", value: profileLoading ? "—" : String(profile?.addresses?.length ?? 0), onClick: () => { setActiveSection("addresses"); window.scrollTo({ top: 0, behavior: "smooth" }); }, iconBg: "var(--ferixcomerz-icon-bg-address)", iconColor: "var(--ferixcomerz-icon-color-address)" },
                 ].map(({ icon: Icon, label, value, href, onClick, iconBg, iconColor }) => (
                   <div key={label} onClick={onClick} className="cursor-pointer">
                     {href ? (
@@ -1047,7 +1047,7 @@ export default function DashboardPage() {
               {/* Get Now Banner */}
               <div
                 className="rounded-2xl overflow-hidden mb-4 relative"
-                style={{ background: "var(--kryros-get-now-gradient)" }}
+                style={{ background: "var(--ferixcomerz-get-now-gradient)" }}
               >
                 <div className="flex items-center justify-between p-5 md:p-6">
                   <div className="flex-1">
@@ -1072,7 +1072,7 @@ export default function DashboardPage() {
                     <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl flex-shrink-0 self-end">
                       <div className="w-full h-full bg-primary/80 flex flex-col items-center justify-end pb-2">
                         <ShoppingBag className="w-8 h-8 text-white/80 mb-1" />
-                        <span className="text-[8px] font-black text-white">KRYROS</span>
+                        <span className="text-[8px] font-black text-white">Ferixcomerz</span>
                       </div>
                     </div>
                     <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-xl self-end flex-shrink-0">

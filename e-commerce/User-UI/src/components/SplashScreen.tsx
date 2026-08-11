@@ -43,7 +43,7 @@ export default function SplashScreen({ onDone }: SplashScreenProps) {
           width: 48,
           height: 48,
           border: "4px solid var(--border)",
-          borderTop: "4px solid var(--kryros-primary)", // Primary red color
+          borderTop: "4px solid var(--ferixcomerz-primary)", // Primary red color
           borderRadius: "50%",
           animation: "spin 0.8s linear infinite",
         }}

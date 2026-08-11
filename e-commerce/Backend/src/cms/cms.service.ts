@@ -1083,11 +1083,11 @@ export class CMSService {
         description:
           'Your trusted source for phones, electronics, accessories, software, and technology services in Zambia and beyond.',
         contactPhone: '+260 966 423 719',
-        contactEmail: 'kryrosmobile@gmail.com',
+        contactEmail: 'ferixcomerzmobile@gmail.com',
         contactAddress: 'Lusaka, Zambia',
         newsletterTitle: 'Subscribe to our Newsletter',
         newsletterSubtitle: 'Get the latest deals and updates directly to your inbox',
-        copyrightText: '© {year} KRYROS MOBILE TECH LIMITED. All rights reserved.',
+        copyrightText: '© {year} Ferixcomerz MOBILE TECH LIMITED. All rights reserved.',
         socialLinks: [
           { platform: 'facebook', url: '#' },
           { platform: 'twitter', url: '#' },
@@ -1098,8 +1098,8 @@ export class CMSService {
         paymentMethods: [{ name: 'Visa' }, { name: 'Mastercard' }, { name: 'M-Pesa' }],
         announcementBarEnabled: true,
         announcementBarText: '30% discount on all products special for November!',
-        announcementBarBgColor: 'bg-kryros-dark',
-        announcementBarTextColor: 'text-kryros-green',
+        announcementBarBgColor: 'bg-ferixcomerz-dark',
+        announcementBarTextColor: 'text-ferixcomerz-green',
         newsletterPopupEnabled: true,
         newsletterPopupTitle: 'Unlock Premium Deals',
         newsletterPopupSubtitle: 'Join our community and be the first to know about new arrivals, flash sales, and tech guides.',
@@ -1205,7 +1205,7 @@ export class CMSService {
         defaultCreditDurations: [3, 6, 12],
       },
       'header': {
-        logoText: 'KRYROS',
+        logoText: 'Ferixcomerz',
         announcementEnabled: true,
         announcementText: 'Free Delivery on all orders over $100',
         announcementCta: 'Track Order',

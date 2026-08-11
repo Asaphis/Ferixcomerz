@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 /**
- * KRYROS Primary Button
+ * Ferixcomerz Primary Button
  * Height: 48px | Padding: 16px 24px | Radius: 8px | Font: Roboto 500 16px
  * All colors sourced from CSS variables in index.css (:root)
  * Shadow + translateY(-2px) on hover | 4px ring on focus

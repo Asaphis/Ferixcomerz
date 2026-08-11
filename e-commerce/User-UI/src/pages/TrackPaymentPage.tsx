@@ -247,7 +247,7 @@ export default function TrackPaymentPage() {
             <Lock className="w-3 h-3" /> Secure · Encrypted · Safe
           </p>
           <p className="text-[10px] text-muted-foreground">
-            If you have any issues, please contact KRYROS support with your reference number.
+            If you have any issues, please contact Ferixcomerz support with your reference number.
           </p>
         </div>
       </div>

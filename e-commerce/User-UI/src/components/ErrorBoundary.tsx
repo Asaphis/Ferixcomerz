@@ -34,10 +34,10 @@ export default class ErrorBoundary extends Component<Props, State> {
       error.message.includes("Loading CSS chunk") ||
       error.message.includes("Failed to fetch dynamically imported module")
     ) {
-      const lastReload = sessionStorage.getItem("kryros_last_chunk_reload");
+      const lastReload = sessionStorage.getItem("ferixcomerz_last_chunk_reload");
       const now = Date.now();
       if (!lastReload || now - parseInt(lastReload) > 10000) {
-        sessionStorage.setItem("kryros_last_chunk_reload", now.toString());
+        sessionStorage.setItem("ferixcomerz_last_chunk_reload", now.toString());
         window.location.reload();
       }
     }
@@ -65,13 +65,13 @@ export default class ErrorBoundary extends Component<Props, State> {
             fontSize: '1.25rem',
             fontWeight: 700,
             marginBottom: '0.5rem',
-            color: 'var(--kryros-primary-text)',
+            color: 'var(--ferixcomerz-primary-text)',
           }}>
             Something went wrong
           </h2>
           <p style={{
             fontSize: '0.875rem',
-            color: 'var(--kryros-secondary-text)',
+            color: 'var(--ferixcomerz-secondary-text)',
             marginBottom: '1.5rem',
             maxWidth: '400px',
           }}>
@@ -86,8 +86,8 @@ export default class ErrorBoundary extends Component<Props, State> {
               padding: '0.625rem 1.5rem',
               borderRadius: '0.75rem',
               border: 'none',
-              background: 'var(--kryros-primary, #0d9488)',
-              color: 'var(--kryros-white-text)',
+              background: 'var(--ferixcomerz-primary, #0d9488)',
+              color: 'var(--ferixcomerz-white-text)',
               fontWeight: 600,
               fontSize: '0.875rem',
               cursor: 'pointer',

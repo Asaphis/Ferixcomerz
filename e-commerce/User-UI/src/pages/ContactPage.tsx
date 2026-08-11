@@ -21,7 +21,7 @@ export default function ContactPage() {
       .catch(() => {});
   }, []);
 
-  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@kryros.com";
+  const contactEmail = settings.contactEmail || import.meta.env.VITE_CONTACT_EMAIL || "info@ferixcomerz.com";
   const contactPhone = settings.contactPhone || import.meta.env.VITE_CONTACT_PHONE || "+260 97X XXX XXX";
   const whatsappNumber = settings.whatsappNumber || import.meta.env.VITE_WHATSAPP_NUMBER || "26097XXXXXXX";
   const address = settings.address || "Victoria Way, Burgess Hill, UK";
@@ -87,10 +87,10 @@ export default function ContactPage() {
         <p className="text-sm font-bold text-foreground mb-3">Follow Us</p>
         <div className="flex gap-3">
           {[
-            { icon: Facebook, color: "text-[var(--kryros-social-facebook)]", bg: "bg-[var(--kryros-social-facebook)]/10 border-[var(--kryros-social-facebook)]/20" },
-            { icon: Instagram, color: "text-[var(--kryros-social-instagram)]", bg: "bg-[var(--kryros-social-instagram)]/10 border-[var(--kryros-social-instagram)]/20" },
-            { icon: Twitter, color: "text-[var(--kryros-social-twitter)]", bg: "bg-[var(--kryros-social-twitter)]/10 border-[var(--kryros-social-twitter)]/20" },
-            { icon: Youtube, color: "text-[var(--kryros-social-youtube)]", bg: "bg-[var(--kryros-social-youtube)]/10 border-[var(--kryros-social-youtube)]/20" },
+            { icon: Facebook, color: "text-[var(--ferixcomerz-social-facebook)]", bg: "bg-[var(--ferixcomerz-social-facebook)]/10 border-[var(--ferixcomerz-social-facebook)]/20" },
+            { icon: Instagram, color: "text-[var(--ferixcomerz-social-instagram)]", bg: "bg-[var(--ferixcomerz-social-instagram)]/10 border-[var(--ferixcomerz-social-instagram)]/20" },
+            { icon: Twitter, color: "text-[var(--ferixcomerz-social-twitter)]", bg: "bg-[var(--ferixcomerz-social-twitter)]/10 border-[var(--ferixcomerz-social-twitter)]/20" },
+            { icon: Youtube, color: "text-[var(--ferixcomerz-social-youtube)]", bg: "bg-[var(--ferixcomerz-social-youtube)]/10 border-[var(--ferixcomerz-social-youtube)]/20" },
           ].map(({ icon: Icon, color, bg }, i) => (
             <button key={i} className={`w-11 h-11 rounded-xl border flex items-center justify-center hover:scale-105 transition-transform ${bg}`}>
               <Icon className={`w-5 h-5 ${color}`} />

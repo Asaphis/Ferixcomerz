@@ -175,8 +175,8 @@ async function bootstrap() {
   // Swagger — development only
   if (!isProd) {
     const config = new DocumentBuilder()
-      .setTitle('KRYROS API')
-      .setDescription('KRYROS Mobile Tech — Enterprise Commerce Platform')
+      .setTitle('Ferixcomerz API')
+      .setDescription('Ferixcomerz Mobile Tech — Enterprise Commerce Platform')
       .setVersion('1.0')
       .addBearerAuth()
       .build();

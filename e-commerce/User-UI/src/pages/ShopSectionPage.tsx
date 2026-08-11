@@ -186,7 +186,7 @@ export default function ShopSectionPage() {
 
   const accentColor = useMemo(() => {
     if (sectionConfig.accentColor) return sectionConfig.accentColor;
-    return isFlashSale ? "var(--kryros-error)" : "var(--kryros-primary)";
+    return isFlashSale ? "var(--ferixcomerz-error)" : "var(--ferixcomerz-primary)";
   }, [isFlashSale, sectionConfig]);
 
   const headerBgColor = sectionConfig.headerBgColor;
@@ -347,9 +347,9 @@ export default function ShopSectionPage() {
               {showTimer && products.length > 0 && (
                 <div className={`flex items-center gap-1 font-bold ml-2 ${headerBgColor ? "text-white" : "text-primary"}`}>
                   <span className="text-[10px] uppercase opacity-70 mr-1 hidden sm:inline">Ends in:</span>
-                  <span className="text-xs bg-kryros-primary/10 px-1.5 py-0.5 rounded">{fmt(timeLeft.hours)}h</span>
-                  <span className="text-xs bg-kryros-primary/10 px-1.5 py-0.5 rounded">{fmt(timeLeft.minutes)}m</span>
-                  <span className="text-xs bg-kryros-primary/10 px-1.5 py-0.5 rounded">{fmt(timeLeft.seconds)}s</span>
+                  <span className="text-xs bg-ferixcomerz-primary/10 px-1.5 py-0.5 rounded">{fmt(timeLeft.hours)}h</span>
+                  <span className="text-xs bg-ferixcomerz-primary/10 px-1.5 py-0.5 rounded">{fmt(timeLeft.minutes)}m</span>
+                  <span className="text-xs bg-ferixcomerz-primary/10 px-1.5 py-0.5 rounded">{fmt(timeLeft.seconds)}s</span>
                 </div>
               )}
             </div>

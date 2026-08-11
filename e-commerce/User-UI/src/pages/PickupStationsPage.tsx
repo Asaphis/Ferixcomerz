@@ -112,10 +112,10 @@ export default function PickupStationsPage() {
       {/* Map - Lusaka, Zambia (Leaflet via srcdoc, no X-Frame-Options block) */}
       <div className="rounded-2xl overflow-hidden mb-5 border border-border md:h-80" style={{ height: 220 }}>
         <iframe
-          title="KRYROS Pickup Stations Map"
+          title="Ferixcomerz Pickup Stations Map"
           srcDoc={(() => {
             const markerColor = typeof window !== "undefined"
-              ? (getComputedStyle(document.documentElement).getPropertyValue("--kryros-map-marker").trim() || "#0ea5e9")
+              ? (getComputedStyle(document.documentElement).getPropertyValue("--ferixcomerz-map-marker").trim() || "#0ea5e9")
               : "#0ea5e9";
             return `<!DOCTYPE html>
 <html>
@@ -139,7 +139,7 @@ export default function PickupStationsPage() {
     html: '<div style="background:${markerColor};width:14px;height:14px;border-radius:50%;border:2.5px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>',
     iconSize: [14, 14], iconAnchor: [7, 7]
   });
-  L.marker([-15.4167, 28.2833], { icon: icon }).addTo(map).bindPopup('<b>KRYROS Pickup Station</b><br>Lusaka, Zambia').openPopup();
+  L.marker([-15.4167, 28.2833], { icon: icon }).addTo(map).bindPopup('<b>Ferixcomerz Pickup Station</b><br>Lusaka, Zambia').openPopup();
 <\/script>
 </body>
 </html>`;

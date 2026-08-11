@@ -26,7 +26,7 @@
     </queries>
 
     <application
-        android:label="KRYROS"
+        android:label="Ferixcomerz"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true">
@@ -52,9 +52,9 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="kryros.com" />
-                <data android:scheme="https" android:host="kryros.com" />
-                <data android:scheme="kryros" />
+                <data android:scheme="http" android:host="ferixcomerz.com" />
+                <data android:scheme="https" android:host="ferixcomerz.com" />
+                <data android:scheme="ferixcomerz" />
             </intent-filter>
 
             <intent-filter>
