@@ -209,7 +209,7 @@ function PageTransitionLoader({ visible }: { visible: boolean }) {
           width: 48,
           height: 48,
           border: "4px solid var(--border)",
-        borderTop: "4px solid var(--kryros-primary)",
+        borderTop: "4px solid var(--ferixcomerz-primary)",
         borderRadius: "50%",
         animation: "spin 0.8s linear infinite",
       }}
@@ -234,8 +234,8 @@ function PageLoader() {
         style={{
           width: 32,
           height: 32,
-          border: "3px solid var(--kryros-light-border)",
-          borderTop: "3px solid var(--kryros-primary)",
+          border: "3px solid var(--ferixcomerz-light-border)",
+          borderTop: "3px solid var(--ferixcomerz-primary)",
           borderRadius: "50%",
           animation: "spin 0.7s linear infinite",
         }}

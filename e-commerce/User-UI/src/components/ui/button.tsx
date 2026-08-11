@@ -17,11 +17,11 @@ const buttonVariants = cva(
       variant: {
         default:
           "bg-primary text-white border border-white/15 " +
-          "shadow-[0_2px_8px_var(--kryros-shadow),0_8px_20px_var(--kryros-shadow-primary-md)] " +
-          "hover:bg-[var(--kryros-primary-hover)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_var(--kryros-shadow-primary-lg)] " +
-          "active:bg-[var(--kryros-primary-active)] active:translate-y-0 active:shadow-[0_3px_10px_var(--kryros-shadow-primary-sm)] " +
-          "focus-visible:shadow-[0_0_0_4px_var(--kryros-shadow-primary-sm),0_8px_20px_var(--kryros-shadow-primary-md)] " +
-          "disabled:bg-[var(--kryros-disabled-btn)] disabled:text-white disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-100",
+          "shadow-[0_2px_8px_var(--ferixcomerz-shadow),0_8px_20px_var(--ferixcomerz-shadow-primary-md)] " +
+          "hover:bg-[var(--ferixcomerz-primary-hover)] hover:-translate-y-0.5 hover:shadow-[0_12px_28px_var(--ferixcomerz-shadow-primary-lg)] " +
+          "active:bg-[var(--ferixcomerz-primary-active)] active:translate-y-0 active:shadow-[0_3px_10px_var(--ferixcomerz-shadow-primary-sm)] " +
+          "focus-visible:shadow-[0_0_0_4px_var(--ferixcomerz-shadow-primary-sm),0_8px_20px_var(--ferixcomerz-shadow-primary-md)] " +
+          "disabled:bg-[var(--ferixcomerz-disabled-btn)] disabled:text-white disabled:shadow-none disabled:cursor-not-allowed disabled:opacity-100",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm border-destructive-border hover:bg-destructive/90",
         outline:

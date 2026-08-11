@@ -4,7 +4,7 @@ import { Upload, Video, Image as ImageIcon, X } from "lucide-react";
 import toast from "react-hot-toast";
 
 /**
- * CloudinaryUpload — shared file upload component for the Kryros Admin Panel.
+ * CloudinaryUpload — shared file upload component for the Ferixcomerz Admin Panel.
  *
  * Uploads ALL files (images AND videos, any size) directly to Cloudinary
  * from the browser — files NEVER pass through the Next.js or NestJS server.
@@ -13,14 +13,14 @@ import toast from "react-hot-toast";
  *   <CloudinaryUpload
  *     value={imageUrl}
  *     onChange={(url) => setImageUrl(url)}
- *     folder="kryros/categories"
+ *     folder="ferixcomerz/categories"
  *   />
  *
  * Usage (multiple — products):
  *   <CloudinaryUpload
  *     multiple
  *     onChange={(url) => setImages(imgs => [...imgs, url])}
- *     folder="kryros/products"
+ *     folder="ferixcomerz/products"
  *     showUrlInput={false}
  *   />
  */
@@ -44,7 +44,7 @@ export default function CloudinaryUpload({
   onUrlChange,
   accept = "image/*,video/*",
   multiple = false,
-  folder = "kryros/general",
+  folder = "ferixcomerz/general",
   showUrlInput = true,
   border = "var(--border)",
   surface = "var(--surface)",
@@ -77,7 +77,7 @@ export default function CloudinaryUpload({
   // ── Direct-to-Cloudinary upload ──────────────────────────────────────────
   async function uploadToCloudinary(file: File): Promise<string> {
     const encodedFolder = encodeURIComponent(folder);
-    // Use the BFF route — it reads the httpOnly kryros_token cookie and
+    // Use the BFF route — it reads the httpOnly ferixcomerz_token cookie and
     // forwards the request to the backend with proper Authorization header.
     const sigRes = await fetch(`/api/bff/cloudinary-sign?folder=${encodedFolder}`);
     if (!sigRes.ok) throw new Error("Could not get upload signature");

@@ -17,7 +17,7 @@ const api = axios.create({
 
 // ── Request interceptor ───────────────────────────────────────────────────────
 // No Authorization header injection needed here.
-// proxy.ts reads the httpOnly 'kryros_token' cookie server-side and injects
+// proxy.ts reads the httpOnly 'ferixcomerz_token' cookie server-side and injects
 // the Authorization: Bearer header into every request forwarded to the backend.
 // This keeps the token 100% invisible to JavaScript.
 api.interceptors.request.use((config) => config);
@@ -27,7 +27,7 @@ api.interceptors.request.use((config) => config);
 // Flow:
 //   401 received → POST /api/bff/refresh (reads httpOnly refresh cookie server-side)
 //              → BFF issues new httpOnly access + refresh cookies
-//              → original request retried (proxy picks up new kryros_token cookie)
+//              → original request retried (proxy picks up new ferixcomerz_token cookie)
 //
 // The token is NEVER visible in JavaScript at any point in this flow.
 // Concurrent 401s are queued so only ONE refresh call is made.
@@ -62,12 +62,12 @@ api.interceptors.response.use(
 
     try {
       // Call BFF refresh — no body or token needed from JS side.
-      // The BFF reads the httpOnly 'kryros_refresh' cookie server-side.
+      // The BFF reads the httpOnly 'ferixcomerz_refresh' cookie server-side.
       await axios.post("/api/bff/refresh");
 
       _drainQueue();
 
-      // Retry the original request — proxy will inject the new kryros_token cookie
+      // Retry the original request — proxy will inject the new ferixcomerz_token cookie
       return api(orig);
     } catch {
       _flushQueue();
