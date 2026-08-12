@@ -11,10 +11,9 @@ interface CustomSelectProps {
   border: string;
   textMain: string;
   textMuted: string;
-  surface: string;
 }
 
-function CustomSelect({ value, onChange, options, disabled = false, border, textMain, textMuted, surface }: CustomSelectProps) {
+function CustomSelect({ value, onChange, options, disabled = false, border, textMain, textMuted }: CustomSelectProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,27 +31,30 @@ function CustomSelect({ value, onChange, options, disabled = false, border, text
       <div
         onClick={() => !disabled && setOpen(o => !o)}
         style={{
-          width: '100%', padding: '9px 36px 9px 12px', borderRadius: '8px',
-          background: disabled ? 'var(--surface)' : surface,
-          border: `1px solid ${open ? 'var(--primary)' : border}`,
+          width: '100%', padding: '12px 38px 12px 16px', borderRadius: '10px',
+          background: disabled ? 'var(--surface)' : '#FFFFFF',
+          border: `1.5px solid ${open ? 'var(--primary)' : border}`,
           color: disabled ? textMuted : textMain,
           fontSize: '13.5px', cursor: disabled ? 'default' : 'pointer',
           fontFamily: 'var(--font-inter)',
           userSelect: 'none',
           position: 'relative',
           display: 'flex', alignItems: 'center',
-          transition: 'border-color 0.15s',
+          transition: 'all 0.2s ease',
           boxSizing: 'border-box',
+          boxShadow: open ? '0 0 0 4px rgba(2, 145, 192, 0.12)' : 'none'
         }}
+        onMouseEnter={e => { if (!disabled && !open) e.currentTarget.style.borderColor = 'var(--primary)'; }}
+        onMouseLeave={e => { if (!disabled && !open) e.currentTarget.style.borderColor = border; }}
       >
-        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{value}</span>
+        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>{value}</span>
         <ChevronDown
-          size={14}
+          size={16}
           color={textMuted}
           style={{
-            position: 'absolute', right: '10px', top: '50%',
+            position: 'absolute', right: '12px', top: '50%',
             transform: `translateY(-50%) rotate(${open ? '180deg' : '0deg'})`,
-            transition: 'transform 0.15s', flexShrink: 0,
+            transition: 'transform 0.2s', flexShrink: 0,
             pointerEvents: 'none',
           }}
         />
@@ -61,42 +63,44 @@ function CustomSelect({ value, onChange, options, disabled = false, border, text
       {/* Dropdown list */}
       {open && (
         <div style={{
-          position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0,
+          position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
           zIndex: 99999,
-          background: 'var(--card)',
-          border: `1px solid ${border}`,
-          borderRadius: '10px',
-          boxShadow: '0 8px 32px var(--shadow)',
+          background: '#FFFFFF',
+          border: `1.5px solid ${border}`,
+          borderRadius: '12px',
+          boxShadow: '0 12px 36px rgba(76, 59, 53, 0.12)',
           overflow: 'hidden',
           maxHeight: '220px',
           overflowY: 'auto',
+          animation: 'fadeInUp 0.15s ease'
         }}>
           {options.map(opt => (
             <div
               key={opt}
               onClick={() => { onChange?.(opt); setOpen(false); }}
               style={{
-                padding: '11px 14px',
+                padding: '12px 16px',
                 cursor: 'pointer',
                 fontSize: '13.5px',
                 color: opt === value ? 'var(--primary)' : textMain,
                 background: opt === value
-                  ? 'rgba(192,21,27,0.10)'
+                  ? 'rgba(2, 145, 192, 0.08)'
                   : 'transparent',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                 fontFamily: 'var(--font-inter)',
                 borderBottom: `1px solid ${border}`,
-                transition: 'background 0.1s',
+                transition: 'all 0.15s',
+                fontWeight: opt === value ? 600 : 500
               }}
               onMouseEnter={e => {
-                if (opt !== value) e.currentTarget.style.background = 'rgba(192,21,27,0.05)';
+                if (opt !== value) e.currentTarget.style.background = 'rgba(2, 145, 192, 0.04)';
               }}
               onMouseLeave={e => {
                 if (opt !== value) e.currentTarget.style.background = 'transparent';
               }}
             >
               <span>{opt}</span>
-              {opt === value && <Check size={13} color="var(--primary)" />}
+              {opt === value && <Check size={14} color="var(--primary)" strokeWidth={2.5} />}
             </div>
           ))}
         </div>
@@ -115,7 +119,7 @@ interface ModalProps {
 }
 
 export function Modal({ open, onClose, title, children, maxWidth = '500px' }: ModalProps) {
-  const bg = 'var(--card)';
+  const bg = '#FFFFFF';
   const border = 'var(--border)';
   const textMain = 'var(--text-main)';
   const textMuted = 'var(--text-muted)';
@@ -123,18 +127,55 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
   if (!open) return null;
   return (
     <div
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'var(--overlay)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(3px)' }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'var(--overlay)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+      }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: '16px', width: '100%', maxWidth, maxHeight: '90vh', overflow: 'auto', boxShadow: '0 30px 60px rgba(0,0,0,0.35)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 16px', borderBottom: `1px solid ${border}` }}>
-          <h2 style={{ fontSize: '15px', fontWeight: 700, color: textMain, margin: 0 }}>{title}</h2>
-          <button onClick={onClose} style={{ width: '28px', height: '28px', borderRadius: '7px', background: 'var(--surface)', border: `1px solid ${border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
-            <X size={14} color={textMuted} />
+      <div style={{
+        background: bg,
+        border: `1px solid ${border}`,
+        borderRadius: '20px',
+        width: '100%',
+        maxWidth,
+        maxHeight: '90vh',
+        overflow: 'auto',
+        boxShadow: '0 25px 50px rgba(76, 59, 53, 0.15)',
+        animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+      }}>
+        {/* Modal Header */}
+        <div style={{
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', padding: '22px 28px 18px',
+          borderBottom: `1px solid ${border}`, background: 'var(--surface)'
+        }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 800, color: textMain, margin: 0, letterSpacing: '-0.3px' }}>{title}</h2>
+          <button
+            onClick={onClose}
+            style={{
+              width: '32px', height: '32px', borderRadius: '10px',
+              background: '#FFFFFF', border: `1.5px solid ${border}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer', flexShrink: 0, transition: 'all 0.15s'
+            }}
+            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--primary)'}
+            onMouseLeave={e => e.currentTarget.style.borderColor = border}
+          >
+            <X size={15} color={textMuted} />
           </button>
         </div>
-        <div style={{ padding: '20px 24px 24px' }}>{children}</div>
+        <div style={{ padding: '24px 28px 28px' }}>{children}</div>
       </div>
+      <style>{`
+        @keyframes modalSlideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 }
@@ -150,8 +191,8 @@ interface ConfirmDialogProps {
   loading?: boolean;
 }
 
-export function ConfirmDialog({ open, onClose, onConfirm, title, message, confirmLabel = 'Delete', loading = false }: ConfirmDialogProps) {
-  const bg = 'var(--card)';
+export function ConfirmDialog({ open, onClose, onConfirm, title, message, confirmLabel = 'Confirm Action', loading = false }: ConfirmDialogProps) {
+  const bg = '#FFFFFF';
   const border = 'var(--border)';
   const textMain = 'var(--text-main)';
   const textMuted = 'var(--text-muted)';
@@ -159,19 +200,77 @@ export function ConfirmDialog({ open, onClose, onConfirm, title, message, confir
   if (!open) return null;
   return (
     <div
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'var(--overlay)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', backdropFilter: 'blur(3px)' }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'var(--overlay)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+      }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{ background: bg, border: `1px solid ${border}`, borderRadius: '16px', width: '100%', maxWidth: '420px', padding: '28px', boxShadow: '0 30px 60px rgba(0,0,0,0.35)' }}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(214,48,49,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-          <AlertTriangle size={22} color="var(--danger)" />
+      <div style={{
+        background: bg,
+        border: `1px solid ${border}`,
+        borderRadius: '20px',
+        width: '100%',
+        maxWidth: '440px',
+        padding: '32px',
+        boxShadow: '0 25px 50px rgba(76, 59, 53, 0.15)',
+        animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+      }}>
+        {/* Warning Badge / Icon */}
+        <div style={{
+          width: '54px', height: '54px', borderRadius: '14px',
+          background: 'rgba(147, 95, 4, 0.08)',
+          border: '1.5px solid rgba(147, 95, 4, 0.15)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: '20px', boxShadow: '0 4px 12px rgba(147, 95, 4, 0.05)'
+        }}>
+          <AlertTriangle size={24} color="var(--brand-gold-dark)" />
         </div>
-        <h3 style={{ fontSize: '16px', fontWeight: 700, color: textMain, margin: '0 0 8px' }}>{title}</h3>
-        <p style={{ fontSize: '13.5px', color: textMuted, margin: '0 0 24px', lineHeight: 1.6 }}>{message}</p>
-        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} disabled={loading} style={{ padding: '9px 18px', borderRadius: '9px', background: 'var(--surface)', border: `1px solid ${border}`, color: textMain, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)' }}>Cancel</button>
-          <button onClick={onConfirm} disabled={loading} style={{ padding: '9px 18px', borderRadius: '9px', background: 'var(--danger)', border: 'none', color: 'var(--text-white)', fontSize: '13.5px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, fontFamily: 'var(--font-inter)' }}>
-            {loading ? 'Deleting...' : confirmLabel}
+        <h3 style={{ fontSize: '18px', fontWeight: 800, color: textMain, margin: '0 0 10px', letterSpacing: '-0.3px' }}>{title}</h3>
+        <p style={{ fontSize: '14px', color: textMuted, margin: '0 0 28px', lineHeight: 1.6, fontWeight: 500 }}>{message}</p>
+
+        {/* Action triggers */}
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+          <button
+            onClick={onClose}
+            disabled={loading}
+            style={{
+              padding: '11px 20px', borderRadius: '10px',
+              background: 'var(--surface)', border: `1.5px solid ${border}`,
+              color: textMain, fontSize: '13.5px', fontWeight: 700,
+              cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'all 0.15s'
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#FFFFFF'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            style={{
+              padding: '11px 20px', borderRadius: '10px',
+              background: 'linear-gradient(135deg, var(--brand-gold-bright) 0%, var(--brand-gold-dark) 100%)',
+              border: 'none', color: '#FFFFFF', fontSize: '13.5px', fontWeight: 700,
+              cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
+              fontFamily: 'var(--font-inter)', transition: 'all 0.2s',
+              boxShadow: '0 4px 12px rgba(147, 95, 4, 0.2)'
+            }}
+            onMouseEnter={e => {
+              if (!loading) {
+                e.currentTarget.style.transform = 'translateY(-1px)';
+                e.currentTarget.style.boxShadow = '0 6px 16px rgba(147, 95, 4, 0.35)';
+              }
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'none';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(147, 95, 4, 0.2)';
+            }}
+          >
+            {loading ? 'Processing Operation...' : confirmLabel}
           </button>
         </div>
       </div>
@@ -194,23 +293,29 @@ interface FormFieldProps {
   placeholder?: string;
 }
 
-export function FormField({ label, value, onChange, type = 'text', options, readOnly = false, border, textMain, textMuted, surface, placeholder }: FormFieldProps) {
+export function FormField({ label, value, onChange, type = 'text', options, readOnly = false, border, textMain, textMuted, placeholder }: FormFieldProps) {
   const inputStyle: React.CSSProperties = {
-    width: '100%', padding: '9px 12px', borderRadius: '8px',
-    background: readOnly ? 'var(--surface)' : surface,
-    border: `1px solid ${border}`,
+    width: '100%', padding: '11px 14px', borderRadius: '10px',
+    background: readOnly ? 'var(--surface)' : '#FFFFFF',
+    border: `1.5px solid ${border}`,
     color: readOnly ? textMuted : textMain,
     fontSize: '13.5px', outline: 'none',
     fontFamily: 'var(--font-inter)',
     boxSizing: 'border-box',
+    fontWeight: 500,
+    transition: 'all 0.2s ease',
   };
   return (
-    <div style={{ marginBottom: '14px' }}>
-      <label style={{ display: 'block', fontSize: '11.5px', fontWeight: 600, color: textMuted, marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>{label}</label>
+    <div style={{ marginBottom: '18px' }}>
+      <label style={{
+        display: 'block', fontSize: '11px', fontWeight: 800,
+        color: textMuted, marginBottom: '6px', textTransform: 'uppercase',
+        letterSpacing: '0.6px'
+      }}>{label}</label>
+
       {options ? (
-        // ✅ Custom dropdown — no native browser picker
         readOnly ? (
-          <div style={{ ...inputStyle, cursor: 'default', display: 'flex', alignItems: 'center' }}>{value}</div>
+          <div style={{ ...inputStyle, cursor: 'default', display: 'flex', alignItems: 'center', background: 'var(--surface)' }}>{value}</div>
         ) : (
           <CustomSelect
             value={value}
@@ -220,13 +325,46 @@ export function FormField({ label, value, onChange, type = 'text', options, read
             border={border}
             textMain={textMain}
             textMuted={textMuted}
-            surface={surface}
           />
         )
       ) : type === 'textarea' ? (
-        <textarea value={value} onChange={(e) => onChange?.(e.target.value)} readOnly={readOnly} rows={3} placeholder={placeholder} style={{ ...inputStyle, resize: 'vertical' }} />
+        <textarea
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          readOnly={readOnly}
+          rows={3}
+          placeholder={placeholder}
+          style={{ ...inputStyle, resize: 'vertical' }}
+          onFocus={e => {
+            e.target.style.borderColor = 'var(--primary)';
+            e.target.style.boxShadow = '0 0 0 4px rgba(2, 145, 192, 0.12)';
+          }}
+          onBlur={e => {
+            e.target.style.borderColor = border;
+            e.target.style.boxShadow = 'none';
+          }}
+        />
       ) : (
-        <input type={type} value={value} onChange={(e) => onChange?.(e.target.value)} readOnly={readOnly} placeholder={placeholder} style={inputStyle} />
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          style={inputStyle}
+          onFocus={e => {
+            if (!readOnly) {
+              e.target.style.borderColor = 'var(--primary)';
+              e.target.style.boxShadow = '0 0 0 4px rgba(2, 145, 192, 0.12)';
+            }
+          }}
+          onBlur={e => {
+            if (!readOnly) {
+              e.target.style.borderColor = border;
+              e.target.style.boxShadow = 'none';
+            }
+          }}
+        />
       )}
     </div>
   );
@@ -242,13 +380,47 @@ interface ModalFooterProps {
   textMain: string;
 }
 
-export function ModalFooter({ onClose, onSubmit, loading = false, submitLabel = 'Save', border, textMain }: ModalFooterProps) {
+export function ModalFooter({ onClose, onSubmit, loading = false, submitLabel = 'Save changes', border, textMain }: ModalFooterProps) {
   return (
-    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '6px', paddingTop: '16px', borderTop: `1px solid ${border}` }}>
-      <button onClick={onClose} disabled={loading} style={{ padding: '9px 18px', borderRadius: '9px', background: 'var(--surface)', border: `1px solid ${border}`, color: textMain, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)' }}>{onSubmit ? 'Cancel' : 'Close'}</button>
+    <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px', paddingTop: '20px', borderTop: `1px solid ${border}` }}>
+      <button
+        onClick={onClose}
+        disabled={loading}
+        style={{
+          padding: '10px 20px', borderRadius: '10px',
+          background: 'var(--surface)', border: `1.5px solid ${border}`,
+          color: textMain, fontSize: '13.5px', fontWeight: 700,
+          cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'all 0.15s'
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = '#FFFFFF'}
+        onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
+      >
+        {onSubmit ? 'Cancel' : 'Close'}
+      </button>
       {onSubmit && (
-        <button onClick={onSubmit} disabled={loading} style={{ padding: '9px 18px', borderRadius: '9px', background: 'var(--btn-primary)', border: 'none', color: 'var(--text-white)', fontSize: '13.5px', fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1, fontFamily: 'var(--font-inter)' }}>
-          {loading ? 'Saving...' : submitLabel}
+        <button
+          onClick={onSubmit}
+          disabled={loading}
+          style={{
+            padding: '10px 20px', borderRadius: '10px',
+            background: 'linear-gradient(135deg, var(--brand-blue-medium) 0%, var(--brand-blue-dark) 100%)',
+            border: 'none', color: '#FFFFFF', fontSize: '13.5px', fontWeight: 700,
+            cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
+            fontFamily: 'var(--font-inter)', transition: 'all 0.2s',
+            boxShadow: '0 4px 12px rgba(2, 145, 192, 0.25)'
+          }}
+          onMouseEnter={e => {
+            if (!loading) {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(2, 145, 192, 0.4)';
+            }
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'none';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(2, 145, 192, 0.25)';
+          }}
+        >
+          {loading ? 'Processing...' : submitLabel}
         </button>
       )}
     </div>

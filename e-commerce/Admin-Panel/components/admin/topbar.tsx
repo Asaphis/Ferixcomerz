@@ -38,12 +38,10 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
   const bellRef = useRef<HTMLButtonElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
 
-  const bg = "#FFFFFF";
   const border = "var(--border)";
   const textMain = "var(--text-main)";
   const textMuted = "var(--text-muted)";
   const surface = "var(--surface)";
-  const card = "var(--card)";
   const currentPage = pageNames[pathname] || "Dashboard Overview";
 
   const unread = notifs.filter(n => !n.isRead).length;
@@ -74,7 +72,12 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
     setNotifLoading(false);
   };
 
-  useEffect(() => { fetchNotifs(); }, []);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      fetchNotifs();
+    }, 0);
+    return () => clearTimeout(t);
+  }, []);
 
   // Close menus on outside click
   useEffect(() => {
@@ -125,39 +128,6 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
   const handleLogout = () => { setShowUserMenu(false); logout(); };
   const handleProfile = () => { setShowUserMenu(false); router.push("/settings"); };
 
-  // Bell button
-  const BellBtn = ({ size }: { size: number }) => (
-    <button
-      ref={bellRef}
-      onClick={() => { setShowNotifMenu(v => !v); if (!showNotifMenu) fetchNotifs(); }}
-      style={{
-        position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
-        width: size, height: size, background: surface, border: `1.5px solid ${border}`,
-        borderRadius: 10, cursor: "pointer", color: showNotifMenu ? "var(--primary)" : textMuted,
-        flexShrink: 0, transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
-      }}
-      onMouseEnter={e => {
-        e.currentTarget.style.borderColor = "var(--primary)";
-        e.currentTarget.style.background = "#FFFFFF";
-      }}
-      onMouseLeave={e => {
-        if (!showNotifMenu) {
-          e.currentTarget.style.borderColor = border;
-          e.currentTarget.style.background = surface;
-        }
-      }}
-    >
-      <Bell size={16} />
-      {unread > 0 && (
-        <div style={{
-          position: "absolute", top: -2, right: -2, width: 10, height: 10,
-          background: "var(--brand-gold-bright)", borderRadius: "50%", border: `2.5px solid #FFFFFF`,
-          boxShadow: "0 0 6px var(--brand-gold-bright)"
-        }} />
-      )}
-    </button>
-  );
-
   return (
     <>
       {/* Desktop topbar */}
@@ -167,7 +137,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: `1px solid ${border}`,
-        display: "flex", alignItems: "center", gap: 14,
+        display: "none", alignItems: "center", gap: 14,
         padding: "0 24px", zIndex: 40, transition: "left 0.25s cubic-bezier(0.16, 1, 0.3, 1)", left: sidebarW,
         boxShadow: "0 2px 12px rgba(76, 59, 53, 0.02)"
       }}>
@@ -209,7 +179,36 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           <span style={{ fontSize: "12.5px", color: textMuted, fontWeight: 500 }}>Search console...</span>
         </div>
 
-        <BellBtn size={38} />
+        {/* Desktop Bell Button */}
+        <button
+          ref={bellRef}
+          onClick={() => { setShowNotifMenu(v => !v); if (!showNotifMenu) fetchNotifs(); }}
+          style={{
+            position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
+            width: 38, height: 38, background: surface, border: `1.5px solid ${border}`,
+            borderRadius: 10, cursor: "pointer", color: showNotifMenu ? "var(--primary)" : textMuted,
+            flexShrink: 0, transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "var(--primary)";
+            e.currentTarget.style.background = "#FFFFFF";
+          }}
+          onMouseLeave={e => {
+            if (!showNotifMenu) {
+              e.currentTarget.style.borderColor = border;
+              e.currentTarget.style.background = surface;
+            }
+          }}
+        >
+          <Bell size={16} />
+          {unread > 0 && (
+            <div style={{
+              position: "absolute", top: -2, right: -2, width: 10, height: 10,
+              background: "var(--brand-gold-bright)", borderRadius: "50%", border: `2.5px solid #FFFFFF`,
+              boxShadow: "0 0 6px var(--brand-gold-bright)"
+            }} />
+          )}
+        </button>
 
         {/* User Card */}
         <div
@@ -276,7 +275,37 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         <span style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.3px", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
           {currentPage}
         </span>
-        <BellBtn size={36} />
+
+        {/* Mobile Bell Button */}
+        <button
+          onClick={() => { setShowNotifMenu(v => !v); if (!showNotifMenu) fetchNotifs(); }}
+          style={{
+            position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
+            width: 36, height: 36, background: surface, border: `1.5px solid ${border}`,
+            borderRadius: 10, cursor: "pointer", color: showNotifMenu ? "var(--primary)" : textMuted,
+            flexShrink: 0, transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = "var(--primary)";
+            e.currentTarget.style.background = "#FFFFFF";
+          }}
+          onMouseLeave={e => {
+            if (!showNotifMenu) {
+              e.currentTarget.style.borderColor = border;
+              e.currentTarget.style.background = surface;
+            }
+          }}
+        >
+          <Bell size={16} />
+          {unread > 0 && (
+            <div style={{
+              position: "absolute", top: -2, right: -2, width: 10, height: 10,
+              background: "var(--brand-gold-bright)", borderRadius: "50%", border: `2.5px solid #FFFFFF`,
+              boxShadow: "0 0 6px var(--brand-gold-bright)"
+            }} />
+          )}
+        </button>
+
         <div
           onClick={() => setShowUserMenu(v => !v)}
           style={{
