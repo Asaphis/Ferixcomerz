@@ -9,6 +9,7 @@ import {
   LogOut, User, ChevronUp,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
+import BrandLogo from "./logo";
 
 const navItems = [
   { label: "Dashboard",        icon: LayoutDashboard, href: "/dashboard"      },
@@ -44,11 +45,13 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
   const { user, logout } = useAuth();
   const [showUserPopup, setShowUserPopup] = useState(false);
 
-  const bg       = "var(--sidebar-bg)";
-  const border   = "rgba(255, 255, 255, 0.1)";
-  const textMain = "var(--sidebar-text-active)";
-  const textMuted = "var(--sidebar-text)";
-  const surface  = "var(--sidebar-active-bg)";
+  // Luxury theme mapping
+  const bgGradient = "linear-gradient(180deg, #012044 0%, #013E67 100%)";
+  const border     = "rgba(241, 223, 217, 0.12)";
+  const textMain   = "rgba(255, 255, 255, 0.95)";
+  const textMuted  = "rgba(255, 255, 255, 0.65)";
+  const activeBg   = "linear-gradient(90deg, rgba(2, 145, 192, 0.2) 0%, rgba(2, 145, 192, 0.05) 100%)";
+  const activeColor = "#0291C0"; // Cyan-blue active indicator
 
   const handleLogout = () => {
     setShowUserPopup(false);
@@ -63,60 +66,144 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
   };
 
   const NavList = ({ onNav }: { onNav?: () => void }) => (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", background: bg, borderRight: `1px solid ${border}`, overflow: "hidden" }}>
-      {/* Logo */}
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",
+      background: bgGradient,
+      borderRight: `1px solid ${border}`,
+      overflow: "hidden"
+    }}>
+      {/* Brand Header */}
       <div style={{
-        padding: collapsed ? "0 12px" : "0 20px",
-        height: 64, borderBottom: `1px solid ${border}`,
-        display: "flex", alignItems: "center",
+        padding: collapsed ? "0 12px" : "0 24px",
+        height: 72,
+        borderBottom: `1px solid ${border}`,
+        display: "flex",
+        alignItems: "center",
         justifyContent: collapsed ? "center" : "space-between",
         flexShrink: 0,
-        background: "var(--ferixcomerz-header-navy)",
+        background: "rgba(1, 32, 68, 0.4)",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img
-            src="/ferixcomerz-logo.png"
-            alt="Ferixcomerz"
-            style={{ width: 34, height: 34, objectFit: "contain", flexShrink: 0 }}
-          />
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <BrandLogo size={collapsed ? 30 : 36} />
           {!collapsed && (
-            <span style={{ fontSize: 15, fontWeight: 800, color: "white", letterSpacing: "-0.3px" }}>
-              Ferixcomerz
-            </span>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{
+                fontSize: "16px",
+                fontWeight: 800,
+                color: "white",
+                letterSpacing: "-0.4px",
+                lineHeight: 1.2
+              }}>
+                Ferixcomerz
+              </span>
+              <span style={{
+                fontSize: "9px",
+                fontWeight: 700,
+                color: "var(--brand-gold-bright)",
+                letterSpacing: "1.5px",
+                textTransform: "uppercase",
+                opacity: 0.9
+              }}>
+                Admin Portal
+              </span>
+            </div>
           )}
         </div>
         {onNav && (
-          <button onClick={onNav} style={{ background: "none", border: "none", cursor: "pointer", color: textMuted, padding: 4, display: "flex", alignItems: "center" }}>
+          <button
+            onClick={onNav}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: textMuted,
+              padding: 6,
+              display: "flex",
+              alignItems: "center",
+              borderRadius: "50%",
+              transition: "background 0.2s"
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
+            onMouseLeave={e => e.currentTarget.style.background = "none"}
+          >
             <X size={18} />
           </button>
         )}
       </div>
 
-      {/* Nav items */}
-      <div style={{ flex: 1, overflowY: "auto", padding: "8px 6px" }}>
+      {/* Navigation List */}
+      <div style={{
+        flex: 1,
+        overflowY: "auto",
+        padding: "16px 12px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "4px"
+      }} className="sidebar-scroll">
         {navItems.map(({ label, icon: Icon, href }) => {
           const active = pathname === href || pathname.startsWith(href + "/");
           return (
-            <Link key={href} href={href} style={{ textDecoration: "none", display: "block" }}
-              onClick={() => onNav && onNav()}>
+            <Link
+              key={href}
+              href={href}
+              style={{ textDecoration: "none", display: "block" }}
+              onClick={() => onNav && onNav()}
+            >
               <div style={{
-                display: "flex", alignItems: "center",
-                gap: collapsed ? 0 : 10,
-                padding: collapsed ? "10px 0" : "9px 10px",
+                display: "flex",
+                alignItems: "center",
+                gap: collapsed ? 0 : 12,
+                padding: collapsed ? "12px 0" : "10px 14px",
                 justifyContent: collapsed ? "center" : "flex-start",
-                borderRadius: 8, marginBottom: 1,
-                background: active ? "var(--sidebar-active-bg)" : "transparent",
+                borderRadius: "10px",
+                background: active ? activeBg : "transparent",
                 color: active ? "white" : textMuted,
                 cursor: "pointer",
-              }}>
-                <Icon size={16} style={{ flexShrink: 0 }} />
+                transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                border: active ? "1px solid rgba(2, 145, 192, 0.25)" : "1px solid transparent",
+                position: "relative"
+              }}
+                onMouseEnter={e => {
+                  if (!active) {
+                    e.currentTarget.style.background = "rgba(255, 255, 255, 0.04)";
+                    e.currentTarget.style.color = "white";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!active) {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = textMuted;
+                  }
+                }}
+              >
+                <Icon size={18} style={{
+                  flexShrink: 0,
+                  color: active ? activeColor : "inherit",
+                  transition: "color 0.2s"
+                }} />
                 {!collapsed && (
-                  <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, color: active ? "white" : textMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+                  <span style={{
+                    fontSize: "13px",
+                    fontWeight: active ? 600 : 500,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    flex: 1
+                  }}>
                     {label}
                   </span>
                 )}
                 {active && !collapsed && (
-                  <div style={{ width: 3, height: 16, background: "var(--primary)", borderRadius: 2, flexShrink: 0 }} />
+                  <div style={{
+                    width: 4,
+                    height: 16,
+                    background: "var(--brand-gold-bright)",
+                    borderRadius: 2,
+                    flexShrink: 0,
+                    boxShadow: "0 0 8px var(--brand-gold-bright)"
+                  }} />
                 )}
               </div>
             </Link>
@@ -124,40 +211,48 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
         })}
       </div>
 
-      {/* ── User section at bottom ── */}
+      {/* Bottom Profile and Signout Trigger */}
       {user && (
-        <div style={{ position: "relative", flexShrink: 0 }}>
-              {showUserPopup && !collapsed && (
+        <div style={{ position: "relative", flexShrink: 0, borderTop: `1px solid ${border}`, background: "rgba(1, 32, 68, 0.3)" }}>
+          {showUserPopup && !collapsed && (
             <div style={{
-              position: "absolute", bottom: "100%", left: 0, right: 0,
-              background: "var(--sidebar-bg)",
+              position: "absolute", bottom: "100%", left: 12, right: 12,
+              background: "rgba(1, 32, 68, 0.95)",
+              backdropFilter: "blur(12px)",
+              WebkitBackdropFilter: "blur(12px)",
               border: `1px solid ${border}`,
-              borderRadius: "10px 10px 0 0",
+              borderRadius: "12px",
               overflow: "hidden",
-              boxShadow: "0 -8px 24px rgba(0,0,0,0.3)",
+              boxShadow: "0 -8px 24px rgba(0,0,0,0.4)",
+              marginBottom: 8,
+              zIndex: 99
             }}>
-              <button onClick={handleProfile} style={{
-                width: "100%", display: "flex", alignItems: "center", gap: 10,
-                padding: "11px 16px", background: "none", border: "none",
-                cursor: "pointer", color: textMuted, fontSize: 13.5,
-                fontFamily: "var(--font-inter)",
-              }}
-                onMouseEnter={e => e.currentTarget.style.background = "var(--surface)"}
+              <button
+                onClick={handleProfile}
+                style={{
+                  width: "100%", display: "flex", alignItems: "center", gap: 10,
+                  padding: "12px 16px", background: "none", border: "none",
+                  cursor: "pointer", color: "white", fontSize: "13px", fontWeight: 500,
+                  fontFamily: "var(--font-inter)", textAlign: "left"
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}
               >
-                <User size={14} /> My Profile
+                <User size={15} color="var(--brand-blue-bright)" /> My Profile Settings
               </button>
               <div style={{ height: 1, background: border }} />
-              <button onClick={handleLogout} style={{
-                width: "100%", display: "flex", alignItems: "center", gap: 10,
-                padding: "12px 16px", background: "none", border: "none",
-                cursor: "pointer", color: "var(--danger)", fontSize: 13.5, fontWeight: 600,
-                fontFamily: "var(--font-inter)",
-              }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(214,48,49,0.08)"}
+              <button
+                onClick={handleLogout}
+                style={{
+                  width: "100%", display: "flex", alignItems: "center", gap: 10,
+                  padding: "12px 16px", background: "none", border: "none",
+                  cursor: "pointer", color: "var(--brand-gold-bright)", fontSize: "13px", fontWeight: 600,
+                  fontFamily: "var(--font-inter)", textAlign: "left"
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(214, 155, 4, 0.12)"}
                 onMouseLeave={e => e.currentTarget.style.background = "none"}
               >
-                <LogOut size={14} /> Sign Out
+                <LogOut size={15} color="var(--brand-gold-bright)" /> Sign Out Securely
               </button>
             </div>
           )}
@@ -165,31 +260,46 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
           <div
             onClick={() => setShowUserPopup(v => !v)}
             style={{
-              padding: collapsed ? "12px 0" : "12px 14px",
-              borderTop: `1px solid ${border}`,
+              padding: collapsed ? "16px 0" : "14px 20px",
               cursor: "pointer",
-              display: "flex", alignItems: "center",
+              display: "flex",
+              alignItems: "center",
               justifyContent: collapsed ? "center" : "space-between",
-              gap: 10,
-              background: showUserPopup ? "var(--surface)" : "transparent",
-              transition: "background 0.15s",
+              gap: 12,
+              background: showUserPopup ? "rgba(255,255,255,0.04)" : "transparent",
+              transition: "background 0.2s",
             }}
-            onMouseEnter={e => { if (!showUserPopup) e.currentTarget.style.background = "var(--surface)"; }}
+            onMouseEnter={e => { if (!showUserPopup) e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
             onMouseLeave={e => { if (!showUserPopup) e.currentTarget.style.background = "transparent"; }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0, flex: 1 }}>
-              <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg, var(--primary), var(--secondary))", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "var(--text-white)", flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: 1 }}>
+              <div style={{
+                width: 34, height: 34, borderRadius: "50%",
+                background: "linear-gradient(135deg, var(--brand-blue-bright), var(--brand-green-bright))",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "13px", fontWeight: 700, color: "white", flexShrink: 0,
+                boxShadow: "0 2px 8px rgba(2, 145, 192, 0.4)"
+              }}>
                 {user.name?.[0]?.toUpperCase() || "A"}
               </div>
               {!collapsed && (
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.name}</div>
-                  <div style={{ fontSize: 10, color: textMuted }}>{user.role}</div>
+                  <div style={{ fontSize: "13px", fontWeight: 600, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {user.name}
+                  </div>
+                  <div style={{ fontSize: "10.5px", color: "var(--brand-gold-bright)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                    {user.role}
+                  </div>
                 </div>
               )}
             </div>
             {!collapsed && (
-              <ChevronUp size={14} color={textMuted} style={{ transform: showUserPopup ? "rotate(0deg)" : "rotate(180deg)", transition: "transform 0.15s", flexShrink: 0 }} />
+              <ChevronUp size={16} color="white" style={{
+                transform: showUserPopup ? "rotate(0deg)" : "rotate(180deg)",
+                transition: "transform 0.25s",
+                flexShrink: 0,
+                opacity: 0.8
+              }} />
             )}
           </div>
         </div>
@@ -202,7 +312,7 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
       <aside style={{
         position: "fixed", top: 0, left: 0, bottom: 0,
         width: collapsed ? 60 : 260,
-        transition: "width 0.25s ease",
+        transition: "width 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
         zIndex: 30, overflow: "hidden", display: "flex",
       }} className="sidebar-desktop">
         <NavList />
@@ -210,8 +320,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
 
       {mobileOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex" }}>
-          <div style={{ position: "absolute", inset: 0, background: "var(--overlay)" }} onClick={onMobileClose} />
-          <aside style={{ position: "relative", width: 260, zIndex: 201, animation: "slideInLeft 0.2s ease" }}>
+          <div style={{ position: "absolute", inset: 0, background: "var(--overlay)", backdropFilter: "blur(4px)" }} onClick={onMobileClose} />
+          <aside style={{ position: "relative", width: 260, zIndex: 201, animation: "slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}>
             <NavList onNav={onMobileClose} />
           </aside>
         </div>
@@ -220,6 +330,10 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
       <style>{`
         @media (max-width: 767px) { .sidebar-desktop { display: none !important; } }
         @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
       `}</style>
     </>
   );

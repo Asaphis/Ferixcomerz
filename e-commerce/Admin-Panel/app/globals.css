@@ -1,74 +1,91 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Ferixcomerz GLOBAL THEME — Single source of truth for all colors
-   To change any color in the entire admin panel, edit only this file.
+   Ferixcomerz ULTRA-PREMIUM GLOBAL THEME — Single source of truth for all colors
+   Completely redesigned using gradient brand palettes and modern aesthetic.
+   🟢 Green:  #99BC0D (bright), #147115 (deep)
+   🟡 Gold:   #D69B04 (bright), #935F04 (dark)
+   🔵 Blue:   #0291C0 (bright), #013E67 (dark), #012044 (navy)
+   🌸 Bg:     #FFF7F4 (warm off-white background)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── PRIMARY COLORS ─────────────────────────────────────────────────────── */
-  --primary:              #C0151B;
-  --primary-hover:        #A01015;
-  --secondary:            #344a64;
-  --secondary-hover:      #2a3d54;
+  /* ── PRIMARY COLORS (Now Blue and Cyan-Blue Gilded Palette) ───────────────── */
+  --primary:              #0291C0;
+  --primary-hover:        #036A97;
+  --secondary:            #013E67;
+  --secondary-hover:      #012044;
 
-  /* ── BACKGROUND COLORS ──────────────────────────────────────────────────── */
-  --bg:                   #FFFFFF;
+  /* ── BRAND LOGO PALETTES ────────────────────────────────────────────────── */
+  --brand-green-bright:   #99BC0D;
+  --brand-green-deep:     #147115;
+  --brand-gold-bright:    #D69B04;
+  --brand-gold-dark:      #935F04;
+  --brand-blue-bright:    #0291C0;
+  --brand-blue-medium:    #036A97;
+  --brand-blue-navy:      #012044;
+  --brand-blue-dark:      #013E67;
+
+  /* ── BACKGROUND COLORS (Warm Off-white luxury background) ───────────────── */
+  --bg:                   #FFF7F4;
   --card:                 #FFFFFF;
-  --surface:              #FAFAFA;
-  --footer-bg:            #000000;
-  --header-navy:          #001529;
-  --ferixcomerz-primary-rgb:   192, 21, 27;
+  --surface:              #FFFDFC;
+  --footer-bg:            #012044;
+  --header-navy:          #012044;
+  --ferixcomerz-primary-rgb: 2, 145, 192;
 
-  /* ── NEUTRAL / GRAY SCALE ───────────────────────────────────────────────── */
-  --light-gray:           #FFFFFF;
-  --border:               #E5E5E5;
-  --divider:              #E5E5E5;
-  --medium-gray:          #75757A;
-  --dark-gray:            #535357;
+  /* ── NEUTRAL / GRAY SCALE (Softer warm neutrals) ────────────────────────── */
+  --light-gray:           #FCEFEA;
+  --border:               #F1DFD9;
+  --divider:              #F1DFD9;
+  --medium-gray:          #7F6D67;
+  --dark-gray:            #4C3B35;
 
   /* ── TEXT COLORS ────────────────────────────────────────────────────────── */
-  --text-main:            #313133;
-  --text-secondary:       #75757A;
-  --text-muted:           #75757A;
-  --text-light:           #9E9E9E;
+  --text-main:            #261914;
+  --text-secondary:       #5E4C46;
+  --text-muted:           #7F6D67;
+  --text-light:           #A8968F;
   --text-white:           #FFFFFF;
-  --text-disabled:        #9E9E9E;
-  --link:                 #2563EB;
+  --text-disabled:        #A8968F;
+  --link:                 #0291C0;
 
-  /* ── BUTTON COLORS ──────────────────────────────────────────────────────── */
-  --btn-primary:          #344a64;
-  --btn-primary-hover:    #2a3d54;
-  --btn-secondary:        #C0151B;
-  --btn-secondary-hover:  #A01015;
-  --btn-dark:             #313133;
-  --btn-disabled:         #C7C7CD;
+  /* ── BUTTON COLORS (Polished Premium Brand Elements) ────────────────────── */
+  --btn-primary:          #013E67;
+  --btn-primary-hover:    #012044;
+  --btn-secondary:        #0291C0;
+  --btn-secondary-hover:  #036A97;
+  --btn-dark:             #261914;
+  --btn-disabled:         #D6C6C0;
 
-  /* ── STATUS / FEEDBACK COLORS ───────────────────────────────────────────── */
-  --success:              #2DBE60;
-  --danger:               #D63031;
-  --warning:              #F68B1E;
-  --gold:                 #F6B01E;
+  /* ── STATUS / FEEDBACK COLORS (Uplifted with Brand Palette equivalents) ── */
+  --success:              #147115;
+  --success-bg:           rgba(20, 113, 21, 0.08);
+  --danger:               #935F04;
+  --danger-bg:            rgba(147, 95, 4, 0.08);
+  --warning:              #D69B04;
+  --warning-bg:           rgba(214, 155, 4, 0.08);
+  --gold:                 #D69B04;
 
   /* ── SPECIAL EFFECTS / OVERLAYS ─────────────────────────────────────────── */
-  --glow:                 rgba(192,21,27,0.08);
-  --shadow:               rgba(0,0,0,0.10);
-  --overlay:              rgba(0,0,0,0.50);
-  --orange-glow:          rgba(246,139,30,0.15);
+  --glow:                 rgba(2, 145, 192, 0.08);
+  --shadow:               rgba(76, 59, 53, 0.06);
+  --overlay:              rgba(38, 25, 20, 0.4);
+  --orange-glow:          rgba(214, 155, 4, 0.12);
 
   /* ── QUANTITY BOX ───────────────────────────────────────────────────────── */
-  --qty-bg:               #313133;
-  --qty-border:           #E5E5E5;
+  --qty-bg:               #261914;
+  --qty-border:           #F1DFD9;
 
   /* ── BORDER SOFT / MISC ─────────────────────────────────────────────────── */
-  --border-soft:          rgba(49,49,51,0.06);
+  --border-soft:          rgba(38, 25, 20, 0.04);
 
-  /* ── SIDEBAR ────────────────────────────────────────────────────────────── */
+  /* ── SIDEBAR (Modern glowing deep navy sidebar) ─────────────────────────── */
   --sidebar-width:        260px;
-  --sidebar-bg:           #000000;
-  --sidebar-text:         rgba(255, 255, 255, 0.65);
+  --sidebar-bg:           #012044;
+  --sidebar-text:         rgba(255, 255, 255, 0.7);
   --sidebar-text-active:  #FFFFFF;
-  --sidebar-active-bg:    rgba(255, 255, 255, 0.12);
+  --sidebar-active-bg:    rgba(255, 255, 255, 0.08);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -83,13 +100,24 @@ body {
 }
 
 /* ── SCROLLBAR ─────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--surface); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
 /* ── UTILITY CLASSES ───────────────────────────────────────────────────────── */
-.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px var(--shadow), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 8px 30px var(--shadow), 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
 .surface { background: var(--surface); }
 .text-main { color: var(--text-main); }
 .text-secondary { color: var(--text-secondary); }
@@ -99,24 +127,44 @@ body {
 .bg-surface { background: var(--surface); }
 
 /* ── STATUS BADGE CLASSES ──────────────────────────────────────────────────── */
-.badge-completed  { background: rgba(45,190,96,0.15);  color: var(--success); }
-.badge-processing { background: rgba(52,74,100,0.12);  color: var(--secondary); }
-.badge-pending    { background: rgba(246,176,30,0.15); color: var(--gold); }
-.badge-cancelled  { background: rgba(192,21,27,0.12);  color: var(--primary); }
-.badge-shipped    { background: rgba(52,74,100,0.12);  color: var(--secondary); }
-.badge-delivered  { background: rgba(45,190,96,0.15);  color: var(--success); }
-.badge-error      { background: rgba(214,48,49,0.12);  color: var(--danger); }
-.badge-warning    { background: rgba(246,139,30,0.15); color: var(--warning); }
+.badge-completed  { background: rgba(20, 113, 21, 0.1);  color: var(--brand-green-deep); border: 1px solid rgba(20, 113, 21, 0.15); }
+.badge-processing { background: rgba(2, 145, 192, 0.1);  color: var(--brand-blue-bright); border: 1px solid rgba(2, 145, 192, 0.15); }
+.badge-pending    { background: rgba(214, 155, 4, 0.1);  color: var(--brand-gold-bright); border: 1px solid rgba(214, 155, 4, 0.15); }
+.badge-cancelled  { background: rgba(147, 95, 4, 0.1);   color: var(--brand-gold-dark); border: 1px solid rgba(147, 95, 4, 0.15); }
+.badge-shipped    { background: rgba(3, 106, 151, 0.1);  color: var(--brand-blue-medium); border: 1px solid rgba(3, 106, 151, 0.15); }
+.badge-delivered  { background: rgba(20, 113, 21, 0.1);  color: var(--brand-green-deep); border: 1px solid rgba(20, 113, 21, 0.15); }
+.badge-error      { background: rgba(147, 95, 4, 0.1);   color: var(--brand-gold-dark); border: 1px solid rgba(147, 95, 4, 0.15); }
+.badge-warning    { background: rgba(214, 155, 4, 0.1);  color: var(--brand-gold-bright); border: 1px solid rgba(214, 155, 4, 0.15); }
 
 /* ── ANIMATIONS ────────────────────────────────────────────────────────────── */
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
-.animate-fadeInUp { animation: fadeInUp 0.3s ease forwards; }
+.animate-fadeInUp { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
 /* ── RECHARTS OVERRIDES ────────────────────────────────────────────────────── */
 .recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line { stroke: var(--border) !important; }
-.recharts-text { fill: var(--text-muted) !important; }
+.recharts-cartesian-grid-vertical line { stroke: var(--border) !important; stroke-opacity: 0.5; }
+.recharts-text { fill: var(--text-muted) !important; font-size: 11px; }
+
+/* ── INPUT FIELDS MODERNIZATION ────────────────────────────────────────────── */
+input[type="text"], input[type="password"], input[type="email"], select, textarea {
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  padding: 12px 16px;
+  background-color: var(--card);
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(2, 145, 192, 0.15);
+  outline: none;
+}
+
+/* ── BUTTON OVERHAUL ───────────────────────────────────────────────────────── */
+button, .btn {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
 
 /* ── reCAPTCHA v3 badge ────────────────────────────────────────────────────── */
 .grecaptcha-badge {
