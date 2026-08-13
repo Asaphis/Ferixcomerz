@@ -26,6 +26,11 @@ function CategoriesContent() {
   const textMain = 'var(--text-main)'; const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const [data, setData] = useState<Category[]>([]);
   useEffect(() => {
     getCategories({ limit: 500 }).then((r: any) => {
@@ -162,16 +167,16 @@ function CategoriesContent() {
   );
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Categories" subtitle="Manage product categories" icon={Tag} onAdd={openAdd} addLabel="Add Category" />
       <DataTable columns={columns} data={data as unknown as Record<string, unknown>[]} searchPlaceholder="Search categories..." onEdit={openEdit} onDelete={openDelete} />
 
-      <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add New Category">
+      <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add New Category" maxWidth="520px">
         {formFields}
         <ModalFooter onClose={() => setAddOpen(false)} onSubmit={handleAdd} loading={loading} submitLabel="Add Category" border={border} textMain={textMain} />
       </Modal>
 
-      <Modal open={!!editRow} onClose={() => setEditRow(null)} title={`Edit Category: ${editRow?.name ?? ''}`}>
+      <Modal open={!!editRow} onClose={() => setEditRow(null)} title={`Edit Category: ${editRow?.name ?? ''}`} maxWidth="520px">
         {formFields}
         <ModalFooter onClose={() => setEditRow(null)} onSubmit={handleEdit} loading={loading} submitLabel="Save Changes" border={border} textMain={textMain} />
       </Modal>

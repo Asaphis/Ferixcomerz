@@ -637,7 +637,7 @@ function UsersContent() {
   // ── Render ────────────────────────────────────────────────────────────────────
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader
         title="Users & Roles"
         subtitle="Manage users and their permissions"
@@ -654,13 +654,14 @@ function UsersContent() {
                 color: 'white',
                 border: 'none',
                 borderRadius: '9px',
-                padding: '8px 16px',
-                fontSize: '13px',
+                padding: clampPx(8, 10) clampPx(12, 16),
+                fontSize: clampPx(12, 13),
                 fontWeight: 700,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
+                minHeight: '44px',
               }}
             >
               + Add Admin
@@ -670,31 +671,31 @@ function UsersContent() {
       />
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', marginBottom: '24px' }} className="stats-grid">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: clampPx(10, 12), marginBottom: clampPx(20, 24) }} className="stats-grid">
         {[
           { label: 'Total Users', val: String(data.length),                                   color: 'var(--primary)' },
           { label: 'Active',      val: String(data.filter(u => u.status === 'Active').length), color: 'var(--primary)' },
           { label: 'Inactive',    val: String(data.filter(u => u.status === 'Inactive').length), color: 'var(--text-muted)' },
           { label: 'Blocked',     val: String(data.filter(u => u.status === 'Blocked').length),  color: 'var(--danger)' },
         ].map(s => (
-          <div key={s.label} style={{ background: card, border: `1px solid ${border}`, borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '100px' }}>
-            <div style={{ fontSize: '12px', fontWeight: 600, color: textMuted, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
-            <div style={{ fontSize: '28px', fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.val}</div>
+          <div key={s.label} className="card" style={{ padding: clampPx(12, 16), display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: clampPx(88, 100) }}>
+            <div style={{ fontSize: clampPx(11, 12), fontWeight: 600, color: textMuted, marginBottom: clampPx(6, 8), textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</div>
+            <div style={{ fontSize: clampPx(24, 28), fontWeight: 800, color: s.color, lineHeight: 1 }}>{s.val}</div>
           </div>
         ))}
       </div>
 
       {/* Roles overview */}
-      <div style={{ background: card, border: `1px solid ${border}`, borderRadius: '12px', padding: '18px', marginBottom: '20px' }}>
-        <div style={{ fontSize: '14px', fontWeight: 700, color: textMain, marginBottom: '14px' }}>Roles Overview</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }} className="roles-grid">
+      <div className="card" style={{ padding: clampPx(14, 18), marginBottom: clampPx(16, 20) }}>
+        <div style={{ fontSize: clampPx(13, 14), fontWeight: 700, color: textMain, marginBottom: clampPx(12, 14) }}>Roles Overview</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: clampPx(10, 12) }} className="roles-grid">
           {roleStats.map(r => (
-            <div key={r.name} style={{ background: surface, border: `1px solid ${border}`, borderRadius: '10px', padding: '14px', minWidth: 0 }}>
+            <div key={r.name} style={{ background: surface, border: `1px solid ${border}`, borderRadius: '10px', padding: clampPx(12, 14), minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '6px', gap: '8px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: textMain, whiteSpace: 'nowrap' }}>{r.name}</span>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: r.color, whiteSpace: 'nowrap' }}>{r.count} users</span>
+                <span style={{ fontSize: clampPx(12, 13), fontWeight: 700, color: textMain, whiteSpace: 'nowrap' }}>{r.name}</span>
+                <span style={{ fontSize: clampPx(10, 11), fontWeight: 700, color: r.color, whiteSpace: 'nowrap' }}>{r.count} users</span>
               </div>
-              <div style={{ fontSize: '11.5px', color: textMuted }}>{r.permissions}</div>
+              <div style={{ fontSize: clampPx(11, 12), color: textMuted }}>{r.permissions}</div>
             </div>
           ))}
         </div>
