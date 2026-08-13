@@ -110,6 +110,11 @@ function UsersContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   // ── Data ────────────────────────────────────────────────────────────────────
 
   const [data, setData] = useState<User[]>([]);

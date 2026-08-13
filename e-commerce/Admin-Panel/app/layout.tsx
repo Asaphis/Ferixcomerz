@@ -25,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               border: "1px solid var(--border)",
               borderRadius: "8px",
               fontSize: "14px",
+              maxWidth: "calc(100vw - 32px)",
             },
           }}
         />

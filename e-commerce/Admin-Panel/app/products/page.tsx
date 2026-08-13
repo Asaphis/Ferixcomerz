@@ -646,15 +646,15 @@ function ProductsContent() {
           <div style={{ fontSize: '11px', color: textMuted, padding: '6px 0 8px' }}>
             Configure the payment plan breakdown. The per-installment amount will be auto-calculated as (Price − Deposit) ÷ Number of Installments, or you can override it manually.
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: clampPx(10, 12) }}>
             <FormField label="Payment Duration" value={form.creditDuration} onChange={fp('creditDuration')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="12" />
             <FormField label="Duration Unit" value={form.creditDurationType} onChange={fp('creditDurationType')} options={['weeks', 'months']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: clampPx(10, 12) }}>
             <FormField label="Payment Frequency" value={form.creditInstallmentFrequency} onChange={fp('creditInstallmentFrequency')} options={['daily', 'weekly', 'monthly']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Number of Installments" value={form.creditInstallmentCount} onChange={fp('creditInstallmentCount')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 13" />
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: clampPx(10, 12) }}>
             <FormField label="Per-Installment Amount" value={form.creditInstallmentAmount} onChange={fp('creditInstallmentAmount')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="Auto-calculated or enter manually" />
             <div style={{ display: 'flex', alignItems: 'flex-end' }}>
               <button
@@ -672,15 +672,16 @@ function ProductsContent() {
                   }
                 }}
                 style={{
-                  padding: '8px 14px',
+                  padding: clampPx(8, 10) clampPx(12, 14),
                   borderRadius: '8px',
-                  fontSize: '12px',
+                  fontSize: clampPx(11, 12),
                   fontWeight: 600,
                   background: 'var(--primary)',
                   color: '#fff',
                   border: 'none',
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
+                  minHeight: '44px',
                 }}
               >
                 Auto-Calculate
