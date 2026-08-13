@@ -15,6 +15,11 @@ function ReportsContent() {
   const gridColor = 'var(--border)';
   const fmt = (n: number) => `$${Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 })}`;
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const [selectedMonth, setSelectedMonth] = useState(() => new Date().toISOString().slice(0, 7));
   const [selectedLabel, setSelectedLabel] = useState('This Month');
   const [availableMonths, setAvailableMonths] = useState<Array<{ value: string; label: string }>>([]);
@@ -73,20 +78,20 @@ function ReportsContent() {
   }, [selectedMonth]);
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Reports" subtitle="Sales analytics and business insights" icon={BarChart3}
         extra={
-          <div style={{ display:'flex', alignItems:'center', gap:'10px', flexWrap:'wrap' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:clampPx(8, 10), flexWrap:'wrap' }}>
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              style={{ background:surface, border:`1px solid ${border}`, borderRadius:'9px', color:textMain, fontSize:'13px', fontWeight:600, padding:'8px 12px', cursor:'pointer', fontFamily:'var(--font-inter)' }}
+              style={{ background:surface, border:`1px solid ${border}`, borderRadius:'9px', color:textMain, fontSize:clampPx(12, 13), fontWeight:600, padding:clampPx(8, 10) clampPx(10, 12), cursor:'pointer', fontFamily:'var(--font-inter)', minHeight:'44px' }}
             >
               {(availableMonths.length > 0 ? availableMonths : [{ value: selectedMonth, label: selectedLabel }]).map((month) => (
                 <option key={month.value} value={month.value}>{month.label}</option>
               ))}
             </select>
-            <button style={{display:'flex',alignItems:'center',gap:'6px',background:surface,border:`1px solid ${border}`,borderRadius:'9px',color:textMain,fontSize:'13px',fontWeight:500,padding:'8px 14px',cursor:'pointer',fontFamily:'var(--font-inter)'}}>
+            <button style={{display:'flex',alignItems:'center',gap:'6px',background:surface,border:`1px solid ${border}`,borderRadius:'9px',color:textMain,fontSize:clampPx(12, 13),fontWeight:500,padding:clampPx(8, 10) clampPx(12, 14),cursor:'pointer',fontFamily:'var(--font-inter)',minHeight:'44px'}}>
               <Download size={14} /> Export
             </button>
           </div>
@@ -94,12 +99,12 @@ function ReportsContent() {
       />
 
       {/* KPI Cards */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'14px',marginBottom:'24px'}} className="kpi">
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:clampPx(10, 14),marginBottom:clampPx(20, 24)}} className="kpi">
         {kpis.map(k=>(
-          <div key={k.label} style={{background:card,border:`1px solid ${border}`,borderRadius:'12px',padding:'16px'}}>
-            <div style={{fontSize:'12px',color:textMuted,marginBottom:'6px'}}>{k.label}</div>
-            <div style={{fontSize:'22px',fontWeight:800,color:textMain}}>{k.val}</div>
-            <div style={{fontSize:'12px',fontWeight:600,color:k.up?'var(--primary)':'var(--danger)',display:'flex',alignItems:'center',gap:'3px',marginTop:'4px'}}>
+          <div key={k.label} className="card" style={{padding:clampPx(12, 16)}}>
+            <div style={{fontSize:clampPx(11, 12),color:textMuted,marginBottom:'6px'}}>{k.label}</div>
+            <div style={{fontSize:clampPx(18, 22),fontWeight:800,color:textMain,lineHeight:1.2}}>{k.val}</div>
+            <div style={{fontSize:clampPx(11, 12),fontWeight:600,color:k.up?'var(--primary)':'var(--danger)',display:'flex',alignItems:'center',gap:'3px',marginTop:'4px'}}>
               {k.up?<TrendingUp size={12}/>:<TrendingDown size={12}/>}{k.change}{k.label === 'Avg Order Value' ? '' : ' vs previous month'}
             </div>
           </div>
@@ -107,10 +112,10 @@ function ReportsContent() {
       </div>
 
       {/* Charts */}
-      <div style={{display:'grid',gridTemplateColumns:'1.5fr 1fr',gap:'16px',marginBottom:'20px'}} className="chart-grid">
-        <div style={{background:card,border:`1px solid ${border}`,borderRadius:'12px',padding:'20px'}}>
-          <div style={{fontSize:'14px',fontWeight:700,color:textMain,marginBottom:'4px'}}>Revenue Trend</div>
-          <div style={{fontSize:'12px',color:textMuted,marginBottom:'16px'}}>{selectedLabel}</div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr',gap:clampPx(12, 16),marginBottom:clampPx(16, 20)}} className="chart-grid">
+        <div className="card" style={{padding:clampPx(16, 20)}}>
+          <div style={{fontSize:clampPx(13, 14),fontWeight:700,color:textMain,marginBottom:'4px'}}>Revenue Trend</div>
+          <div style={{fontSize:clampPx(11, 12),color:textMuted,marginBottom:clampPx(12, 16)}}>{selectedLabel}</div>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={chartData} margin={{left:-20}}>
               <CartesianGrid strokeDasharray="3 3" stroke={gridColor} />
@@ -121,23 +126,23 @@ function ReportsContent() {
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <div style={{background:card,border:`1px solid ${border}`,borderRadius:'12px',padding:'20px'}}>
-          <div style={{fontSize:'14px',fontWeight:700,color:textMain,marginBottom:'4px'}}>Sales by Category</div>
-          <div style={{fontSize:'12px',color:textMuted,marginBottom:'16px'}}>{selectedLabel}</div>
-          <div style={{display:'flex',alignItems:'center',gap:'16px'}}>
+        <div className="card" style={{padding:clampPx(16, 20)}}>
+          <div style={{fontSize:clampPx(13, 14),fontWeight:700,color:textMain,marginBottom:'4px'}}>Sales by Category</div>
+          <div style={{fontSize:clampPx(11, 12),color:textMuted,marginBottom:clampPx(12, 16)}}>{selectedLabel}</div>
+          <div style={{display:'flex',alignItems:'center',gap:clampPx(12, 16),flexWrap:'wrap'}}>
             <PieChart width={130} height={130}>
               <Pie data={catData} cx={65} cy={65} innerRadius={40} outerRadius={65} dataKey="value" stroke="none">
                 {catData.map((e,i)=><Cell key={i} fill={e.color} />)}
               </Pie>
             </PieChart>
-            <div style={{flex:1}}>
+            <div style={{flex:1,minWidth:0}}>
               {catData.map(c=>(
                 <div key={c.name} style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:'8px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'6px'}}>
                     <div style={{width:'8px',height:'8px',borderRadius:'50%',background:c.color}} />
-                    <span style={{fontSize:'12.5px',color:textMuted}}>{c.name}</span>
+                    <span style={{fontSize:clampPx(11, 12),color:textMuted}}>{c.name}</span>
                   </div>
-                  <span style={{fontSize:'12.5px',fontWeight:700,color:textMain}}>{c.value}%</span>
+                  <span style={{fontSize:clampPx(11, 12),fontWeight:700,color:textMain}}>{c.value}%</span>
                 </div>
               ))}
             </div>
