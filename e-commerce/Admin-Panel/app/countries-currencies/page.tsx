@@ -412,19 +412,19 @@ function CountriesContent() {
       )}
 
       {/* Edit Country Modal */}
-      <Modal open={!!editCountry} onClose={()=>setEditCountry(null)} title={`Edit Country: ${editCountry?.name ?? ''}`}>
+      <Modal open={!!editCountry} onClose={()=>setEditCountry(null)} title={`Edit Country: ${editCountry?.name ?? ''}`} maxWidth="540px">
         {editCountryFields}
         <ModalFooter onClose={()=>setEditCountry(null)} onSubmit={handleSaveCountry} loading={loading} submitLabel="Save Changes" border={border} textMain={textMain} />
       </Modal>
 
       {/* Add Country Modal */}
-      <Modal open={addCountryOpen} onClose={()=>setAddCountryOpen(false)} title="Add New Country">
+      <Modal open={addCountryOpen} onClose={()=>setAddCountryOpen(false)} title="Add New Country" maxWidth="540px">
         {addCountryFields}
         <ModalFooter onClose={()=>setAddCountryOpen(false)} onSubmit={handleAddCountry} loading={loading} submitLabel="Add Country" border={border} textMain={textMain} />
       </Modal>
 
       {/* Edit Currency Rate Modal */}
-      <Modal open={!!editCurrency} onClose={()=>setEditCurrency(null)} title={`Edit Currency: ${editCurrency?.code ?? ''}`}>
+      <Modal open={!!editCurrency} onClose={()=>setEditCurrency(null)} title={`Edit Currency: ${editCurrency?.code ?? ''}`} maxWidth="440px">
         <FormField label="Exchange Rate (vs USD)" value={curForm.rate} onChange={(v)=>setCurForm(f=>({...f,rate:v}))} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 27.5" />
         <FormField label="Status" value={curForm.status} onChange={(v)=>setCurForm(f=>({...f,status:v}))} options={['Active','Inactive','Base']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
         <ModalFooter onClose={()=>setEditCurrency(null)} onSubmit={handleSaveCurrency} loading={loading} submitLabel="Save Rate" border={border} textMain={textMain} />
