@@ -558,7 +558,7 @@ function CreditContent() {
       <div style={{display:'flex',gap:'4px',marginBottom:clampPx(16, 20),background:surface,padding:'4px',borderRadius:'10px',border:`1px solid ${border}`,overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
         {TABS.map(t=>(
           <button key={t.key} onClick={()=>setActiveTab(t.key)} style={{
-            flex:'1 0 auto', padding:clampPx(8, 10) clampPx(12, 14), borderRadius:'8px', border:'none', cursor:'pointer',
+            flex:'1 0 auto', padding:`${clampPx(8, 10)} ${clampPx(12, 14)}`, borderRadius:'8px', border:'none', cursor:'pointer',
             background:activeTab===t.key?'var(--primary)':'transparent',
             color:activeTab===t.key?'white':textMuted,
             fontSize:clampPx(12, 13), fontWeight:600, fontFamily:'var(--font-inter)',

@@ -174,7 +174,7 @@ function ShippingContent() {
   ];
 
   const tabStyle = (active: boolean) => ({
-    padding: clampPx(8, 10) clampPx(14, 18), borderRadius: '8px', fontSize: clampPx(12, 13), fontWeight: 600, cursor: 'pointer',
+    padding: `${clampPx(8, 10)} ${clampPx(14, 18)}`, borderRadius: '8px', fontSize: clampPx(12, 13), fontWeight: 600, cursor: 'pointer',
     background: active ? 'var(--primary)' : 'transparent', color: active ? '#fff' : textMuted, border: 'none',
     minHeight: '44px',
   });

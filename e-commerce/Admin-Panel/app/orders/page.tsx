@@ -478,7 +478,7 @@ function OrdersContent() {
                   key={t.key}
                   onClick={() => setTab(t.key)}
                   style={{
-                    padding: clampPx(8, 10) clampPx(12, 16), borderRadius: '8px', fontSize: clampPx(12, 13), fontWeight: '600', border: 'none', cursor: 'pointer',
+                    padding: `${clampPx(8, 10)} ${clampPx(12, 16)}`, borderRadius: '8px', fontSize: clampPx(12, 13), fontWeight: '600', border: 'none', cursor: 'pointer',
                     background: tab === t.key ? 'white' : 'transparent',
                     color: tab === t.key ? 'var(--primary)' : T.muted,
                     boxShadow: tab === t.key ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',

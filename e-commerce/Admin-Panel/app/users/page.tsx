@@ -654,7 +654,7 @@ function UsersContent() {
                 color: 'white',
                 border: 'none',
                 borderRadius: '9px',
-                padding: clampPx(8, 10) clampPx(12, 16),
+                padding: `${clampPx(8, 10)} ${clampPx(12, 16)}`,
                 fontSize: clampPx(12, 13),
                 fontWeight: 700,
                 cursor: 'pointer',

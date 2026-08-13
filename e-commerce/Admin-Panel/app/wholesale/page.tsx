@@ -577,7 +577,7 @@ function WholesaleContent() {
           { id:'inventory', label:'Bulk Inventory', icon:Package }
         ].map(t => (
           <button key={t.id} onClick={() => setSection(t.id as Section)} style={{
-            display:'flex', alignItems:'center', gap:'8px', padding:clampPx(10, 12) clampPx(12, 16), borderRadius:'12px', fontSize:clampPx(12, 13), fontWeight:600,
+            display:'flex', alignItems:'center', gap:'8px', padding:`${clampPx(10, 12)} ${clampPx(12, 16)}`, borderRadius:'12px', fontSize:clampPx(12, 13), fontWeight:600,
             background: section === t.id ? 'rgba(31,168,154,0.1)' : card,
             color: section === t.id ? 'var(--primary)' : textMuted,
             border: `1px solid ${section === t.id ? 'var(--primary)' : border}`,

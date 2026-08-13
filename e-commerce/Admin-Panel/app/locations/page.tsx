@@ -430,7 +430,7 @@ function LocationsContent() {
     pickups:   () => { setPickupForm({ ...EMPTY_PICKUP }); setAddPickupOpen(true); },
   };
 
-  const selStyle = { width: '100%', background: surface, border: `1px solid ${border}`, borderRadius: '9px', color: textMain, fontSize: clampPx(12, 13), outline: 'none', padding: clampPx(10, 12) clampPx(12, 14), cursor: 'pointer', minHeight: '44px' };
+  const selStyle = { width: '100%', background: surface, border: `1px solid ${border}`, borderRadius: '9px', color: textMain, fontSize: clampPx(12, 13), outline: 'none', padding: `${clampPx(10, 12)} ${clampPx(12, 14)}`, cursor: 'pointer', minHeight: '44px' };
 
   return (
     <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>

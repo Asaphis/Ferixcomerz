@@ -565,7 +565,7 @@ function ProductsContent() {
   ];
 
   const sectionLabel = (label: string) => (
-    <div style={{ fontSize: clampPx(10, 11), fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', padding: clampPx(10, 12) 0 clampPx(3, 4), borderBottom: `1px solid ${border}`, marginBottom: clampPx(10, 12) }}>{label}</div>
+    <div style={{ fontSize: clampPx(10, 11), fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', padding: `${clampPx(10, 12)} 0 ${clampPx(3, 4)}`, borderBottom: `1px solid ${border}`, marginBottom: clampPx(10, 12) }}>{label}</div>
   );
 
   const formFields = (

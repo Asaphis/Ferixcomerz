@@ -201,8 +201,6 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
 }
 
 // ── ConfirmDialog ──────────────────────────────────────────
-  );
-}
 
 // ── ConfirmDialog ──────────────────────────────────────────
 interface ConfirmDialogProps {

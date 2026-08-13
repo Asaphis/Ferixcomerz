@@ -320,7 +320,7 @@ function CurrenciesContent() {
       />
 
       {/* Default Currency Selector */}
-      <div className="card" style={{ marginBottom: clampPx(14, 16), padding: clampPx(14, 16) clampPx(16, 20), background: 'rgba(246,176,30,0.06)', border: '1px solid rgba(246,176,30,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: clampPx(12, 16), flexWrap: 'wrap' }}>
+      <div className="card" style={{ marginBottom: clampPx(14, 16), padding: `${clampPx(14, 16)} ${clampPx(16, 20)}`, background: 'rgba(246,176,30,0.06)', border: '1px solid rgba(246,176,30,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: clampPx(12, 16), flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: clampPx(10, 12), minWidth: 0, flex: 1 }}>
           <div style={{ width: clampPx(36, 40), height: clampPx(36, 40), borderRadius: '10px', background: 'rgba(246,176,30,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Star size={clampPx(18, 20)} color="var(--gold)" fill="var(--gold)" />

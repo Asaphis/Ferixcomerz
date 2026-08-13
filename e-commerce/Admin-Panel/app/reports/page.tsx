@@ -85,7 +85,7 @@ function ReportsContent() {
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              style={{ background:surface, border:`1px solid ${border}`, borderRadius:'9px', color:textMain, fontSize:clampPx(12, 13), fontWeight:600, padding:clampPx(8, 10) clampPx(10, 12), cursor:'pointer', fontFamily:'var(--font-inter)', minHeight:'44px' }}
+              style={{ background:surface, border:`1px solid ${border}`, borderRadius:'9px', color:textMain, fontSize:clampPx(12, 13), fontWeight:600, padding:`${clampPx(8, 10)} ${clampPx(10, 12)}`, cursor:'pointer', fontFamily:'var(--font-inter)', minHeight:'44px' }}
             >
               {(availableMonths.length > 0 ? availableMonths : [{ value: selectedMonth, label: selectedLabel }]).map((month) => (
                 <option key={month.value} value={month.value}>{month.label}</option>
