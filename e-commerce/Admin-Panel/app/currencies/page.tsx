@@ -38,6 +38,11 @@ function CurrenciesContent() {
   const textMuted = 'var(--text-muted)';
   const surface   = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const [currencies, setCurrencies] = useState<CurrencyRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [defaultCurrencyCode, setDefaultCurrencyCode] = useState<string>('USD');
