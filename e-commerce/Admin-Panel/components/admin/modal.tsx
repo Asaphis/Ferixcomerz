@@ -62,7 +62,7 @@ function CustomSelect({ value, onChange, options, disabled = false, border, text
 
       {/* Dropdown list */}
       {open && (
-        <div style={{
+        <div className="custom-select-dropdown" style={{
           position: 'absolute', top: 'calc(100% + 6px)', left: 0, right: 0,
           zIndex: 99999,
           background: '#FFFFFF',
@@ -72,7 +72,9 @@ function CustomSelect({ value, onChange, options, disabled = false, border, text
           overflow: 'hidden',
           maxHeight: '220px',
           overflowY: 'auto',
-          animation: 'fadeInUp 0.15s ease'
+          animation: 'fadeInUp 0.2s ease',
+          maxWidth: '100%',
+          minWidth: 'min(100%, 200px)'
         }}>
           {options.map(opt => (
             <div
@@ -178,6 +180,10 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         @media (min-width: 768px) {
           .modal-overlay {
             padding: 24px;
@@ -191,6 +197,10 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
         }
       `}</style>
     </div>
+  );
+}
+
+// ── ConfirmDialog ──────────────────────────────────────────
   );
 }
 
@@ -214,22 +224,23 @@ export function ConfirmDialog({ open, onClose, onConfirm, title, message, confir
   if (!open) return null;
   return (
     <div
+      className="confirm-dialog-overlay"
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
         background: 'var(--overlay)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
       }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{
+      <div className="confirm-dialog-content" style={{
         background: bg,
         border: `1px solid ${border}`,
         borderRadius: '20px',
         width: '100%',
-        maxWidth: '440px',
-        padding: '32px',
+        maxWidth: 'min(440px, calc(100vw - 32px))',
+        padding: '24px',
         boxShadow: '0 25px 50px rgba(76, 59, 53, 0.15)',
         animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
       }}>
@@ -247,7 +258,7 @@ export function ConfirmDialog({ open, onClose, onConfirm, title, message, confir
         <p style={{ fontSize: '14px', color: textMuted, margin: '0 0 28px', lineHeight: 1.6, fontWeight: 500 }}>{message}</p>
 
         {/* Action triggers */}
-        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
           <button
             onClick={onClose}
             disabled={loading}
@@ -255,7 +266,8 @@ export function ConfirmDialog({ open, onClose, onConfirm, title, message, confir
               padding: '11px 20px', borderRadius: '10px',
               background: 'var(--surface)', border: `1.5px solid ${border}`,
               color: textMain, fontSize: '13.5px', fontWeight: 700,
-              cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'all 0.15s'
+              cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'all 0.25s',
+              minWidth: '100px', minHeight: '44px'
             }}
             onMouseEnter={e => e.currentTarget.style.background = '#FFFFFF'}
             onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
@@ -270,8 +282,9 @@ export function ConfirmDialog({ open, onClose, onConfirm, title, message, confir
               background: 'linear-gradient(135deg, var(--brand-gold-bright) 0%, var(--brand-gold-dark) 100%)',
               border: 'none', color: '#FFFFFF', fontSize: '13.5px', fontWeight: 700,
               cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
-              fontFamily: 'var(--font-inter)', transition: 'all 0.2s',
-              boxShadow: '0 4px 12px rgba(147, 95, 4, 0.2)'
+              fontFamily: 'var(--font-inter)', transition: 'all 0.25s',
+              boxShadow: '0 4px 12px rgba(147, 95, 4, 0.2)',
+              minWidth: '100px', minHeight: '44px'
             }}
             onMouseEnter={e => {
               if (!loading) {
@@ -284,10 +297,20 @@ export function ConfirmDialog({ open, onClose, onConfirm, title, message, confir
               e.currentTarget.style.boxShadow = '0 4px 12px rgba(147, 95, 4, 0.2)';
             }}
           >
-            {loading ? 'Processing Operation...' : confirmLabel}
+            {loading ? 'Processing...' : confirmLabel}
           </button>
         </div>
       </div>
+      <style>{`
+        @media (min-width: 768px) {
+          .confirm-dialog-overlay {
+            padding: 24px;
+          }
+          .confirm-dialog-content {
+            padding: 32px;
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -317,10 +340,11 @@ export function FormField({ label, value, onChange, type = 'text', options, read
     fontFamily: 'var(--font-inter)',
     boxSizing: 'border-box',
     fontWeight: 500,
-    transition: 'all 0.2s ease',
+    transition: 'all 0.25s ease',
+    maxWidth: '100%'
   };
   return (
-    <div style={{ marginBottom: '18px' }}>
+    <div style={{ marginBottom: '18px', maxWidth: '100%' }}>
       <label style={{
         display: 'block', fontSize: '11px', fontWeight: 800,
         color: textMuted, marginBottom: '6px', textTransform: 'uppercase',
@@ -396,7 +420,7 @@ interface ModalFooterProps {
 
 export function ModalFooter({ onClose, onSubmit, loading = false, submitLabel = 'Save changes', border, textMain }: ModalFooterProps) {
   return (
-    <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px', paddingTop: '20px', borderTop: `1px solid ${border}` }}>
+    <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '10px', paddingTop: '20px', borderTop: `1px solid ${border}`, flexWrap: 'wrap' }}>
       <button
         onClick={onClose}
         disabled={loading}
@@ -404,7 +428,8 @@ export function ModalFooter({ onClose, onSubmit, loading = false, submitLabel = 
           padding: '10px 20px', borderRadius: '10px',
           background: 'var(--surface)', border: `1.5px solid ${border}`,
           color: textMain, fontSize: '13.5px', fontWeight: 700,
-          cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'all 0.15s'
+          cursor: 'pointer', fontFamily: 'var(--font-inter)', transition: 'all 0.25s',
+          minWidth: '100px', minHeight: '44px'
         }}
         onMouseEnter={e => e.currentTarget.style.background = '#FFFFFF'}
         onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
@@ -420,8 +445,9 @@ export function ModalFooter({ onClose, onSubmit, loading = false, submitLabel = 
             background: 'linear-gradient(135deg, var(--brand-blue-medium) 0%, var(--brand-blue-dark) 100%)',
             border: 'none', color: '#FFFFFF', fontSize: '13.5px', fontWeight: 700,
             cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
-            fontFamily: 'var(--font-inter)', transition: 'all 0.2s',
-            boxShadow: '0 4px 12px rgba(2, 145, 192, 0.25)'
+            fontFamily: 'var(--font-inter)', transition: 'all 0.25s',
+            boxShadow: '0 4px 12px rgba(2, 145, 192, 0.25)',
+            minWidth: '100px', minHeight: '44px'
           }}
           onMouseEnter={e => {
             if (!loading) {
