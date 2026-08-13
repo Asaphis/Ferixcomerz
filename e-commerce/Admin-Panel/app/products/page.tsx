@@ -105,6 +105,11 @@ function ProductsContent() {
   const textMain = 'var(--text-main)'; const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const PAGE_SIZE = 25;
   const [data, setData] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -560,7 +565,7 @@ function ProductsContent() {
   ];
 
   const sectionLabel = (label: string) => (
-    <div style={{ fontSize: '11px', fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', padding: '12px 0 4px', borderBottom: `1px solid ${border}`, marginBottom: '12px' }}>{label}</div>
+    <div style={{ fontSize: clampPx(10, 11), fontWeight: 700, color: textMuted, textTransform: 'uppercase', letterSpacing: '0.5px', padding: clampPx(10, 12) 0 clampPx(3, 4), borderBottom: `1px solid ${border}`, marginBottom: clampPx(10, 12) }}>{label}</div>
   );
 
   const formFields = (
@@ -730,13 +735,13 @@ function ProductsContent() {
   );
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Products" subtitle="Manage your product catalogue" icon={Package} onAdd={openAdd} addLabel="Add Product" />
       {isLoading ? (
-        <div style={{ padding: '16px 0' }}>
+        <div style={{ padding: clampPx(12, 16) 0 }}>
           {[...Array(8)].map((_, i) => (
             <div key={i} style={{
-              height: 52,
+              height: clampPx(48, 52),
               background: 'var(--surface)',
               borderRadius: 8,
               marginBottom: 8,
@@ -750,32 +755,34 @@ function ProductsContent() {
         <>
           <DataTable columns={columns} data={data as unknown as Record<string, unknown>[]} searchPlaceholder="Search products..." onEdit={openEdit} onDelete={openDelete} onView={openView} />
           {/* Pagination Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 16, padding: '12px 0', borderTop: `1px solid ${border}` }}>
-            <span style={{ fontSize: 13, color: textMuted }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: clampPx(12, 16), padding: clampPx(10, 12) 0, borderTop: `1px solid ${border}`, flexWrap: 'wrap', gap: clampPx(8, 12) }}>
+            <span style={{ fontSize: clampPx(12, 13), color: textMuted }}>
               {totalCount > 0 ? `Showing ${currentPage * PAGE_SIZE + 1}–${Math.min((currentPage + 1) * PAGE_SIZE, totalCount)} of ${totalCount} products` : `${data.length} products`}
             </span>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: clampPx(6, 8) }}>
               <button
                 onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                 disabled={currentPage === 0}
                 style={{
-                  padding: '6px 16px', borderRadius: 6, border: `1px solid ${border}`,
+                  padding: clampPx(8, 10) clampPx(12, 16), borderRadius: 6, border: `1px solid ${border}`,
                   background: surface, color: textMain,
                   cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
-                  opacity: currentPage === 0 ? 0.4 : 1, fontSize: 13,
+                  opacity: currentPage === 0 ? 0.4 : 1, fontSize: clampPx(12, 13),
+                  minHeight: '40px',
                 }}
               >← Prev</button>
-              <span style={{ padding: '6px 12px', fontSize: 13, color: textMuted, background: card, border: `1px solid ${border}`, borderRadius: 6 }}>
+              <span style={{ padding: clampPx(8, 10) clampPx(10, 12), fontSize: clampPx(12, 13), color: textMuted, background: card, border: `1px solid ${border}`, borderRadius: 6, display: 'flex', alignItems: 'center', minHeight: '40px' }}>
                 Page {currentPage + 1}{totalCount > 0 ? ` of ${Math.ceil(totalCount / PAGE_SIZE)}` : ''}
               </span>
               <button
                 onClick={() => setCurrentPage(p => p + 1)}
                 disabled={data.length < PAGE_SIZE && totalCount > 0 ? (currentPage + 1) * PAGE_SIZE >= totalCount : data.length < PAGE_SIZE}
                 style={{
-                  padding: '6px 16px', borderRadius: 6, border: `1px solid ${border}`,
+                  padding: clampPx(8, 10) clampPx(12, 16), borderRadius: 6, border: `1px solid ${border}`,
                   background: surface, color: textMain,
-                  cursor: 'pointer', fontSize: 13,
+                  cursor: 'pointer', fontSize: clampPx(12, 13),
                   opacity: data.length < PAGE_SIZE ? 0.4 : 1,
+                  minHeight: '40px',
                 }}
               >Next →</button>
             </div>
@@ -783,18 +790,18 @@ function ProductsContent() {
         </>
       )}
 
-      <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add New Product">
+      <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add New Product" maxWidth="680px">
         {formFields}
         <ModalFooter onClose={() => setAddOpen(false)} onSubmit={handleAdd} loading={loading} submitLabel="Create Product" border={border} textMain={textMain} />
       </Modal>
 
-      <Modal open={!!editRow} onClose={() => setEditRow(null)} title={`Edit: ${editRow?.name ?? ''}`}>
+      <Modal open={!!editRow} onClose={() => setEditRow(null)} title={`Edit: ${editRow?.name ?? ''}`} maxWidth="680px">
         {formFields}
         <ModalFooter onClose={() => setEditRow(null)} onSubmit={handleEdit} loading={loading} submitLabel="Save Changes" border={border} textMain={textMain} />
       </Modal>
 
       {viewRow && (
-        <Modal open={!!viewRow} onClose={() => setViewRow(null)} title="Product Details">
+        <Modal open={!!viewRow} onClose={() => setViewRow(null)} title="Product Details" maxWidth="560px">
           <FormField label="Name" value={viewRow.name} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           <FormField label="SKU" value={viewRow.sku} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           <FormField label="Category" value={viewRow.category || '—'} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
@@ -807,14 +814,14 @@ function ProductsContent() {
           <FormField label="Specifications" value={viewRow.specifications || '—'} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           <FormField label="Tags" value={viewRow.tags || '—'} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           <FormField label="Status" value={viewRow.status} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
-          <button onClick={() => setViewRow(null)} style={{ width: '100%', padding: '10px', borderRadius: '9px', background: surface, border: `1px solid ${border}`, color: textMain, fontSize: '13.5px', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)', marginTop: '8px' }}>Close</button>
+          <button onClick={() => setViewRow(null)} style={{ width: '100%', padding: '12px', borderRadius: '9px', background: surface, border: `1px solid ${border}`, color: textMain, fontSize: clampPx(13, 14), fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font-inter)', marginTop: '8px', minHeight: '44px' }}>Close</button>
         </Modal>
       )}
 
       <ConfirmDialog open={!!deleteRow} onClose={() => setDeleteRow(null)} onConfirm={handleDelete} loading={loading} title="Delete Product" message={`Delete "${deleteRow?.name}" permanently?`} />
 
       <Modal open={conditionSettingsOpen} onClose={() => setConditionSettingsOpen(false)} title="Edit Product Conditions" maxWidth="560px">
-        <div style={{ fontSize:'13px', color:textMuted, lineHeight:1.6, marginBottom:'14px' }}>
+        <div style={{ fontSize:clampPx(12, 13), color:textMuted, lineHeight:1.6, marginBottom:clampPx(12, 14) }}>
           Add one condition per line. These options will appear in the product upload form, and whatever you choose for a product will be saved and shown on the frontend.
         </div>
         <FormField
