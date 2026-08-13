@@ -119,7 +119,7 @@ function ServicesContent() {
     { key: 'duration', label: 'Duration' },
     { key: 'provider', label: 'Provider' },
     { key: 'bookings', label: 'Bookings', render: (v) => <span style={{ fontWeight: 700, color: 'var(--secondary)' }}>{String(v)}</span> },
-    { key: 'status', label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '11.5px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(83,83,87,0.12)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'status', label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '11.5px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(83,83,87,0.12)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
   ];
 
   const modalFields = (

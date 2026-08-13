@@ -109,7 +109,7 @@ function InvoicingContent() {
   };
 
   const statusMap: Record<string,{bg:string;color:string}> = {
-    Paid:{bg:'rgba(192,21,27,0.10)',color:'var(--primary)'},
+    Paid:{bg:'rgba(2,145,192,0.10)',color:'var(--primary)'},
     Unpaid:{bg:'rgba(246,176,30,0.12)',color:'var(--gold)'},
     Overdue:{bg:'rgba(185,28,28,0.12)',color:'var(--danger)'},
     Draft:{bg:'rgba(83,83,87,0.12)',color:'var(--text-muted)'},

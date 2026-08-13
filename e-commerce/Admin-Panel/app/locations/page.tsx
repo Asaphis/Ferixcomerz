@@ -372,8 +372,8 @@ function LocationsContent() {
     { key: 'code',   label: 'Code', render: (v) => <span style={{ fontWeight: 700, color: 'var(--primary)', fontSize: '13px' }}>{String(v)}</span>, width: '70px' },
     { key: 'name',   label: 'Country', render: (v) => <span style={{ fontWeight: 600, color: textMain }}>{String(v)}</span> },
     { key: 'currency', label: 'Currency', render: (v, row) => { const r = row as unknown as Country; return <span style={{ color: textMain }}><b>{String(v)}</b> {r.symbol}</span>; } },
-    { key: 'shippingEnabled', label: 'Shipping', render: (v) => <span style={{ padding: '3px 8px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: v ? 'rgba(192,21,27,0.10)' : 'rgba(239,68,68,0.1)', color: v ? 'var(--primary)' : 'var(--danger)' }}>{v ? 'Enabled' : 'Disabled'}</span> },
-    { key: 'status', label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'shippingEnabled', label: 'Shipping', render: (v) => <span style={{ padding: '3px 8px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: v ? 'rgba(2,145,192,0.10)' : 'rgba(239,68,68,0.1)', color: v ? 'var(--primary)' : 'var(--danger)' }}>{v ? 'Enabled' : 'Disabled'}</span> },
+    { key: 'status', label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
     { key: 'isDefault', label: 'Default', render: (v) => v ? <span style={{ color: 'var(--gold)', fontWeight: 700, fontSize: '12px' }}>★ Default</span> : <span style={{ color: textMuted, fontSize: '12px' }}>—</span> },
   ];
 
@@ -382,13 +382,13 @@ function LocationsContent() {
     { key: 'code',        label: 'Code', render: (v) => <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '12px' }}>{String(v) || '—'}</span>, width: '70px' },
     { key: 'countryName', label: 'Country', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
     { key: 'cities',      label: 'Cities', render: (v) => <span style={{ fontWeight: 600, color: 'var(--secondary)' }}>{String(v)}</span>, width: '70px' },
-    { key: 'status',      label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'status',      label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
   ];
 
   const cityColumns: Column[] = [
     { key: 'name',      label: 'City', render: (v) => <span style={{ fontWeight: 600, color: textMain }}>{String(v)}</span> },
     { key: 'stateName', label: 'State / Province', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
-    { key: 'status',    label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'status',    label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
   ];
 
   const pickupColumns: Column[] = [
@@ -402,7 +402,7 @@ function LocationsContent() {
         const p = row as unknown as PickupStation;
         return (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span>
+            <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span>
             <button onClick={() => handleTogglePickup(p)} style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '6px', border: '1px solid rgba(52,74,100,0.30)', background: 'rgba(52,74,100,0.08)', color: 'var(--secondary)', cursor: 'pointer', fontWeight: 600 }}>
               {v === 'Active' ? 'Deactivate' : 'Activate'}
             </button>

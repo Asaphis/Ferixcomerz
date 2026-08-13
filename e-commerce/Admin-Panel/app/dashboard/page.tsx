@@ -1,9 +1,9 @@
 "use client";
 import AdminShell from "@/components/admin/admin-shell";
-// Lazy-loaded — recharts is ~180 KB, defer until after shell paint
 import dynamic from "next/dynamic";
 import type * as RechartsTypes from "recharts";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+import { useAuth } from "@/contexts/auth-context";
+
 const Recharts = dynamic(() => import("recharts") as any, { ssr: false });
 const _rc = typeof window !== "undefined" ? require("recharts") : {};
 const AreaChart: typeof RechartsTypes.AreaChart = _rc.AreaChart;
@@ -16,30 +16,28 @@ const ResponsiveContainer: typeof RechartsTypes.ResponsiveContainer = _rc.Respon
 const PieChart: typeof RechartsTypes.PieChart = _rc.PieChart;
 const Pie: typeof RechartsTypes.Pie = _rc.Pie;
 const Cell: typeof RechartsTypes.Cell = _rc.Cell;
+
 import {
   TrendingUp, TrendingDown, ShoppingCart, DollarSign, Package,
   CreditCard, FileText, UserPlus, BarChart2, Settings, Wallet,
-  Clock, ShieldAlert
+  Clock, ShieldCheck, ArrowRight, Activity, Calendar
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getRecentOrders, getTopProducts, getRecentCustomers, getReportsSummary } from "@/lib/api";
 
 const quickActions = [
-  { label: "New Invoice",  Icon: FileText,    color: "var(--brand-blue-bright)", href: "/invoicing"       },
-  { label: "New Estimate", Icon: FileText,    color: "var(--brand-green-deep)",  href: "/invoicing"       },
-  { label: "New Payment",  Icon: CreditCard,  color: "var(--brand-gold-bright)", href: "/wallet-payments" },
-  { label: "Add Product",  Icon: Package,     color: "var(--brand-gold-dark)",   href: "/products"        },
-  { label: "New Purchase", Icon: ShoppingCart,color: "var(--brand-blue-dark)",   href: "/orders"          },
-  { label: "New Customer", Icon: UserPlus,    color: "var(--brand-green-bright)",href: "/users"           },
-  { label: "View Reports", Icon: BarChart2,   color: "var(--brand-blue-medium)", href: "/reports"         },
-  { label: "Settings",     Icon: Settings,    color: "var(--text-muted)",        href: "/settings"        },
+  { label: "Invoice",  Icon: FileText,    color: "var(--brand-blue-bright)", href: "/invoicing"       },
+  { label: "Payment",  Icon: CreditCard,  color: "var(--brand-gold-bright)", href: "/wallet-payments" },
+  { label: "Product",  Icon: Package,     color: "var(--brand-gold-dark)",   href: "/products"        },
+  { label: "Order",    Icon: ShoppingCart,color: "var(--brand-blue-dark)",   href: "/orders"          },
+  { label: "Customer", Icon: UserPlus,    color: "var(--brand-green-bright)",href: "/users"           },
 ];
 
 function shortRef(prefix: string, value?: string | null) {
   const clean = value?.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
-  if (!clean) return `${prefix}-UNKNOWN`;
-  return `${prefix}-${clean.slice(-6)}`;
+  if (!clean) return `${prefix}-N/A`;
+  return `${prefix}-${clean.slice(-5)}`;
 }
 
 function formatOrderRef(orderNumber?: string | null, fallbackId?: string | null) {
@@ -47,41 +45,24 @@ function formatOrderRef(orderNumber?: string | null, fallbackId?: string | null)
   return `#${shortRef("ORD", fallbackId)}`;
 }
 
-function formatActivityOrderRef(id?: string | null) {
-  if (!id?.trim()) return "Transaction";
-  return `Order ${shortRef("ORD", id)}`;
-}
-
 function StatusBadge({ status }: { status: string }) {
   const s = status?.toLowerCase() || "";
   const map: Record<string, { bg: string; color: string; label: string }> = {
-    completed: { bg: "rgba(20, 113, 21, 0.1)",  color: "var(--brand-green-deep)", label: "Completed" },
-    delivered: { bg: "rgba(20, 113, 21, 0.1)",  color: "var(--brand-green-deep)", label: "Delivered" },
-    processing:{ bg: "rgba(2, 145, 192, 0.1)",  color: "var(--brand-blue-bright)", label: "Processing" },
-    pending:   { bg: "rgba(214, 155, 4, 0.1)",  color: "var(--brand-gold-bright)", label: "Pending" },
-    cancelled: { bg: "rgba(147, 95, 4, 0.1)",   color: "var(--brand-gold-dark)", label: "Cancelled" },
-    paid:      { bg: "rgba(20, 113, 21, 0.1)",  color: "var(--brand-green-deep)", label: "Paid" },
+    completed: { bg: "rgba(20, 113, 21, 0.08)",  color: "var(--brand-green-deep)", label: "Completed" },
+    delivered: { bg: "rgba(20, 113, 21, 0.08)",  color: "var(--brand-green-deep)", label: "Delivered" },
+    processing:{ bg: "rgba(2, 145, 192, 0.08)",  color: "var(--brand-blue-bright)", label: "Processing" },
+    pending:   { bg: "rgba(214, 155, 4, 0.08)",  color: "var(--brand-gold-bright)", label: "Pending" },
+    cancelled: { bg: "rgba(147, 95, 4, 0.08)",   color: "var(--brand-gold-dark)", label: "Cancelled" },
+    paid:      { bg: "rgba(20, 113, 21, 0.08)",  color: "var(--brand-green-deep)", label: "Paid" },
   };
-  const style = map[s] || { bg: "rgba(127, 109, 103, 0.1)", color: "var(--text-muted)", label: status };
+  const style = map[s] || { bg: "rgba(127, 109, 103, 0.08)", color: "var(--text-muted)", label: status };
   return (
     <span style={{
-      background: style.bg, color: style.color, fontSize: "11px", fontWeight: 700,
-      padding: "4px 10px", borderRadius: "20px", whiteSpace: "nowrap", border: `1px solid ${style.color}20`
+      background: style.bg, color: style.color, fontSize: "10.5px", fontWeight: 800,
+      padding: "2px 8px", borderRadius: "12px", whiteSpace: "nowrap", border: `1px solid ${style.color}15`
     }}>
       {style.label}
     </span>
-  );
-}
-
-function ActivityIcon({ color }: { color: string }) {
-  return (
-    <div style={{
-      width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
-      background: `${color}12`, display: "flex", alignItems: "center", justifyContent: "center",
-      border: `1.5px solid ${color}20`
-    }}>
-      <ShoppingCart size={15} color={color} />
-    </div>
   );
 }
 
@@ -99,14 +80,13 @@ interface Customer {
 }
 
 function DashboardContent() {
+  const { user: authUser } = useAuth();
   const router = useRouter();
-  const card      = "var(--card)";
   const border    = "var(--border)";
   const textMain  = "var(--text-main)";
   const textMuted = "var(--text-muted)";
   const textSec   = "var(--text-secondary)";
   const surface   = "var(--surface)";
-  const gridLine  = "var(--border)";
 
   const [orders, setOrders]       = useState<Order[]>([]);
   const [products, setProducts]   = useState<Product[]>([]);
@@ -148,21 +128,6 @@ function DashboardContent() {
     }).finally(() => setIsDashboardLoading(false));
   }, [selectedMonth]);
 
-  const cardStyle = (extra?: React.CSSProperties): React.CSSProperties => ({
-    background: card,
-    border: `1px solid ${border}`,
-    borderRadius: 18,
-    overflow: "hidden",
-    minWidth: 0,
-    boxShadow: "0 10px 30px rgba(76, 59, 53, 0.04)",
-    padding: "24px",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    transition: "transform 0.25s ease, box-shadow 0.25s ease",
-    ...extra,
-  });
-
   const fmt = (n: number) =>
     `$${Number(n || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
@@ -178,41 +143,34 @@ function DashboardContent() {
     "var(--brand-gold-bright)",
     "var(--brand-green-bright)",
     "var(--brand-blue-dark)",
-    "var(--brand-gold-dark)",
-    "var(--brand-green-deep)"
+    "var(--brand-gold-dark)"
   ];
 
-  // Area chart monthly series from reports
   const salesData: Array<{ date: string; sales: number; customers: number }> = report?.revenueSeries?.length > 0
     ? report.revenueSeries.map((s: any) => ({ date: String(s.label), sales: Number(s.revenue || 0), customers: Number(s.customers || 0) }))
     : [{ date: "Jan", sales: 0 }, { date: "Feb", sales: 0 }, { date: "Mar", sales: 0 },
        { date: "Apr", sales: 0 }, { date: "May", sales: 0 }, { date: "Jun", sales: 0 }].map((item) => ({ ...item, customers: 0 }));
 
-  // Pie chart sales by category
   const channelData: Array<{ name: string; value: number; amount: number; color: string }> = report?.salesByCategory?.length > 0
     ? report.salesByCategory.slice(0, 5).map((cat: any, i: number) => ({
         name: cat.name, value: Number(cat.value || 0), amount: 0, color: CHART_COLORS[i % CHART_COLORS.length],
       }))
-    : [{ name: "No sales recorded yet", value: 100, amount: 0, color: "var(--text-muted)" }];
+    : [{ name: "General Catalog", value: 100, amount: 0, color: "var(--brand-blue-bright)" }];
 
-  // Activity feed recent transactions
-  const activities: Array<{ text: string; time: string; color: string; icon: string }> = report?.recentTransactions?.length > 0
+  const activities: Array<{ text: string; time: string; color: string }> = report?.recentTransactions?.length > 0
     ? report.recentTransactions.slice(0, 5).map((tx: any) => ({
-        text: `${formatActivityOrderRef(tx.id)}  ·  ${tx.customer || "Customer"}  ·  ${fmt(tx.amount)}`,
-        time: tx.date ? new Date(tx.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "",
-        color: (tx.status === "paid" || tx.status === "delivered") ? "var(--brand-green-deep)" : tx.status === "pending" ? "var(--brand-gold-bright)" : "var(--brand-blue-bright)",
-        icon: "ShoppingBag",
+        text: `Order ${shortRef("ORD", tx.id)} · ${tx.customer || "Customer"} · ${fmt(tx.amount)}`,
+        time: tx.date ? new Date(tx.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "Today",
+        color: (tx.status === "paid" || tx.status === "delivered") ? "var(--brand-green-deep)" : "var(--brand-blue-bright)",
       }))
     : orders.slice(0, 5).map((o, i) => ({
-        text: `${formatOrderRef(o.orderNumber, o.id)}  ·  ${
+        text: `${formatOrderRef(o.orderNumber, o.id)} · ${
           o.user ? `${o.user.firstName || ""} ${o.user.lastName || ""}`.trim() || o.user.email || "Customer" : "Customer"
-        }  ·  ${fmt(parseFloat(o.total || "0"))}`,
+        } · ${fmt(parseFloat(o.total || "0"))}`,
         time: new Date(o.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
         color: CHART_COLORS[i % CHART_COLORS.length],
-        icon: "ShoppingBag",
       }));
 
-  // Top products
   const displayProducts: Product[] = report?.topProducts?.length > 0
     ? report.topProducts.map((p: any) => ({
         id: p.name,
@@ -222,132 +180,144 @@ function DashboardContent() {
       }))
     : products;
 
-  // KPI metadata with dynamic gradients and styling
-  const kpiCards = [
-    { label: "Monthly Revenue",  value: fmt(totalRevenue),         change: `${report?.stats?.revenueGrowth ?? 0}%`,   up: (report?.stats?.revenueGrowth ?? 0) >= 0,  Icon: DollarSign,   color: "var(--brand-blue-bright)", bgGrad: "linear-gradient(135deg, rgba(2, 145, 192, 0.08) 0%, rgba(255, 255, 255, 0) 100%)", spark: salesData.slice(-7).map(s => s.sales) },
-    { label: "Monthly Orders",   value: String(totalOrdersCount),  change: `${report?.stats?.ordersGrowth ?? 0}%`,    up: (report?.stats?.ordersGrowth ?? 0) >= 0,   Icon: ShoppingCart, color: "var(--brand-gold-bright)", bgGrad: "linear-gradient(135deg, rgba(214, 155, 4, 0.08) 0%, rgba(255, 255, 255, 0) 100%)", spark: salesData.slice(-7).map(s => s.sales) },
-    { label: "New Customers",    value: String(totalUsersCount),   change: `${report?.stats?.customersGrowth ?? 0}%`, up: (report?.stats?.customersGrowth ?? 0) >= 0, Icon: UserPlus,     color: "var(--brand-green-bright)", bgGrad: "linear-gradient(135deg, rgba(153, 188, 13, 0.08) 0%, rgba(255, 255, 255, 0) 100%)", spark: salesData.map(s => s.customers || 0).slice(-7) },
-    { label: "Credit Disbursed", value: fmt(creditDisbursed),      change: selectedLabel,                               up: true,                                              Icon: CreditCard,   color: "var(--brand-blue-dark)", bgGrad: "linear-gradient(135deg, rgba(1, 62, 103, 0.08) 0%, rgba(255, 255, 255, 0) 100%)", spark: [5,8,6,10,9,12,15] },
-    { label: "Outstanding Balance", value: fmt(totalOutstanding),  change: "Live Tracking",                           up: false,                                             Icon: Wallet,       color: "var(--brand-gold-dark)", bgGrad: "linear-gradient(135deg, rgba(147, 95, 4, 0.08) 0%, rgba(255, 255, 255, 0) 100%)", spark: [5,5,5,5,5,5,5] },
+  const kpis = [
+    { label: "Net Revenue", val: fmt(totalRevenue), change: `${report?.stats?.revenueGrowth ?? 0}%`, up: (report?.stats?.revenueGrowth ?? 0) >= 0, color: "var(--brand-blue-bright)", spark: salesData.slice(-7).map(s => s.sales) },
+    { label: "Orders Cleared", val: String(totalOrdersCount), change: `${report?.stats?.ordersGrowth ?? 0}%`, up: (report?.stats?.ordersGrowth ?? 0) >= 0, color: "var(--brand-gold-bright)", spark: salesData.slice(-7).map(s => s.sales) },
+    { label: "New Customers", val: String(totalUsersCount), change: `${report?.stats?.customersGrowth ?? 0}%`, up: (report?.stats?.customersGrowth ?? 0) >= 0, color: "var(--brand-green-bright)", spark: salesData.map(s => s.customers || 0).slice(-7) },
+    { label: "Disbursed Credit", val: fmt(creditDisbursed), change: "Active Ledger", up: true, color: "var(--brand-blue-dark)", spark: [3, 5, 8, 4, 11, 9, 14] },
+    { label: "Risk Exposure", val: fmt(totalOutstanding), change: "Live Audit", up: false, color: "var(--brand-gold-dark)", spark: [4, 4, 4, 4, 4, 4, 4] },
   ];
 
-  const COLORS = ["var(--brand-blue-bright)","var(--brand-gold-bright)","var(--brand-green-bright)","var(--brand-blue-dark)","var(--brand-gold-dark)"];
-
-  const getInitials = (order: Order) => {
-    const u = order.user;
-    if (u?.firstName && u?.lastName) return `${u.firstName[0]}${u.lastName[0]}`.toUpperCase();
-    if (u?.firstName) return u.firstName.slice(0, 2).toUpperCase();
-    if (u?.email) return u.email.slice(0, 2).toUpperCase();
-    return "US";
-  };
-  const getName = (order: Order) => {
-    const u = order.user;
-    if (!u) return "Guest Customer";
-    return [u.firstName, u.lastName].filter(Boolean).join(" ") || u.email || "Unknown User";
-  };
-  const formatDate = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  const formatTime = (d: string) => new Date(d).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
-
   return (
-    <div style={{ fontFamily: "var(--font-inter), sans-serif", padding: 0 }}>
+    <div style={{ fontFamily: "var(--font-inter), sans-serif", display: "flex", flexDirection: "column", gap: 20 }}>
       {isDashboardLoading && (
         <div style={{
           position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-          background: "rgba(255,247,244,0.7)", backdropFilter: "blur(4px)",
+          background: "rgba(255,247,244,0.6)", backdropFilter: "blur(4px)",
           zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center"
         }}>
           <div style={{ textAlign: "center" }}>
-            <div style={{ width: 48, height: 48, margin: "0 auto 16px", border: "3px solid var(--border)", borderTopColor: "var(--primary)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-            <p style={{ color: "var(--text-muted)", fontSize: "14px", fontWeight: 600 }}>Syncing Ledger Data...</p>
+            <div style={{ width: 40, height: 40, margin: "0 auto 12px", border: "3px solid var(--border)", borderTopColor: "var(--primary)", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+            <p style={{ color: "var(--text-muted)", fontSize: "13px", fontWeight: 600 }}>Syncing Ledger Data...</p>
           </div>
         </div>
       )}
 
-      {/* ── HEADER ROW ── */}
+      {/* ── LUXURY DUAL-TONE WELCOME HERO ── */}
       <div style={{
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        flexWrap: "wrap", gap: 16, marginBottom: 24, background: "#FFFFFF",
-        padding: "20px 24px", borderRadius: 18, border: `1px solid ${border}`,
-        boxShadow: "0 10px 30px rgba(76, 59, 53, 0.02)"
+        background: "linear-gradient(135deg, #012044 0%, #013E67 100%)",
+        borderRadius: 16,
+        padding: "24px",
+        color: "white",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 20,
+        boxShadow: "0 10px 30px rgba(1, 32, 68, 0.15)",
+        border: "1px solid rgba(255,255,255,0.06)",
+        position: "relative",
+        overflow: "hidden"
       }}>
-        <div>
-          <h1 style={{ fontSize: "24px", fontWeight: 800, color: textMain, letterSpacing: "-0.75px", margin: 0 }}>
-            Operations & Financial Telemetry
+        {/* Dynamic Glowing Brand Watermark */}
+        <div style={{
+          position: "absolute", right: "-40px", bottom: "-40px", width: 240, height: 240,
+          background: "radial-gradient(circle, rgba(2, 145, 192, 0.2) 0%, rgba(0,0,0,0) 70%)",
+          pointerEvents: "none", zIndex: 1
+        }} />
+
+        <div style={{ zIndex: 2, position: "relative" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+            <span style={{
+              background: "rgba(214, 155, 4, 0.2)", color: "var(--brand-gold-bright)",
+              fontSize: "10px", fontWeight: 800, padding: "3px 10px", borderRadius: "12px",
+              border: "1px solid rgba(214, 155, 4, 0.3)", textTransform: "uppercase", letterSpacing: "1px"
+            }}>
+              Active Security Guard
+            </span>
+            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: "11px", color: "rgba(255,255,255,0.7)", fontWeight: 500 }}>
+              <ShieldCheck size={13} color="var(--brand-green-bright)" /> Encryption Handshake Active
+            </span>
+          </div>
+          <h1 style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "-0.5px", margin: 0 }}>
+            Welcome, {authUser?.name || "Officer"}
           </h1>
-          <p style={{ fontSize: "13.5px", color: textMuted, marginTop: 4, margin: 0 }}>
-            Real-time ledger audit, dynamic metrics tracking, and catalog system management for <strong style={{ color: "var(--brand-blue-bright)" }}>{selectedLabel}</strong>.
+          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.75)", marginTop: 4, margin: 0, maxWidth: 520 }}>
+            You are securely logged into the Ferixcomerz Enterprise Console. Here is your operations framework overview for {selectedLabel}.
           </p>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: "12px", fontWeight: 700, color: textSec, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-            Telemetry Frame:
-          </span>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 12, zIndex: 2, position: "relative" }}>
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
             style={{
-              background: surface, color: textMain, border: `1.5px solid ${border}`,
-              borderRadius: 10, padding: "8px 16px", fontSize: "13.5px", fontWeight: 700,
-              outline: "none", cursor: "pointer", boxShadow: "0 2px 6px rgba(0,0,0,0.01)"
+              background: "rgba(255,255,255,0.08)", color: "white", border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: 10, padding: "8px 16px", fontSize: "13px", fontWeight: 700,
+              outline: "none", cursor: "pointer", backdropFilter: "blur(10px)"
             }}
           >
             {(availableMonths.length > 0 ? availableMonths : [{ value: selectedMonth, label: selectedLabel }]).map((month) => (
-              <option key={month.value} value={month.value}>{month.label}</option>
+              <option key={month.value} value={month.value} style={{ background: "#012044", color: "white" }}>{month.label}</option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* ── STEP 1: KPI CARDS WITH GRACEFUL WRAPPING AND SPACING ── */}
-      <div className="telemetry-grid" style={{ marginBottom: 24 }}>
-        {kpiCards.map(({ label, value, change, up, Icon, color, bgGrad, spark }) => {
+      {/* ── SIDE-BY-SIDE COMPACT METRIC BOXES ── */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(5, 1fr)",
+        gap: 12,
+        width: "100%"
+      }} className="metric-row-grid">
+        {kpis.map(({ label, val, change, up, color, spark }) => {
           const sparkData = spark.map(v => ({ v }));
           return (
-            <div key={label} className="telemetry-card" style={cardStyle({
-              background: `${bgGrad}, #FFFFFF`,
-              border: `1.5px solid ${border}`,
-              minHeight: "150px"
-            })}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, width: "100%" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{
-                    width: 38, height: 38, borderRadius: 12, background: `${color}15`,
-                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                    border: `1.5px solid ${color}22`
-                  }}>
-                    <Icon size={18} color={color} />
-                  </div>
-                  <span style={{ fontSize: "13px", color: textMuted, fontWeight: 700 }}>{label}</span>
-                </div>
+            <div key={label} style={{
+              background: "white",
+              border: `1px solid ${border}`,
+              borderRadius: 12,
+              padding: "14px 16px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              boxShadow: "0 4px 12px rgba(76, 59, 53, 0.02)",
+              minWidth: 0,
+              minHeight: 110,
+              position: "relative",
+              overflow: "hidden"
+            }}>
+              {/* Highlight bar */}
+              <div style={{ position: "absolute", top: 0, left: 0, bottom: 0, width: 4, background: color }} />
+
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", width: "100%" }}>
+                <span style={{ fontSize: "11px", color: textMuted, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2px" }}>{label}</span>
                 <span style={{
-                  fontSize: "11px", fontWeight: 800,
+                  fontSize: "10px", fontWeight: 800,
                   color: up ? "var(--brand-green-deep)" : "var(--brand-gold-dark)",
-                  background: up ? "rgba(20, 113, 21, 0.1)" : "rgba(147, 95, 4, 0.1)",
-                  padding: "4px 8px", borderRadius: "12px",
-                  display: "flex", alignItems: "center", gap: 4
+                  background: up ? "rgba(20, 113, 21, 0.08)" : "rgba(147, 95, 4, 0.08)",
+                  padding: "1px 6px", borderRadius: "10px",
                 }}>
-                  {up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
                   {change}
                 </span>
               </div>
-              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, width: "100%", marginTop: "auto" }}>
-                <div>
-                  <div style={{ fontSize: "24px", fontWeight: 800, color: textMain, letterSpacing: "-0.75px", lineHeight: 1 }}>{value}</div>
-                  <div style={{ fontSize: "11px", color: textMuted, marginTop: 6, fontWeight: 500 }}>
-                    {label.includes("Revenue") || label.includes("Orders") ? `Against previous term` : `Updated just now`}
-                  </div>
+
+              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 10, marginTop: "auto" }}>
+                <div style={{ fontSize: "18px", fontWeight: 850, color: textMain, letterSpacing: "-0.5px", lineHeight: 1.1 }}>
+                  {val}
                 </div>
-                {/* Sparkline chart */}
-                <div style={{ width: 85, height: 36, flexShrink: 0, overflow: "hidden" }}>
+                {/* Micro-sparkline */}
+                <div style={{ width: 55, height: 22, flexShrink: 0, opacity: 0.8 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={sparkData} margin={{ top: 2, right: 0, left: 0, bottom: 0 }}>
                       <defs>
                         <linearGradient id={`sg-${label}`} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+                          <stop offset="0%" stopColor={color} stopOpacity={0.25} />
                           <stop offset="100%" stopColor={color} stopOpacity={0} />
                         </linearGradient>
                       </defs>
-                      <Area type="monotone" dataKey="v" stroke={color} strokeWidth={2} fill={`url(#sg-${label})`} dot={false} />
+                      <Area type="monotone" dataKey="v" stroke={color} strokeWidth={1.5} fill={`url(#sg-${label})`} dot={false} />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -357,85 +327,84 @@ function DashboardContent() {
         })}
       </div>
 
-      {/* ── STEP 2: MAIN CHARTS & SYSTEM CONTROL GRID ── */}
-      <div className="main-charts-grid" style={{ marginBottom: 24 }}>
-        {/* Left: Revenue Area Chart */}
-        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
-          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18, width: "100%" }}>
+      {/* ── QUICK GATEWAY COLUMN & SYSTEM CONTROL ── */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1.6fr 1fr",
+        gap: 20
+      }} className="dashboard-grid-two">
+
+        {/* Left: Financial Performance Area Chart */}
+        <div style={{
+          background: "white",
+          border: `1px solid ${border}`,
+          borderRadius: 16,
+          padding: "20px",
+          display: "flex",
+          flexDirection: "column",
+          boxShadow: "0 4px 12px rgba(76, 59, 53, 0.02)"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
             <div>
-              <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Revenue & Capital Yield</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
-                <span style={{ fontSize: "26px", fontWeight: 800, color: textMain, letterSpacing: "-0.75px" }}>{fmt(totalRevenue)}</span>
-                <span style={{
-                  fontSize: "11.5px", fontWeight: 800, color: "var(--brand-green-deep)",
-                  background: "rgba(20, 113, 21, 0.08)", padding: "4px 8px", borderRadius: "12px",
-                  display: "flex", alignItems: "center", gap: 4
-                }}>
-                  <TrendingUp size={12} /> Target Aligned
-                </span>
-              </div>
+              <h2 style={{ fontSize: "15px", fontWeight: 800, color: textMain, margin: 0 }}>Revenue Dynamics</h2>
+              <p style={{ fontSize: "11px", color: textMuted, margin: "2px 0 0" }}>Capital yield overview compared with forecast frames</p>
             </div>
-            <div style={{ background: surface, border: `1.5px solid ${border}`, borderRadius: 10, padding: "6px 14px", fontSize: "12px", fontWeight: 700, color: textSec }}>
-              {selectedLabel} Analytics
-            </div>
+            <span style={{ fontSize: "12px", color: "var(--brand-blue-bright)", fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
+              <Activity size={14} /> Live Telemetry
+            </span>
           </div>
-          <div style={{ height: 260, width: "100%" }}>
+
+          <div style={{ height: 230, width: "100%" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={salesData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+              <AreaChart data={salesData} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--brand-blue-bright)" stopOpacity={0.35} />
+                    <stop offset="0%" stopColor="var(--brand-blue-bright)" stopOpacity={0.25} />
                     <stop offset="100%" stopColor="var(--brand-blue-bright)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke={gridLine} vertical={false} />
-                <XAxis dataKey="date" tick={{ fontSize: 10, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 10, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(Number(v)/1000).toFixed(1)}k`} />
-                <Tooltip contentStyle={{ background: "#FFFFFF", border: `1.5px solid ${border}`, borderRadius: 12, boxShadow: "0 8px 24px rgba(76,59,53,0.06)", fontSize: "12px" }} formatter={(v: number) => [`$${Number(v).toLocaleString()}`, "Ledger Revenue"]} />
-                <Area type="monotone" dataKey="sales" stroke="var(--brand-blue-bright)" strokeWidth={3} fill="url(#salesGrad)" dot={{ fill: "var(--brand-blue-bright)", r: 4, strokeWidth: 0 }} activeDot={{ r: 6 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke={border} vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 9, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 9, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(Number(v)/1000).toFixed(0)}k`} />
+                <Tooltip contentStyle={{ background: "#FFFFFF", border: `1px solid ${border}`, borderRadius: 8, fontSize: "11px" }} formatter={(v: number) => [`$${Number(v).toLocaleString()}`, "Yield"]} />
+                <Area type="monotone" dataKey="sales" stroke="var(--brand-blue-bright)" strokeWidth={2} fill="url(#salesGrad)" dot={{ fill: "var(--brand-blue-bright)", r: 3, strokeWidth: 0 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Right: Pie Allocation & Quick Gateway Column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        {/* Right: Quick Action Buttons & Categorization */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {/* Quick Actions Panel */}
-          <div style={cardStyle({ border: `1.5px solid ${border}`, flex: 1 })}>
-            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px", marginBottom: 14 }}>
-              System Actions Gateway
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
+          <div style={{
+            background: "white",
+            border: `1px solid ${border}`,
+            borderRadius: 16,
+            padding: "20px",
+            boxShadow: "0 4px 12px rgba(76, 59, 53, 0.02)"
+          }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 800, color: textMain, margin: "0 0 12px" }}>System Management Shortcuts</h2>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {quickActions.map(({ label, Icon, color, href }) => (
                 <button
                   key={label}
                   onClick={() => router.push(href)}
                   style={{
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-                    background: surface, border: `1.5px solid ${border}`, borderRadius: 12,
-                    padding: "14px 6px", cursor: "pointer", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+                    display: "flex", alignItems: "center", gap: 8,
+                    background: surface, border: `1px solid ${border}`, borderRadius: 10,
+                    padding: "8px 12px", cursor: "pointer", transition: "all 0.2s"
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.borderColor = "var(--primary)";
                     e.currentTarget.style.background = "#FFFFFF";
-                    e.currentTarget.style.transform = "translateY(-1.5px)";
-                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(2, 145, 192, 0.08)";
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = border;
                     e.currentTarget.style.background = surface;
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <div style={{
-                    width: 34, height: 34, borderRadius: 10, background: `${color}12`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    border: `1.5px solid ${color}20`
-                  }}>
-                    <Icon size={15} color={color} />
-                  </div>
-                  <span style={{ fontSize: "11px", fontWeight: 700, color: textSec, textAlign: "center", lineHeight: 1.2 }}>
+                  <Icon size={14} color={color} />
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: textSec }}>
                     {label}
                   </span>
                 </button>
@@ -443,85 +412,86 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* Allocation sector */}
-          <div style={cardStyle({ border: `1.5px solid ${border}`, flex: 1 })}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-              <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Share Allocation by Sector</div>
-              <div style={{ background: surface, border: `1.5px solid ${border}`, borderRadius: 10, padding: "4px 10px", fontSize: "11.5px", fontWeight: 700, color: textSec }}>
-                Active Allocation
-              </div>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-              <div style={{ width: 110, height: 110, flexShrink: 0, position: "relative" }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie data={channelData} cx="50%" cy="50%" innerRadius={36} outerRadius={52} dataKey="value" stroke="none" paddingAngle={4}>
-                      {channelData.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}
-                    </Pie>
-                  </PieChart>
-                </ResponsiveContainer>
-                <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                  <span style={{ fontSize: "11px", color: textMuted, fontWeight: 700, textTransform: "uppercase" }}>Yield</span>
-                </div>
-              </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 6 }}>
-                {channelData.slice(0, 4).map((ch: any) => (
-                  <div key={ch.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: ch.color, flexShrink: 0 }} />
-                      <span style={{ fontSize: "12px", fontWeight: 600, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {/* Share Allocation by Sector */}
+          <div style={{
+            background: "white",
+            border: `1px solid ${border}`,
+            borderRadius: 16,
+            padding: "16px 20px",
+            boxShadow: "0 4px 12px rgba(76, 59, 53, 0.02)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 16
+          }}>
+            <div style={{ flex: 1 }}>
+              <h2 style={{ fontSize: "13.5px", fontWeight: 800, color: textMain, margin: 0 }}>Category Sales Weight</h2>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 10 }}>
+                {channelData.slice(0, 3).map((ch, i) => (
+                  <div key={ch.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "11px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0 }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: ch.color, flexShrink: 0 }} />
+                      <span style={{ fontWeight: 600, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {ch.name}
                       </span>
                     </div>
-                    <span style={{ fontSize: "11.5px", fontWeight: 700, color: textMuted }}>
-                      {ch.value}%
-                    </span>
+                    <span style={{ fontWeight: 700, color: textMuted }}>{ch.value}%</span>
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div style={{ width: 75, height: 75, flexShrink: 0 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={channelData} cx="50%" cy="50%" innerRadius={22} outerRadius={34} dataKey="value" stroke="none" paddingAngle={3}>
+                    {channelData.map((e, i) => <Cell key={i} fill={e.color} />)}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── STEP 3: QUEUES & LISTS GRID (Spatially independent, fully un-messy) ── */}
-      <div className="telemetry-grid" style={{ marginBottom: 24 }}>
-        {/* Order Pipeline card */}
-        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Order Pipeline</div>
-            <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-              Active Queue &rarr;
+      {/* ── SYSTEM RECORD TABLES SIT SIDE-BY-SIDE ── */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 20
+      }} className="dashboard-grid-two">
+
+        {/* Left: Active Pipeline Queue */}
+        <div style={{
+          background: "white",
+          border: `1px solid ${border}`,
+          borderRadius: 16,
+          padding: "20px",
+          boxShadow: "0 4px 12px rgba(76, 59, 53, 0.02)"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 800, color: textMain, margin: 0 }}>Active Pipeline Queue</h2>
+            <span onClick={() => router.push("/orders")} style={{ fontSize: "11px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
+              Full Orders &rarr;
             </span>
           </div>
+
           {orders.length === 0 ? (
-            <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
+            <div style={{ fontSize: "12px", color: textMuted, padding: "20px 0", textAlign: "center" }}>No records pending</div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-              {orders.map((o, idx) => {
-                const initials = getInitials(o);
-                const name = getName(o);
-                const color = COLORS[idx % COLORS.length];
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {orders.slice(0, 4).map((o) => {
+                const name = o.user ? `${o.user.firstName || ""} ${o.user.lastName || ""}`.trim() || o.user.email || "Guest" : "Guest";
                 return (
                   <div key={o.id} style={{
-                    display: "flex", alignItems: "center", gap: 12, paddingBottom: 12,
-                    borderBottom: `1px solid ${border}`
+                    display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+                    paddingBottom: 10, borderBottom: `1px solid ${border}`, fontSize: "12.5px"
                   }}>
-                    <div style={{
-                      width: 36, height: 36, borderRadius: "50%", background: `${color}12`,
-                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px",
-                      fontWeight: 800, color, flexShrink: 0, border: `1px solid ${color}22`
-                    }}>
-                      {initials}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: "13.5px", fontWeight: 700, color: textMain }}>{formatOrderRef(o.orderNumber, o.id)}</div>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontWeight: 700, color: textMain }}>{formatOrderRef(o.orderNumber, o.id)}</div>
                       <div style={{ fontSize: "11px", color: textMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
                     </div>
-                    <div style={{ fontSize: "11px", color: textMuted, whiteSpace: "nowrap", marginRight: 8 }}>{formatTime(o.createdAt)}</div>
-                    <div style={{ fontSize: "13.5px", fontWeight: 800, color: textMain, whiteSpace: "nowrap", marginRight: 8 }}>
-                      {fmt(parseFloat(o.total || "0"))}
-                    </div>
+                    <div style={{ fontWeight: 800, color: textMain }}>{fmt(parseFloat(o.total || "0"))}</div>
                     <StatusBadge status={o.status} />
                   </div>
                 );
@@ -530,35 +500,38 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* Product Performance card */}
-        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Product Performance</div>
-            <span onClick={() => router.push("/products")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
+        {/* Right: Product Velocity Track */}
+        <div style={{
+          background: "white",
+          border: `1px solid ${border}`,
+          borderRadius: 16,
+          padding: "20px",
+          boxShadow: "0 4px 12px rgba(76, 59, 53, 0.02)"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+            <h2 style={{ fontSize: "14px", fontWeight: 800, color: textMain, margin: 0 }}>Product Velocity</h2>
+            <span onClick={() => router.push("/products")} style={{ fontSize: "11px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
               Catalog List
             </span>
           </div>
+
           {displayProducts.length === 0 ? (
-            <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
+            <div style={{ fontSize: "12px", color: textMuted, padding: "20px 0", textAlign: "center" }}>No catalog telemetry recorded</div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-              {displayProducts.map((p) => (
-                <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 12, borderBottom: `1px solid ${border}` }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 10, background: "rgba(2, 145, 192, 0.08)",
-                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                    border: "1px solid rgba(2, 145, 192, 0.12)"
-                  }}>
-                    <Package size={16} color="var(--brand-blue-bright)" />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: "13.5px", fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {displayProducts.slice(0, 4).map((p) => (
+                <div key={p.id} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12,
+                  paddingBottom: 10, borderBottom: `1px solid ${border}`, fontSize: "12.5px"
+                }}>
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
                     <div style={{ fontSize: "11px", color: "var(--brand-green-deep)", fontWeight: 700 }}>
                       {p._count?.orderItems || 0} Units Cleared
                     </div>
                   </div>
-                  <div style={{ fontSize: "13.5px", fontWeight: 800, color: textMain, whiteSpace: "nowrap" }}>
-                    {fmt((p._count?.orderItems || 0) * (p.salePrice || p.price || 0))}
+                  <div style={{ fontWeight: 800, color: textMain }}>
+                    {fmt((p._count?.orderItems || 0) * (p.price || 0))}
                   </div>
                 </div>
               ))}
@@ -566,109 +539,30 @@ function DashboardContent() {
           )}
         </div>
 
-        {/* Real-time Audit Ledger card */}
-        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Real-time Audit Ledger</div>
-            <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-              Full Audit
-            </span>
-          </div>
-          {activities.length === 0 ? (
-            <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "24px 0" }}>
-              <Clock size={20} color={textMuted} style={{ margin: "0 auto 8px", opacity: 0.5 }} />
-              No transactions recorded
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
-              {activities.map((a, i) => (
-                <div key={i} style={{ display: "flex", gap: 12, paddingBottom: 12, borderBottom: `1px solid ${border}`, alignItems: "center" }}>
-                  <ActivityIcon color={a.color} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: "13px", color: textMain, fontWeight: 600, lineHeight: 1.4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {a.text}
-                    </div>
-                    <div style={{ fontSize: "11px", color: textMuted, marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
-                      <Clock size={11} /> {a.time}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ── STEP 4: FINANCIAL HEALTH & LEDGERS CARD WRAPPER ── */}
-      <div className="financial-health-grid" style={{ marginBottom: 24 }}>
-        {[
-          { label: "Active Credit Exposure", val: fmt(totalOutstanding),  sub: "Outstanding risk ledger",         color: "var(--brand-gold-dark)", hl: false },
-          { label: "Disbursed Credit Limit", val: fmt(creditDisbursed),   sub: `Credit issued in active period`,    color: "var(--brand-blue-medium)", hl: false },
-          { label: "Customer Signups",      val: String(totalUsersCount), sub: `New portal user registrations`,    color: "var(--brand-green-bright)", hl: false },
-          { label: "Gross Ledger Yield",     val: fmt(totalRevenue),       sub: `Settled invoices & contracts`,    color: "var(--brand-blue-dark)", hl: true  },
-        ].map(item => (
-          <div key={item.label} style={{
-            background: item.hl ? "linear-gradient(135deg, var(--brand-blue-navy) 0%, var(--brand-blue-dark) 100%)" : "#FFFFFF",
-            border: `1.5px solid ${item.hl ? "transparent" : border}`,
-            borderRadius: 18, padding: "20px",
-            boxShadow: "0 8px 24px rgba(76,59,53,0.02)"
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: item.hl ? "rgba(255,255,255,0.12)" : `${item.color}12`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                border: item.hl ? "1px solid rgba(255,255,255,0.15)" : `1px solid ${item.color}20`
-              }}>
-                <Wallet size={16} color={item.hl ? "#fff" : item.color} />
-              </div>
-              <div style={{ fontSize: "13px", fontWeight: 700, color: item.hl ? "rgba(255,255,255,0.85)" : textMuted }}>
-                {item.label}
-              </div>
-            </div>
-            <div style={{ fontSize: "22px", fontWeight: 800, color: item.hl ? "#FFFFFF" : textMain, marginBottom: 4, letterSpacing: "-0.5px" }}>
-              {item.val}
-            </div>
-            <div style={{ fontSize: "11px", color: item.hl ? "rgba(255,255,255,0.7)" : textMuted, fontWeight: 500 }}>
-              {item.sub}
-            </div>
-          </div>
-        ))}
       </div>
 
       <style>{`
-        *, *::before, *::after { box-sizing: border-box; }
-        .telemetry-grid {
+        .metric-row-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-          gap: 24px;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 12px;
         }
-        .main-charts-grid {
+        .dashboard-grid-two {
           display: grid;
           grid-template-columns: 1.6fr 1fr;
-          gap: 24px;
-        }
-        .financial-health-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 24px;
+          gap: 20px;
         }
         @media (max-width: 1024px) {
-          .main-charts-grid {
+          .metric-row-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+          .dashboard-grid-two {
             grid-template-columns: 1fr;
           }
         }
-        @media (max-width: 768px) {
-          .telemetry-grid {
+        @media (max-width: 640px) {
+          .metric-row-grid {
             grid-template-columns: 1fr;
-            gap: 16px;
-          }
-          .financial-health-grid {
-            grid-template-columns: 1fr;
-            gap: 16px;
-          }
-          .main-charts-grid {
-            gap: 16px;
           }
         }
         @keyframes spin { to { transform: rotate(360deg); } }

@@ -293,7 +293,7 @@ function CurrenciesContent() {
           );
         }
         return (
-          <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: 'rgba(192,21,27,0.10)', color: 'var(--text-muted)' }}>
+          <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: 'rgba(2,145,192,0.10)', color: 'var(--text-muted)' }}>
             —
           </span>
         );
@@ -348,7 +348,7 @@ function CurrenciesContent() {
       </div>
 
       {/* Info banner */}
-      <div style={{ marginBottom: '16px', padding: '12px 16px', background: 'rgba(31,168,154,0.06)', border: '1px solid rgba(192,21,27,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+      <div style={{ marginBottom: '16px', padding: '12px 16px', background: 'rgba(31,168,154,0.06)', border: '1px solid rgba(2,145,192,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
         <div style={{ color: textMuted, fontSize: '13px', lineHeight: 1.5 }}>
           <span style={{ fontWeight: 600, color: textMain }}>How currencies work: </span>
           Each currency is linked to at least one country. You can add a currency here by creating its first country mapping, and edits here update all countries sharing that currency code.
@@ -363,7 +363,7 @@ function CurrenciesContent() {
       </div>
 
       {/* Exchange Rate Configuration Banner */}
-      <div style={{ marginBottom: '16px', padding: '12px 16px', background: 'rgba(192,21,27,0.06)', border: '1px solid rgba(192,21,27,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+      <div style={{ marginBottom: '16px', padding: '12px 16px', background: 'rgba(2,145,192,0.06)', border: '1px solid rgba(2,145,192,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
         <div style={{ color: textMuted, fontSize: '13px', lineHeight: 1.5 }}>
           <span style={{ fontWeight: 600, color: textMain }}>Exchange Rate Provider: </span>
           {exchangeConfig.providerName} · {exchangeConfig.isActive ? 'Auto-update enabled' : 'Auto-update disabled'}
