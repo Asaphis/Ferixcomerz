@@ -419,8 +419,8 @@ function CurrenciesContent() {
       />
 
       {/* Edit Currency Modal */}
-      <Modal open={!!editCurrency} onClose={() => setEditCurrency(null)} title={`Edit Currency: ${editCurrency?.code ?? ''}`}>
-        <div style={{ marginBottom: '12px', padding: '10px 14px', background: surface, borderRadius: '8px', border: `1px solid ${border}`, fontSize: '12px', color: textMuted }}>
+      <Modal open={!!editCurrency} onClose={() => setEditCurrency(null)} title={`Edit Currency: ${editCurrency?.code ?? ''}`} maxWidth="480px">
+        <div style={{ marginBottom: clampPx(10, 12), padding: clampPx(8, 10) clampPx(10, 14), background: surface, borderRadius: '8px', border: `1px solid ${border}`, fontSize: clampPx(11, 12), color: textMuted }}>
           Used by: <b style={{ color: textMain }}>{editCurrency?.countries}</b>
         </div>
         <FormField

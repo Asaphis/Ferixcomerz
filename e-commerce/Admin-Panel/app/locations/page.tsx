@@ -48,6 +48,11 @@ function LocationsContent() {
   const textMuted = 'var(--text-muted)';
   const surface  = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   type Tab = 'countries' | 'states' | 'cities' | 'pickups';
   const [tab, setTab] = useState<Tab>('countries');
 
