@@ -672,7 +672,7 @@ function ProductsContent() {
                   }
                 }}
                 style={{
-                  padding: clampPx(8, 10) clampPx(12, 14),
+                  padding: `${clampPx(8, 10)} ${clampPx(12, 14)}`,
                   borderRadius: '8px',
                   fontSize: clampPx(11, 12),
                   fontWeight: 600,

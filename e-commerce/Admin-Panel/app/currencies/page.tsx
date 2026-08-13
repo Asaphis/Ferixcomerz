@@ -336,7 +336,7 @@ function CurrenciesContent() {
           <select
             value={defaultCurrencyCode}
             onChange={(e) => setDefaultCurrencyCode(e.target.value)}
-            style={{ padding: clampPx(8, 10) clampPx(10, 12), borderRadius: '8px', background: surface, border: `1px solid ${border}`, color: textMain, fontSize: clampPx(12, 13), fontWeight: 600, cursor: 'pointer', outline: 'none', minHeight: '44px' }}
+            style={{ padding: `${clampPx(8, 10)} ${clampPx(10, 12)}`, borderRadius: '8px', background: surface, border: `1px solid ${border}`, color: textMain, fontSize: clampPx(12, 13), fontWeight: 600, cursor: 'pointer', outline: 'none', minHeight: '44px' }}
           >
             {currencies.map((c) => (
               <option key={c.code} value={c.code}>{c.code} — {c.symbol}</option>

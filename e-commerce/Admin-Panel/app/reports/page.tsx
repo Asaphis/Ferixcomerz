@@ -91,7 +91,7 @@ function ReportsContent() {
                 <option key={month.value} value={month.value}>{month.label}</option>
               ))}
             </select>
-            <button style={{display:'flex',alignItems:'center',gap:'6px',background:surface,border:`1px solid ${border}`,borderRadius:'9px',color:textMain,fontSize:clampPx(12, 13),fontWeight:500,padding:clampPx(8, 10) clampPx(12, 14),cursor:'pointer',fontFamily:'var(--font-inter)',minHeight:'44px'}}>
+            <button style={{display:'flex',alignItems:'center',gap:'6px',background:surface,border:`1px solid ${border}`,borderRadius:'9px',color:textMain,fontSize:clampPx(12, 13),fontWeight:500,padding:`${clampPx(8, 10)} ${clampPx(12, 14)}`,cursor:'pointer',fontFamily:'var(--font-inter)',minHeight:'44px'}}>
               <Download size={14} /> Export
             </button>
           </div>

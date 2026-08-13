@@ -508,16 +508,16 @@ function OrdersContent() {
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
             <thead>
               <tr style={{ background: 'var(--surface)', borderBottom: `1px solid ${T.border}` }}>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), width: '48px' }}>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, width: '48px' }}>
                   <input type="checkbox" checked={selectedIds.size === orders.length && orders.length > 0} onChange={toggleSelectAll} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
                 </th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order</th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Customer</th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Date</th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total</th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Payment</th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</th>
-                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), width: '48px' }}></th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order</th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Customer</th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Date</th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total</th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Payment</th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</th>
+                <th style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, width: '48px' }}></th>
               </tr>
             </thead>
             <tbody>
