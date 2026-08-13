@@ -377,7 +377,7 @@ function CurrenciesContent() {
           <button
             onClick={() => setExchangeConfigOpen(true)}
             style={{
-              padding: clampPx(8, 10) clampPx(12, 16),
+              padding: `${clampPx(8, 10)} ${clampPx(12, 16)}`,
               borderRadius: '8px',
               fontSize: clampPx(11, 12),
               fontWeight: 600,
@@ -394,7 +394,7 @@ function CurrenciesContent() {
             onClick={handleRefreshRates}
             disabled={exchangeConfigLoading}
             style={{
-              padding: clampPx(8, 10) clampPx(12, 16),
+              padding: `${clampPx(8, 10)} ${clampPx(12, 16)}`,
               borderRadius: '8px',
               fontSize: clampPx(11, 12),
               fontWeight: 600,
@@ -420,7 +420,7 @@ function CurrenciesContent() {
 
       {/* Edit Currency Modal */}
       <Modal open={!!editCurrency} onClose={() => setEditCurrency(null)} title={`Edit Currency: ${editCurrency?.code ?? ''}`} maxWidth="480px">
-        <div style={{ marginBottom: clampPx(10, 12), padding: clampPx(8, 10) clampPx(10, 14), background: surface, borderRadius: '8px', border: `1px solid ${border}`, fontSize: clampPx(11, 12), color: textMuted }}>
+        <div style={{ marginBottom: clampPx(10, 12), padding: `${clampPx(8, 10)} ${clampPx(10, 14)}`, background: surface, borderRadius: '8px', border: `1px solid ${border}`, fontSize: clampPx(11, 12), color: textMuted }}>
           Used by: <b style={{ color: textMain }}>{editCurrency?.countries}</b>
         </div>
         <FormField

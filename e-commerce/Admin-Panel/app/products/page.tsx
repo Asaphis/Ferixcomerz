@@ -756,7 +756,7 @@ function ProductsContent() {
         <>
           <DataTable columns={columns} data={data as unknown as Record<string, unknown>[]} searchPlaceholder="Search products..." onEdit={openEdit} onDelete={openDelete} onView={openView} />
           {/* Pagination Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: clampPx(12, 16), padding: clampPx(10, 12) 0, borderTop: `1px solid ${border}`, flexWrap: 'wrap', gap: clampPx(8, 12) }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: clampPx(12, 16), padding: `${clampPx(10, 12)} 0`, borderTop: `1px solid ${border}`, flexWrap: 'wrap', gap: clampPx(8, 12) }}>
             <span style={{ fontSize: clampPx(12, 13), color: textMuted }}>
               {totalCount > 0 ? `Showing ${currentPage * PAGE_SIZE + 1}–${Math.min((currentPage + 1) * PAGE_SIZE, totalCount)} of ${totalCount} products` : `${data.length} products`}
             </span>
@@ -765,21 +765,21 @@ function ProductsContent() {
                 onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
                 disabled={currentPage === 0}
                 style={{
-                  padding: clampPx(8, 10) clampPx(12, 16), borderRadius: 6, border: `1px solid ${border}`,
+                  padding: `${clampPx(8, 10)} ${clampPx(12, 16)}`, borderRadius: 6, border: `1px solid ${border}`,
                   background: surface, color: textMain,
                   cursor: currentPage === 0 ? 'not-allowed' : 'pointer',
                   opacity: currentPage === 0 ? 0.4 : 1, fontSize: clampPx(12, 13),
                   minHeight: '40px',
                 }}
               >← Prev</button>
-              <span style={{ padding: clampPx(8, 10) clampPx(10, 12), fontSize: clampPx(12, 13), color: textMuted, background: card, border: `1px solid ${border}`, borderRadius: 6, display: 'flex', alignItems: 'center', minHeight: '40px' }}>
+              <span style={{ padding: `${clampPx(8, 10)} ${clampPx(10, 12)}`, fontSize: clampPx(12, 13), color: textMuted, background: card, border: `1px solid ${border}`, borderRadius: 6, display: 'flex', alignItems: 'center', minHeight: '40px' }}>
                 Page {currentPage + 1}{totalCount > 0 ? ` of ${Math.ceil(totalCount / PAGE_SIZE)}` : ''}
               </span>
               <button
                 onClick={() => setCurrentPage(p => p + 1)}
                 disabled={data.length < PAGE_SIZE && totalCount > 0 ? (currentPage + 1) * PAGE_SIZE >= totalCount : data.length < PAGE_SIZE}
                 style={{
-                  padding: clampPx(8, 10) clampPx(12, 16), borderRadius: 6, border: `1px solid ${border}`,
+                  padding: `${clampPx(8, 10)} ${clampPx(12, 16)}`, borderRadius: 6, border: `1px solid ${border}`,
                   background: surface, color: textMain,
                   cursor: 'pointer', fontSize: clampPx(12, 13),
                   opacity: data.length < PAGE_SIZE ? 0.4 : 1,

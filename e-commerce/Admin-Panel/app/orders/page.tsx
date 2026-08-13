@@ -557,7 +557,7 @@ function OrdersContent() {
                         {STATUS_CFG[o.status]?.label}
                       </div>
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20), textAlign: 'right' }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}`, textAlign: 'right' }}>
                       <ChevronRight size={18} color={T.muted} />
                     </td>
                   </tr>
