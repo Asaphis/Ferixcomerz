@@ -501,8 +501,8 @@ function OrdersContent() {
           </div>
         </div>
 
-        <div className="table-container" style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+        <div className="table-container" style={{ overflowX: 'auto', maxWidth: '100%' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
             <thead>
               <tr style={{ background: 'var(--surface)', borderBottom: `1px solid ${T.border}` }}>
                 <th style={{ padding: '16px 20px', width: '40px' }}>

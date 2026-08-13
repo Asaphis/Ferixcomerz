@@ -10,6 +10,14 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
+  /* ── RESPONSIVE BREAKPOINTS ─────────────────────────────────────────────── */
+  --breakpoint-xs: 375px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
   /* ── PRIMARY COLORS (Now Blue and Cyan-Blue Gilded Palette) ───────────────── */
   --primary:              #0291C0;
   --primary-hover:        #036A97;
@@ -103,10 +111,15 @@ body {
 }
 
 /* ── SCROLLBAR ─────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Mobile-specific scrollbar */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+}
 
 /* ── UTILITY CLASSES ───────────────────────────────────────────────────────── */
 .card {
@@ -116,9 +129,19 @@ body {
   padding: 24px;
   box-shadow: 0 4px 20px var(--shadow), 0 1px 3px rgba(0, 0, 0, 0.02);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  max-width: 100%;
+  overflow: hidden;
 }
 .card:hover {
   box-shadow: 0 8px 30px var(--shadow), 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* Responsive card padding */
+@media (max-width: 768px) {
+  .card { padding: 16px; }
+}
+@media (max-width: 480px) {
+  .card { padding: 12px; border-radius: 12px; }
 }
 
 .surface { background: var(--surface); }
@@ -128,6 +151,56 @@ body {
 .text-primary-brand { color: var(--primary); }
 .bg-card { background: var(--card); }
 .bg-surface { background: var(--surface); }
+
+/* ── RESPONSIVE CONTAINER UTILITIES ─────────────────────────────────────────── */
+.container-safe {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (min-width: 768px) {
+  .container-safe {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-safe {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/* ── RESPONSIVE WIDTH UTILITIES ─────────────────────────────────────────────── */
+.w-full-mobile { width: 100% !important; }
+.max-w-full-mobile { max-width: 100% !important; }
+
+@media (min-width: 768px) {
+  .w-full-mobile { width: auto !important; }
+  .max-w-full-mobile { max-width: none !important; }
+}
+
+/* ── RESPONSIVE DROPDOWN UTILITIES ─────────────────────────────────────────── */
+.dropdown-safe {
+  position: fixed;
+  max-width: calc(100vw - 32px);
+  left: 16px !important;
+  right: 16px !important;
+  width: auto !important;
+}
+
+@media (min-width: 768px) {
+  .dropdown-safe {
+    left: auto !important;
+    right: 24px !important;
+    max-width: 360px;
+  }
+}
 
 /* ── STATUS BADGE CLASSES ──────────────────────────────────────────────────── */
 .badge-completed  { background: rgba(20, 113, 21, 0.1);  color: var(--brand-green-deep); border: 1px solid rgba(20, 113, 21, 0.15); }

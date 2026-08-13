@@ -321,7 +321,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
 
       {/* ── Notification Dropdown ── */}
       {showNotifMenu && (
-        <div ref={notifRef} style={{
+        <div ref={notifRef} className="dropdown-safe" style={{
           position: "fixed", top: 76, right: 24, width: 360,
           background: "#FFFFFF", border: `1px solid ${border}`, borderRadius: 16,
           boxShadow: "0 12px 36px rgba(76, 59, 53, 0.12)",
@@ -422,7 +422,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
 
       {/* ── User dropdown ── */}
       {showUserMenu && (
-        <div ref={menuRef} style={{
+        <div ref={menuRef} className="dropdown-safe" style={{
           position: "fixed", top: 76, right: 24, width: 220,
           background: "#FFFFFF",
           border: `1px solid ${border}`, borderRadius: 16,

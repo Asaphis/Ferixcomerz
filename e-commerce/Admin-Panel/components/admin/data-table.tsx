@@ -122,8 +122,8 @@ export default function DataTable({
       </div>
 
       {/* Table grid */}
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+      <div style={{ overflowX: 'auto', maxWidth: '100%' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '100%' }}>
           <thead>
             <tr style={{ background: 'var(--surface)', borderBottom: `1.5px solid ${border}` }}>
               {columns.map((col) => (

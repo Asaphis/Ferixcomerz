@@ -819,7 +819,7 @@ function WalletPaymentsContent() {
                 ) : (
                   <div style={{ background: T.card, border: `1px solid ${T.border}`, borderRadius: '14px', overflow: 'hidden' }}>
                     <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-                      <table className="tx-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', minWidth: '800px' }}>
+                      <table className="tx-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', minWidth: '100%' }}>
                         <thead>
                           <tr style={{ borderBottom: `1px solid ${T.border}`, background: T.surface }}>
                             <th style={tableHead(T)}>Reference</th>
@@ -1295,7 +1295,7 @@ function WalletPaymentsContent() {
          .animate-spin { animation: spin 1s linear infinite; }
          @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
          @media (max-width: 768px) {
-           .tx-table { min-width: 600px !important; }
+           .tx-table { min-width: 100% !important; }
          }
        `}</style>
      </AdminShell>
