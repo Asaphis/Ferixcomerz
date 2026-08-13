@@ -430,10 +430,10 @@ function LocationsContent() {
     pickups:   () => { setPickupForm({ ...EMPTY_PICKUP }); setAddPickupOpen(true); },
   };
 
-  const selStyle = { width: '100%', background: surface, border: `1px solid ${border}`, borderRadius: '9px', color: textMain, fontSize: '13.5px', outline: 'none', padding: '10px 14px', cursor: 'pointer' };
+  const selStyle = { width: '100%', background: surface, border: `1px solid ${border}`, borderRadius: '9px', color: textMain, fontSize: clampPx(12, 13), outline: 'none', padding: clampPx(10, 12) clampPx(12, 14), cursor: 'pointer', minHeight: '44px' };
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader
         title="Locations"
         subtitle="Manage countries, states, cities and pickup stations"
@@ -443,7 +443,7 @@ function LocationsContent() {
       />
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '6px', marginBottom: '20px', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: clampPx(4, 6), marginBottom: clampPx(16, 20), flexWrap: 'wrap' }}>
         {([
           { key: 'countries', label: 'Countries',          count: countries.length },
           { key: 'states',    label: 'States / Provinces', count: states.length },
