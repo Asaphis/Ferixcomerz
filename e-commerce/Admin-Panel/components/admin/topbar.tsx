@@ -138,15 +138,19 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: `1px solid ${border}`,
         display: "none", alignItems: "center", gap: 14,
-        padding: "0 24px", zIndex: 40, transition: "left 0.25s cubic-bezier(0.16, 1, 0.3, 1)", left: sidebarW,
-        boxShadow: "0 2px 12px rgba(76, 59, 53, 0.02)"
+        padding: "0 24px", zIndex: 40, transition: "left 0.3s cubic-bezier(0.16, 1, 0.3, 1)", left: sidebarW,
+        boxShadow: "0 2px 12px rgba(76, 59, 53, 0.02)",
+        maxWidth: "calc(100% - var(--sidebar-width))"
       }}>
         <button
           onClick={onMenuToggle}
           style={{
             background: "none", border: "none", cursor: "pointer", color: textMuted,
-            padding: 8, borderRadius: 10, display: "flex", alignItems: "center", flexShrink: 0,
-            transition: "all 0.2s"
+            padding: 10, borderRadius: 10, display: "flex", alignItems: "center", flexShrink: 0,
+            transition: "all 0.25s",
+            minWidth: "44px",
+            minHeight: "44px",
+            justifyContent: "center"
           }}
           onMouseEnter={e => e.currentTarget.style.background = "var(--surface)"}
           onMouseLeave={e => e.currentTarget.style.background = "none"}
@@ -155,8 +159,8 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         </button>
 
         {/* Display Current Dashboard Page Name */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <h2 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text-main)", letterSpacing: "-0.3px", margin: 0 }}>
+        <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
+          <h2 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text-main)", letterSpacing: "-0.3px", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             {currentPage}
           </h2>
           <span style={{ fontSize: "10.5px", color: "var(--brand-gold-dark)", fontWeight: 600 }}>
@@ -164,13 +168,14 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           </span>
         </div>
 
-        <div style={{ flex: 1 }} />
+        <div style={{ flex: 1, minWidth: 20 }} />
 
         {/* Search */}
         <div className="topbar-search" style={{
           display: "flex", alignItems: "center", gap: 10, background: surface,
           border: `1.5px solid ${border}`, borderRadius: 10, padding: "8px 14px", width: 220, flexShrink: 0,
-          transition: "all 0.2s"
+          transition: "all 0.25s",
+          maxWidth: "280px"
         }}
           onMouseEnter={e => e.currentTarget.style.borderColor = "var(--primary)"}
           onMouseLeave={e => e.currentTarget.style.borderColor = border}
@@ -185,9 +190,11 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           onClick={() => { setShowNotifMenu(v => !v); if (!showNotifMenu) fetchNotifs(); }}
           style={{
             position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
-            width: 38, height: 38, background: surface, border: `1.5px solid ${border}`,
+            width: 40, height: 40, background: surface, border: `1.5px solid ${border}`,
             borderRadius: 10, cursor: "pointer", color: showNotifMenu ? "var(--primary)" : textMuted,
-            flexShrink: 0, transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+            flexShrink: 0, transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+            minWidth: "44px",
+            minHeight: "44px"
           }}
           onMouseEnter={e => {
             e.currentTarget.style.borderColor = "var(--primary)";
@@ -217,7 +224,8 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           style={{
             display: "flex", alignItems: "center", gap: 10, background: surface,
             border: `1.5px solid ${border}`, borderRadius: 12, padding: "6px 12px", cursor: "pointer",
-            flexShrink: 0, transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+            flexShrink: 0, transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+            maxWidth: "200px"
           }}
           onMouseEnter={e => {
             e.currentTarget.style.borderColor = "var(--primary)";
@@ -231,7 +239,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           }}
         >
           <div style={{
-            width: 30, height: 30, borderRadius: "50%",
+            width: 32, height: 32, borderRadius: "50%",
             background: "linear-gradient(135deg, var(--brand-blue-bright), var(--brand-blue-dark))",
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: "12px", fontWeight: 700, color: "white", flexShrink: 0,
@@ -239,8 +247,8 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           }}>
             {user?.name?.[0]?.toUpperCase() || "A"}
           </div>
-          <div className="topbar-user-info" style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: "12.5px", fontWeight: 700, color: textMain, whiteSpace: "nowrap" }}>
+          <div className="topbar-user-info" style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
+            <div style={{ fontSize: "12.5px", fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {user?.name?.split(" ")[0] || "Admin"}
             </div>
             <div style={{ fontSize: "10px", color: "var(--brand-green-deep)", fontWeight: 700, letterSpacing: "0.2px" }}>
@@ -249,8 +257,9 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           </div>
           <ChevronDown size={14} color={textMuted} style={{
             transform: showUserMenu ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "transform 0.2s",
-            opacity: 0.8
+            transition: "transform 0.25s",
+            opacity: 0.8,
+            flexShrink: 0
           }} />
         </div>
       </header>
@@ -260,13 +269,17 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         position: "fixed", top: 0, left: 0, right: 0, height: 60,
         background: "#FFFFFF", borderBottom: `1px solid ${border}`,
         display: "none", alignItems: "center", padding: "0 16px", zIndex: 40, gap: 12,
-        boxShadow: "0 2px 12px rgba(76, 59, 53, 0.02)"
+        boxShadow: "0 2px 12px rgba(76, 59, 53, 0.02)",
+        maxWidth: "100%"
       }}>
         <button
           onClick={onMobileMenuToggle}
           style={{
             background: "none", border: "none", cursor: "pointer", color: textMuted,
-            padding: 8, borderRadius: 8, display: "flex", alignItems: "center", flexShrink: 0
+            padding: 10, borderRadius: 8, display: "flex", alignItems: "center", flexShrink: 0,
+            minWidth: "44px",
+            minHeight: "44px",
+            justifyContent: "center"
           }}
         >
           <Menu size={22} />
@@ -281,9 +294,11 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
           onClick={() => { setShowNotifMenu(v => !v); if (!showNotifMenu) fetchNotifs(); }}
           style={{
             position: "relative", display: "flex", alignItems: "center", justifyContent: "center",
-            width: 36, height: 36, background: surface, border: `1.5px solid ${border}`,
+            width: 40, height: 40, background: surface, border: `1.5px solid ${border}`,
             borderRadius: 10, cursor: "pointer", color: showNotifMenu ? "var(--primary)" : textMuted,
-            flexShrink: 0, transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+            flexShrink: 0, transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+            minWidth: "44px",
+            minHeight: "44px"
           }}
           onMouseEnter={e => {
             e.currentTarget.style.borderColor = "var(--primary)";
@@ -309,10 +324,12 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         <div
           onClick={() => setShowUserMenu(v => !v)}
           style={{
-            width: 34, height: 34, borderRadius: "50%",
+            width: 36, height: 36, borderRadius: "50%",
             background: "linear-gradient(135deg, var(--brand-blue-bright), var(--brand-blue-dark))",
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: "13px", fontWeight: 700, color: "white", flexShrink: 0, cursor: "pointer"
+            fontSize: "13px", fontWeight: 700, color: "white", flexShrink: 0, cursor: "pointer",
+            minWidth: "44px",
+            minHeight: "44px"
           }}
         >
           {user?.name?.[0]?.toUpperCase() || "A"}
@@ -322,7 +339,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
       {/* ── Notification Dropdown ── */}
       {showNotifMenu && (
         <div ref={notifRef} className="dropdown-safe" style={{
-          position: "fixed", top: 76, right: 24, width: 360,
+          position: "fixed", top: 76, right: 24, width: 360, maxWidth: "calc(100vw - 48px)",
           background: "#FFFFFF", border: `1px solid ${border}`, borderRadius: 16,
           boxShadow: "0 12px 36px rgba(76, 59, 53, 0.12)",
           overflow: "hidden", zIndex: 9999,
@@ -423,12 +440,12 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
       {/* ── User dropdown ── */}
       {showUserMenu && (
         <div ref={menuRef} className="dropdown-safe" style={{
-          position: "fixed", top: 76, right: 24, width: 220,
+          position: "fixed", top: 76, right: 24, width: 220, maxWidth: "calc(100vw - 48px)",
           background: "#FFFFFF",
           border: `1px solid ${border}`, borderRadius: 16,
           boxShadow: "0 12px 36px rgba(76, 59, 53, 0.12)",
           overflow: "hidden", zIndex: 9999,
-          animation: "fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+          animation: "fadeInUp 0.25s cubic-bezier(0.16, 1, 0.3, 1)"
         }}>
           <div style={{ padding: "16px 20px", borderBottom: `1px solid ${border}`, background: surface }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -439,7 +456,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
               }}>
                 {user?.name?.[0]?.toUpperCase() || "A"}
               </div>
-              <div style={{ minWidth: 0 }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{ fontSize: "13px", fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {user?.name || "Admin"}
                 </div>
@@ -456,7 +473,8 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
               style={{
                 width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "12px 20px",
                 background: "none", border: "none", cursor: "pointer", color: textMuted, fontSize: "13px",
-                fontFamily: "var(--font-inter)", textAlign: "left", fontWeight: 500, transition: "background 0.15s"
+                fontFamily: "var(--font-inter)", textAlign: "left", fontWeight: 500, transition: "background 0.25s",
+                minHeight: "44px"
               }}
               onMouseEnter={e => e.currentTarget.style.background = "var(--surface)"}
               onMouseLeave={e => e.currentTarget.style.background = "none"}
@@ -470,7 +488,8 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
             style={{
               width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "12px 20px",
               background: "none", border: "none", cursor: "pointer", color: "var(--brand-gold-dark)",
-              fontSize: "13px", fontFamily: "var(--font-inter)", fontWeight: 700, transition: "background 0.15s"
+              fontSize: "13px", fontFamily: "var(--font-inter)", fontWeight: 700, transition: "background 0.25s",
+              minHeight: "44px"
             }}
             onMouseEnter={e => e.currentTarget.style.background = "rgba(147, 95, 4, 0.08)"}
             onMouseLeave={e => e.currentTarget.style.background = "none"}
@@ -484,7 +503,7 @@ export default function Topbar({ collapsed, sidebarW, onMenuToggle, onMobileMenu
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         @media (min-width: 768px) { .topbar-mobile { display: none !important; } .topbar-desktop { display: flex !important; } }
         @media (max-width: 767px) { .topbar-mobile { display: flex !important; } .topbar-desktop { display: none !important; } }
-        @media (max-width: 1100px) { .topbar-search { display: none !important; } }
+        @media (max-width: 1024px) { .topbar-search { display: none !important; } }
         @media (max-width: 900px) { .topbar-user-info { display: none !important; } }
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>

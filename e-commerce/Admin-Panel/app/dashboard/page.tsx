@@ -217,7 +217,8 @@ function DashboardContent() {
         boxShadow: "0 10px 30px rgba(1, 32, 68, 0.15)",
         border: "1px solid rgba(255,255,255,0.06)",
         position: "relative",
-        overflow: "hidden"
+        overflow: "hidden",
+        maxWidth: "100%"
       }}>
         {/* Dynamic Glowing Brand Watermark */}
         <div style={{
@@ -226,8 +227,8 @@ function DashboardContent() {
           pointerEvents: "none", zIndex: 1
         }} />
 
-        <div style={{ zIndex: 2, position: "relative" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+        <div style={{ zIndex: 2, position: "relative", flex: 1, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
             <span style={{
               background: "rgba(214, 155, 4, 0.2)", color: "var(--brand-gold-bright)",
               fontSize: "10px", fontWeight: 800, padding: "3px 10px", borderRadius: "12px",
@@ -239,10 +240,10 @@ function DashboardContent() {
               <ShieldCheck size={13} color="var(--brand-green-bright)" /> Encryption Handshake Active
             </span>
           </div>
-          <h1 style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "-0.5px", margin: 0 }}>
+          <h1 style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "-0.5px", margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
             Welcome, {authUser?.name || "Officer"}
           </h1>
-          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.75)", marginTop: 4, margin: 0, maxWidth: 520 }}>
+          <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.75)", marginTop: 4, margin: 0, maxWidth: 520, overflow: "hidden", textOverflow: "ellipsis" }}>
             You are securely logged into the Ferixcomerz Enterprise Console. Here is your operations framework overview for {selectedLabel}.
           </p>
         </div>
@@ -267,9 +268,10 @@ function DashboardContent() {
       {/* ── SIDE-BY-SIDE COMPACT METRIC BOXES ── */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "repeat(5, 1fr)",
+        gridTemplateColumns: "repeat(1, 1fr)",
         gap: 12,
-        width: "100%"
+        width: "100%",
+        maxWidth: "100%"
       }} className="metric-row-grid">
         {kpis.map(({ label, val, change, up, color, spark }) => {
           const sparkData = spark.map(v => ({ v }));
@@ -330,8 +332,9 @@ function DashboardContent() {
       {/* ── QUICK GATEWAY COLUMN & SYSTEM CONTROL ── */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "1.6fr 1fr",
-        gap: 20
+        gridTemplateColumns: "1fr",
+        gap: 20,
+        maxWidth: "100%"
       }} className="dashboard-grid-two">
 
         {/* Left: Financial Performance Area Chart */}
@@ -544,25 +547,35 @@ function DashboardContent() {
       <style>{`
         .metric-row-grid {
           display: grid;
-          grid-template-columns: repeat(5, 1fr);
+          grid-template-columns: repeat(1, 1fr);
           gap: 12px;
         }
         .dashboard-grid-two {
           display: grid;
-          grid-template-columns: 1.6fr 1fr;
+          grid-template-columns: 1fr;
           gap: 20px;
         }
-        @media (max-width: 1024px) {
+        @media (min-width: 480px) {
+          .metric-row-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        @media (min-width: 768px) {
           .metric-row-grid {
             grid-template-columns: repeat(3, 1fr);
           }
+        }
+        @media (min-width: 1024px) {
+          .metric-row-grid {
+            grid-template-columns: repeat(4, 1fr);
+          }
           .dashboard-grid-two {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1.6fr 1fr;
           }
         }
-        @media (max-width: 640px) {
+        @media (min-width: 1280px) {
           .metric-row-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(5, 1fr);
           }
         }
         @keyframes spin { to { transform: rotate(360deg); } }

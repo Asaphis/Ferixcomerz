@@ -472,6 +472,51 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
               {/* Bottom Profile and Signout Trigger */}
               {user && (
                 <div style={{ position: "relative", flexShrink: 0, borderTop: `1px solid ${border}`, background: "rgba(1, 32, 68, 0.3)" }}>
+                  {showUserPopup && (
+                    <div style={{
+                      position: "absolute", bottom: "100%", left: 12, right: 12,
+                      background: "rgba(1, 32, 68, 0.95)",
+                      backdropFilter: "blur(12px)",
+                      WebkitBackdropFilter: "blur(12px)",
+                      border: `1px solid ${border}`,
+                      borderRadius: "12px",
+                      overflow: "hidden",
+                      boxShadow: "0 -8px 24px rgba(0,0,0,0.4)",
+                      marginBottom: 8,
+                      zIndex: 99,
+                      animation: "fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+                    }}>
+                      <button
+                        onClick={handleProfile}
+                        style={{
+                          width: "100%", display: "flex", alignItems: "center", gap: 10,
+                          padding: "12px 16px", background: "none", border: "none",
+                          cursor: "pointer", color: "white", fontSize: "13px", fontWeight: 500,
+                          fontFamily: "var(--font-inter)", textAlign: "left",
+                          minHeight: "44px"
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "none"}
+                      >
+                        <User size={15} color="var(--brand-blue-bright)" /> My Profile Settings
+                      </button>
+                      <div style={{ height: 1, background: border }} />
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          width: "100%", display: "flex", alignItems: "center", gap: 10,
+                          padding: "12px 16px", background: "none", border: "none",
+                          cursor: "pointer", color: "var(--brand-gold-bright)", fontSize: "13px", fontWeight: 600,
+                          fontFamily: "var(--font-inter)", textAlign: "left",
+                          minHeight: "44px"
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.background = "rgba(214, 155, 4, 0.12)"}
+                        onMouseLeave={e => e.currentTarget.style.background = "none"}
+                      >
+                        <LogOut size={15} color="var(--brand-gold-bright)" /> Sign Out Securely
+                      </button>
+                    </div>
+                  )}
                   <div
                     onClick={() => setShowUserPopup(v => !v)}
                     style={{
@@ -482,7 +527,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                       justifyContent: "space-between",
                       gap: 12,
                       background: showUserPopup ? "rgba(255,255,255,0.04)" : "transparent",
-                      transition: "background 0.2s",
+                      transition: "background 0.25s",
+                      minHeight: "64px"
                     }}
                     onMouseEnter={e => { if (!showUserPopup) e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
                     onMouseLeave={e => { if (!showUserPopup) e.currentTarget.style.background = "transparent"; }}
@@ -521,8 +567,10 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
       )}
 
       <style>{`
-        @media (max-width: 767px) { .sidebar-desktop { display: none !important; } }
+        @media (min-width: 768px) { .sidebar-desktop { display: flex !important; } }
         @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .sidebar-scroll::-webkit-scrollbar { width: 4px; }
         .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
         .sidebar-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 999px; }

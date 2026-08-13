@@ -127,22 +127,23 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
   if (!open) return null;
   return (
     <div
+      className="modal-overlay"
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
         background: 'var(--overlay)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
       }}
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div style={{
+      <div className="modal-content" style={{
         background: bg,
         border: `1px solid ${border}`,
         borderRadius: '20px',
         width: '100%',
-        maxWidth,
-        maxHeight: '90vh',
+        maxWidth: `min(${maxWidth}, calc(100vw - 32px))`,
+        maxHeight: '85vh',
         overflow: 'auto',
         boxShadow: '0 25px 50px rgba(76, 59, 53, 0.15)',
         animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -150,17 +151,19 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
         {/* Modal Header */}
         <div style={{
           display: 'flex', alignItems: 'center',
-          justifyContent: 'space-between', padding: '22px 28px 18px',
-          borderBottom: `1px solid ${border}`, background: 'var(--surface)'
+          justifyContent: 'space-between', padding: '18px 20px 16px',
+          borderBottom: `1px solid ${border}`, background: 'var(--surface)',
+          position: 'sticky', top: 0, zIndex: 10
         }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 800, color: textMain, margin: 0, letterSpacing: '-0.3px' }}>{title}</h2>
+          <h2 style={{ fontSize: '16px', fontWeight: 800, color: textMain, margin: 0, letterSpacing: '-0.3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{title}</h2>
           <button
             onClick={onClose}
             style={{
-              width: '32px', height: '32px', borderRadius: '10px',
+              width: '36px', height: '36px', borderRadius: '10px',
               background: '#FFFFFF', border: `1.5px solid ${border}`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', flexShrink: 0, transition: 'all 0.15s'
+              cursor: 'pointer', flexShrink: 0, transition: 'all 0.25s',
+              minWidth: '44px', minHeight: '44px'
             }}
             onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--primary)'}
             onMouseLeave={e => e.currentTarget.style.borderColor = border}
@@ -168,12 +171,23 @@ export function Modal({ open, onClose, title, children, maxWidth = '500px' }: Mo
             <X size={15} color={textMuted} />
           </button>
         </div>
-        <div style={{ padding: '24px 28px 28px' }}>{children}</div>
+        <div style={{ padding: '20px 20px 24px' }}>{children}</div>
       </div>
       <style>{`
         @keyframes modalSlideUp {
           from { opacity: 0; transform: translateY(20px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @media (min-width: 768px) {
+          .modal-overlay {
+            padding: 24px;
+          }
+          .modal-content > div:first-child {
+            padding: 22px 28px 18px;
+          }
+          .modal-content > div:last-child {
+            padding: 24px 28px 28px;
+          }
         }
       `}</style>
     </div>

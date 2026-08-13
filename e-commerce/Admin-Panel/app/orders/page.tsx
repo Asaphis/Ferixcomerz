@@ -141,6 +141,11 @@ const fmtTime = (iso: string) => {
 const fmtMoney = (amount: number, symbol = '$') =>
   `${symbol}${Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 
+// Responsive spacing helper
+const clampPx = (mobile: number, desktop: number) => {
+  return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+};
+
 // ─── Main Content ─────────────────────────────────────────
 function OrdersContent() {
   const { user, loading } = useAuth();
@@ -412,22 +417,22 @@ function OrdersContent() {
   }, [orders, tab, search]);
 
   return (
-    <div className="orders-page" style={{ padding: '24px', maxWidth: '1600px', margin: '0 auto' }}>
-      <div className="header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-        <div>
-          <h1 style={{ fontSize: '24px', fontWeight: '800', color: T.text, marginBottom: '4px' }}>Orders</h1>
-          <p style={{ color: T.muted, fontSize: '13px' }}>Manage and track all customer orders</p>
+    <div className="orders-page container-safe" style={{ paddingBottom: '24px' }}>
+      <div className="header" style={{ marginBottom: clampPx(16, 24), display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: clampPx(12, 16) }}>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <h1 style={{ fontSize: clampPx(20, 24), fontWeight: '800', color: T.text, marginBottom: '4px', lineHeight: 1.2 }}>Orders</h1>
+          <p style={{ color: T.muted, fontSize: clampPx(12, 13) }}>Manage and track all customer orders</p>
         </div>
-        <div style={{ display: 'flex', gap: '12px', marginLeft: 'auto' }}>
+        <div style={{ display: 'flex', gap: '12px', flexShrink: 0 }}>
           {selectedIds.size > 0 && (
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(2,145,192,0.05)', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(2,145,192,0.1)' }}>
-              <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--primary)', marginRight: '8px' }}>{selectedIds.size} selected</span>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(2,145,192,0.05)', padding: '8px 12px', borderRadius: '12px', border: '1px solid rgba(2,145,192,0.1)' }}>
+              <span style={{ fontSize: clampPx(12, 13), fontWeight: '600', color: 'var(--primary)', marginRight: '8px' }}>{selectedIds.size} selected</span>
               <button
                 onClick={() => setDeleteConfirm('bulk')}
                 disabled={bulkLoading || !canDelete}
-                style={{ padding: '8px', borderRadius: '6px', background: 'white', border: '1px solid var(--border)', color: 'var(--danger)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                style={{ padding: '10px', borderRadius: '8px', background: 'white', border: '1px solid var(--border)', color: 'var(--danger)', cursor: 'pointer', display: 'flex', alignItems: 'center', minWidth: '44px', minHeight: '44px', justifyContent: 'center' }}
               >
-                <Trash2 size={16} />
+                <Trash2 size={18} />
               </button>
             </div>
           )}
@@ -436,9 +441,9 @@ function OrdersContent() {
 
       <div className="stats-grid" style={{ 
         display: 'grid', 
-        gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', 
-        gap: '12px', 
-        marginBottom: '24px' 
+        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', 
+        gap: clampPx(10, 12), 
+        marginBottom: clampPx(20, 24) 
       }}>
         {[
           { label: 'Total Orders', value: orders.length, icon: ShoppingBag, color: 'var(--primary)' },
@@ -446,42 +451,40 @@ function OrdersContent() {
           { label: 'To Ship', value: orders.filter(o => o.status === 'CONFIRMED' || o.status === 'PROCESSING').length, icon: Package, color: 'var(--secondary)' },
           { label: 'Completed', value: orders.filter(o => o.status === 'DELIVERED' || o.status === 'COLLECTED').length, icon: CheckCircle, color: 'var(--success)' },
         ].map((s, i) => (
-          <div key={i} style={{ 
-            background: T.card, 
-            padding: '16px', 
-            borderRadius: '16px', 
-            border: `1px solid ${T.border}`, 
+          <div key={i} className="card" style={{ 
+            padding: clampPx(12, 16), 
             display: 'flex', 
             alignItems: 'center', 
-            gap: '12px',
-            minHeight: '80px'
+            gap: clampPx(10, 12),
+            minHeight: clampPx(72, 80)
           }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: `${s.color}10`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, flexShrink: 0 }}>
-              <s.icon size={20} />
+            <div style={{ width: clampPx(36, 40), height: clampPx(36, 40), borderRadius: '12px', background: `${s.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: s.color, flexShrink: 0 }}>
+              <s.icon size={clampPx(18, 20)} />
             </div>
-            <div style={{ minWidth: 0 }}>
-              <p style={{ fontSize: '11px', fontWeight: 600, color: T.muted, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.label}</p>
-              <p style={{ fontSize: '18px', fontWeight: '800', color: T.text, lineHeight: 1.2 }}>{s.value}</p>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <p style={{ fontSize: clampPx(10, 11), fontWeight: 600, color: T.muted, marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '0.3px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.label}</p>
+              <p style={{ fontSize: clampPx(16, 18), fontWeight: '800', color: T.text, lineHeight: 1.2 }}>{s.value}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="main-card" style={{ background: T.card, borderRadius: '20px', border: `1px solid ${T.border}`, overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-        <div className="card-toolbar" style={{ padding: '16px', borderBottom: `1px solid ${T.border}`, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div className="tabs-container" style={{ width: '100%', overflowX: 'auto', paddingBottom: '4px' }}>
-            <div className="tabs" style={{ display: 'inline-flex', gap: '4px', background: 'var(--surface)', padding: '4px', borderRadius: '10px', minWidth: 'max-content' }}>
+      <div className="main-card card" style={{ borderRadius: clampPx(16, 20), padding: 0, overflow: 'hidden' }}>
+        <div className="card-toolbar" style={{ padding: clampPx(12, 16), borderBottom: `1px solid ${T.border}`, display: 'flex', flexDirection: 'column', gap: clampPx(12, 16) }}>
+          <div className="tabs-container" style={{ width: '100%', overflowX: 'auto', paddingBottom: '4px', WebkitOverflowScrolling: 'touch' }}>
+            <div className="tabs" style={{ display: 'inline-flex', gap: '4px', background: 'var(--surface)', padding: '4px', borderRadius: '12px', minWidth: 'max-content' }}>
               {TABS.map(t => (
                 <button
                   key={t.key}
                   onClick={() => setTab(t.key)}
                   style={{
-                    padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer',
+                    padding: clampPx(8, 10) clampPx(12, 16), borderRadius: '8px', fontSize: clampPx(12, 13), fontWeight: '600', border: 'none', cursor: 'pointer',
                     background: tab === t.key ? 'white' : 'transparent',
                     color: tab === t.key ? 'var(--primary)' : T.muted,
                     boxShadow: tab === t.key ? '0 2px 8px rgba(0,0,0,0.05)' : 'none',
                     transition: 'all 0.2s',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    minHeight: '44px'
                   }}
                 >
                   {t.label}
@@ -489,72 +492,72 @@ function OrdersContent() {
               ))}
             </div>
           </div>
-          <div className="search" style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+          <div className="search" style={{ position: 'relative', width: '100%', maxWidth: '100%' }}>
             <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: T.muted }} />
             <input
               type="text"
               placeholder="Search by order #, email, name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px 10px 40px', borderRadius: '10px', border: `1px solid ${T.border}`, background: 'var(--surface)', fontSize: '14px', outline: 'none' }}
+              style={{ width: '100%', padding: '12px 12px 12px 40px', borderRadius: '12px', border: `1px solid ${T.border}`, background: 'var(--surface)', fontSize: clampPx(14, 15), outline: 'none' }}
             />
           </div>
         </div>
 
-        <div className="table-container" style={{ overflowX: 'auto', maxWidth: '100%' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
+        <div className="table-container" style={{ overflowX: 'auto', maxWidth: '100%', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
             <thead>
               <tr style={{ background: 'var(--surface)', borderBottom: `1px solid ${T.border}` }}>
-                <th style={{ padding: '16px 20px', width: '40px' }}>
-                  <input type="checkbox" checked={selectedIds.size === orders.length && orders.length > 0} onChange={toggleSelectAll} />
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), width: '48px' }}>
+                  <input type="checkbox" checked={selectedIds.size === orders.length && orders.length > 0} onChange={toggleSelectAll} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
                 </th>
-                <th style={{ padding: '16px 20px', fontSize: '12px', fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order</th>
-                <th style={{ padding: '16px 20px', fontSize: '12px', fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Customer</th>
-                <th style={{ padding: '16px 20px', fontSize: '12px', fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Date</th>
-                <th style={{ padding: '16px 20px', fontSize: '12px', fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total</th>
-                <th style={{ padding: '16px 20px', fontSize: '12px', fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Payment</th>
-                <th style={{ padding: '16px 20px', fontSize: '12px', fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</th>
-                <th style={{ padding: '16px 20px', width: '60px' }}></th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Order</th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Customer</th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Date</th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Total</th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Payment</th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), fontSize: clampPx(11, 12), fontWeight: '700', color: T.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Status</th>
+                <th style={{ padding: clampPx(12, 16) clampPx(16, 20), width: '48px' }}></th>
               </tr>
             </thead>
             <tbody>
               {ordersLoading ? (
-                <tr><td colSpan={8} style={{ padding: '100px', textAlign: 'center', color: T.muted }}>Loading orders...</td></tr>
+                <tr><td colSpan={8} style={{ padding: clampPx(60, 100), textAlign: 'center', color: T.muted, fontSize: clampPx(13, 14) }}>Loading orders...</td></tr>
               ) : filteredOrders.length === 0 ? (
-                <tr><td colSpan={8} style={{ padding: '100px', textAlign: 'center', color: T.muted }}>No orders found</td></tr>
+                <tr><td colSpan={8} style={{ padding: clampPx(60, 100), textAlign: 'center', color: T.muted, fontSize: clampPx(13, 14) }}>No orders found</td></tr>
               ) : (
                 filteredOrders.map(o => (
                   <tr key={o.id} onClick={() => openDetail(o.id)} style={{ borderBottom: `1px solid ${T.border}`, cursor: 'pointer', transition: 'background 0.2s' }} className="table-row-hover">
-                    <td style={{ padding: '16px 20px' }} onClick={(e) => e.stopPropagation()}>
-                      <input type="checkbox" checked={selectedIds.has(o.id)} onChange={() => toggleSelectOne(o.id)} />
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }} onClick={(e) => e.stopPropagation()}>
+                      <input type="checkbox" checked={selectedIds.has(o.id)} onChange={() => toggleSelectOne(o.id)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
                     </td>
-                    <td style={{ padding: '16px 20px' }}>
-                      <p style={{ fontWeight: '700', color: T.text, fontSize: '14px', marginBottom: '2px' }}>#{o.orderNumber}</p>
-                      <p style={{ fontSize: '12px', color: T.muted }}>{o._count.items} items</p>
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                      <p style={{ fontWeight: '700', color: T.text, fontSize: clampPx(13, 14), marginBottom: '2px' }}>#{o.orderNumber}</p>
+                      <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>{o._count.items} items</p>
                     </td>
-                    <td style={{ padding: '16px 20px' }}>
-                      <p style={{ fontWeight: '600', color: T.text, fontSize: '14px', marginBottom: '2px' }}>{o.user ? `${o.user.firstName} ${o.user.lastName}` : 'Guest'}</p>
-                      <p style={{ fontSize: '12px', color: T.muted }}>{o.user?.email || 'No email'}</p>
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                      <p style={{ fontWeight: '600', color: T.text, fontSize: clampPx(13, 14), marginBottom: '2px' }}>{o.user ? `${o.user.firstName} ${o.user.lastName}` : 'Guest'}</p>
+                      <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>{o.user?.email || 'No email'}</p>
                     </td>
-                    <td style={{ padding: '16px 20px' }}>
-                      <p style={{ fontSize: '14px', color: T.text }}>{fmtDate(o.createdAt)}</p>
-                      <p style={{ fontSize: '12px', color: T.muted }}>{fmtTime(o.createdAt)}</p>
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                      <p style={{ fontSize: clampPx(13, 14), color: T.text }}>{fmtDate(o.createdAt)}</p>
+                      <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>{fmtTime(o.createdAt)}</p>
                     </td>
-                    <td style={{ padding: '16px 20px' }}>
-                      <p style={{ fontWeight: '700', color: T.text, fontSize: '14px' }}>{fmtMoney(o.total, o.currencySymbol)}</p>
-                      {o.totalZMW && <p style={{ fontSize: '11px', color: T.muted }}>≈ ZMW {o.totalZMW.toLocaleString()}</p>}
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                      <p style={{ fontWeight: '700', color: T.text, fontSize: clampPx(13, 14) }}>{fmtMoney(o.total, o.currencySymbol)}</p>
+                      {o.totalZMW && <p style={{ fontSize: clampPx(10, 11), color: T.muted }}>≈ ZMW {o.totalZMW.toLocaleString()}</p>}
                     </td>
-                    <td style={{ padding: '16px 20px' }}>
-                      <div style={{ display: 'inline-flex', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '700', color: PAY_CFG[o.paymentStatus]?.color, background: PAY_CFG[o.paymentStatus]?.bg }}>
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                      <div style={{ display: 'inline-flex', padding: '4px 10px', borderRadius: '6px', fontSize: clampPx(10, 11), fontWeight: '700', color: PAY_CFG[o.paymentStatus]?.color, background: PAY_CFG[o.paymentStatus]?.bg }}>
                         {PAY_CFG[o.paymentStatus]?.label}
                       </div>
                     </td>
-                    <td style={{ padding: '16px 20px' }}>
-                      <div style={{ display: 'inline-flex', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: '700', color: STATUS_CFG[o.status]?.color, background: STATUS_CFG[o.status]?.bg }}>
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                      <div style={{ display: 'inline-flex', padding: '4px 10px', borderRadius: '6px', fontSize: clampPx(10, 11), fontWeight: '700', color: STATUS_CFG[o.status]?.color, background: STATUS_CFG[o.status]?.bg }}>
                         {STATUS_CFG[o.status]?.label}
                       </div>
                     </td>
-                    <td style={{ padding: '16px 20px', textAlign: 'right' }}>
+                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20), textAlign: 'right' }}>
                       <ChevronRight size={18} color={T.muted} />
                     </td>
                   </tr>
@@ -570,10 +573,10 @@ function OrdersContent() {
         <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', justifyContent: 'flex-end' }}>
           <div onClick={() => setDetail(null)} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)' }} />
           <div style={{ position: 'relative', width: '100%', maxWidth: '600px', height: '100%', background: 'white', boxShadow: '-10px 0 40px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', animation: 'slideIn 0.3s ease-out' }}>
-            <div style={{ padding: '20px', borderBottom: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <h2 style={{ fontSize: '18px', fontWeight: '800', color: T.text }}>Order Details</h2>
-                <p style={{ fontSize: '12px', color: T.muted }}>#{detail.orderNumber} • {fmtDate(detail.createdAt)}</p>
+            <div style={{ padding: clampPx(16, 20), borderBottom: `1px solid ${T.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <h2 style={{ fontSize: clampPx(16, 18), fontWeight: '800', color: T.text, lineHeight: 1.2 }}>Order Details</h2>
+                <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>#{detail.orderNumber} • {fmtDate(detail.createdAt)}</p>
               </div>
               <button onClick={() => setDetail(null)} style={{ width: '36px', height: '36px', borderRadius: '50%', border: 'none', background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <X size={20} />
