@@ -95,10 +95,10 @@ const METHOD_TYPES = [
 const FRONTEND_PAYMENT_URL = `${(process.env.NEXT_PUBLIC_FRONTEND_URL || '').replace(/\/$/, '')}/pay`;
 
 const STATUS_CFG: Record<string, { label: string; color: string; bg: string }> = {
-  COMPLETED: { label: 'Completed', color: 'var(--primary)', bg: 'rgba(192,21,27,0.10)' },
-  PAID: { label: 'Paid', color: 'var(--primary)', bg: 'rgba(192,21,27,0.10)' },
-  SUCCESS: { label: 'Success', color: 'var(--primary)', bg: 'rgba(192,21,27,0.10)' },
-  ACTIVE: { label: 'Active', color: 'var(--primary)', bg: 'rgba(192,21,27,0.10)' },
+  COMPLETED: { label: 'Completed', color: 'var(--primary)', bg: 'rgba(2,145,192,0.10)' },
+  PAID: { label: 'Paid', color: 'var(--primary)', bg: 'rgba(2,145,192,0.10)' },
+  SUCCESS: { label: 'Success', color: 'var(--primary)', bg: 'rgba(2,145,192,0.10)' },
+  ACTIVE: { label: 'Active', color: 'var(--primary)', bg: 'rgba(2,145,192,0.10)' },
   PENDING: { label: 'Pending', color: 'var(--gold)', bg: 'rgba(246,176,30,0.12)' },
   FAILED: { label: 'Failed', color: 'var(--danger)', bg: 'rgba(214,48,49,0.12)' },
   EXPIRED: { label: 'Expired', color: 'var(--danger)', bg: 'rgba(214,48,49,0.12)' },

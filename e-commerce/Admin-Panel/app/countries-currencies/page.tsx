@@ -226,8 +226,8 @@ function CountriesContent() {
     { key:'name', label:'Country', render:(v)=><span style={{fontWeight:600,color:textMain}}>{String(v)}</span> },
     { key:'currency', label:'Currency', render:(v,row)=>{ const r=row as unknown as Country; return <span style={{color:textMain}}><b>{String(v)}</b> {r.symbol}</span>; }},
     { key:'rate', label:'Exchange Rate', render:(v,row)=>{ const r=row as unknown as Country; return <span style={{color:textMuted,fontSize:'12px'}}>{r.autoRate ? '🔄 Auto' : '🔒 Manual'} · {String(v)}</span>; }},
-    { key:'shippingEnabled', label:'Shipping', render:(v)=><span style={{padding:'3px 8px',borderRadius:'20px',fontSize:'11px',fontWeight:600,background:v?'rgba(192,21,27,0.10)':'rgba(239,68,68,0.1)',color:v?'var(--primary)':'var(--danger)'}}>{v?'Enabled':'Disabled'}</span> },
-    { key:'status', label:'Status', render:(v)=><span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'12px',fontWeight:600,background:v==='Active'?'rgba(192,21,27,0.10)':'rgba(100,116,139,0.1)',color:v==='Active'?'var(--primary)':'var(--text-muted)'}}>{String(v)}</span> },
+    { key:'shippingEnabled', label:'Shipping', render:(v)=><span style={{padding:'3px 8px',borderRadius:'20px',fontSize:'11px',fontWeight:600,background:v?'rgba(2,145,192,0.10)':'rgba(239,68,68,0.1)',color:v?'var(--primary)':'var(--danger)'}}>{v?'Enabled':'Disabled'}</span> },
+    { key:'status', label:'Status', render:(v)=><span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'12px',fontWeight:600,background:v==='Active'?'rgba(2,145,192,0.10)':'rgba(100,116,139,0.1)',color:v==='Active'?'var(--primary)':'var(--text-muted)'}}>{String(v)}</span> },
     { key:'isDefault', label:'Default', render:(v)=>v?<span style={{color:'var(--gold)',fontWeight:700,fontSize:'12px'}}>★ Default</span>:<span style={{color:textMuted,fontSize:'12px'}}>—</span> },
   ];
 
@@ -236,7 +236,7 @@ function CountriesContent() {
     { key:'symbol', label:'Symbol', render:(v)=><span style={{fontWeight:600,color:textMain}}>{String(v)}</span>, width:'70px' },
     { key:'name', label:'Name', render:(v)=><span style={{color:textMain}}>{String(v)}</span> },
     { key:'rate', label:'Rate (vs USD)', render:(v)=><span style={{color:textMuted}}>{String(v)}</span> },
-    { key:'status', label:'Status', render:(v)=><span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'12px',fontWeight:600,background:'rgba(192,21,27,0.10)',color:'var(--primary)'}}>{String(v)}</span> },
+    { key:'status', label:'Status', render:(v)=><span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'12px',fontWeight:600,background:'rgba(2,145,192,0.10)',color:'var(--primary)'}}>{String(v)}</span> },
   ];
 
   const cfp = (k:string)=>(v:string)=>setCForm(f=>({...f,[k]:v}));
@@ -292,7 +292,7 @@ function CountriesContent() {
 
       {tab === 'currencies' && (
         <>
-          <div style={{color:textMuted,fontSize:'12px',marginBottom:'12px',padding:'10px 14px',background:'rgba(31,168,154,0.06)',border:'1px solid rgba(192,21,27,0.15)',borderRadius:'8px'}}>
+          <div style={{color:textMuted,fontSize:'12px',marginBottom:'12px',padding:'10px 14px',background:'rgba(31,168,154,0.06)',border:'1px solid rgba(2,145,192,0.15)',borderRadius:'8px'}}>
             Currencies are derived from countries. To add a new currency, add a new country with that currency. To edit the exchange rate, click Edit on any currency row below.
           </div>
           <DataTable columns={currencyColumns} data={currencies as unknown as Record<string,unknown>[]} searchPlaceholder="Search currencies..." onEdit={openEditCurrency} />
@@ -301,7 +301,7 @@ function CountriesContent() {
 
       {tab === 'exchange-config' && (
         <>
-          <div style={{color:textMuted,fontSize:'12px',marginBottom:'12px',padding:'10px 14px',background:'rgba(31,168,154,0.06)',border:'1px solid rgba(192,21,27,0.15)',borderRadius:'8px'}}>
+          <div style={{color:textMuted,fontSize:'12px',marginBottom:'12px',padding:'10px 14px',background:'rgba(31,168,154,0.06)',border:'1px solid rgba(2,145,192,0.15)',borderRadius:'8px'}}>
             Configure your currency exchange rate provider. Changes will affect how exchange rates are calculated across your system.
           </div>
           

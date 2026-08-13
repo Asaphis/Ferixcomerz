@@ -291,8 +291,8 @@ function WholesaleContent() {
 
   const statusBadge = (s:string) => {
     const m: Record<string,{bg:string;color:string}> = {
-      Active:{bg:'rgba(192,21,27,0.10)',color:'var(--primary)'},
-      Approved:{bg:'rgba(192,21,27,0.10)',color:'var(--primary)'},
+      Active:{bg:'rgba(2,145,192,0.10)',color:'var(--primary)'},
+      Approved:{bg:'rgba(2,145,192,0.10)',color:'var(--primary)'},
       Inactive:{bg:'rgba(100,116,139,0.1)',color:'var(--text-muted)'},
       Pending:{bg:'rgba(246,176,30,0.12)',color:'var(--gold)'},
       Rejected:{bg:'rgba(214,48,49,0.12)',color:'var(--danger)'},

@@ -171,7 +171,7 @@ function ReportsContent() {
           <tbody>
             {prodData.map(p=>(
               <tr key={p.rank} style={{borderTop:`1px solid ${border}`}}>
-                <td style={{padding:'12px 16px'}}><span style={{width:'26px',height:'26px',borderRadius:'50%',background:'rgba(192,21,27,0.10)',display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:'12px',fontWeight:700,color:'var(--primary)'}}>{p.rank}</span></td>
+                <td style={{padding:'12px 16px'}}><span style={{width:'26px',height:'26px',borderRadius:'50%',background:'rgba(2,145,192,0.10)',display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:'12px',fontWeight:700,color:'var(--primary)'}}>{p.rank}</span></td>
                 <td style={{padding:'12px 16px',fontWeight:600,color:textMain,fontSize:'13.5px'}}>{p.name}</td>
                 <td style={{padding:'12px 16px',fontWeight:700,color:textMain}}>{p.revenue}</td>
                 <td style={{padding:'12px 16px',color:'var(--secondary)',fontWeight:600}}>{p.units}</td>

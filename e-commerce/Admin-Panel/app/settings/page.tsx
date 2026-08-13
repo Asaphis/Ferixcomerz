@@ -816,7 +816,7 @@ function SettingsContent() {
               
               <div style={{ marginTop:'32px', paddingTop:'24px', borderTop:`1px solid ${border}`, display:'flex', justifyContent:'flex-end' }}>
                 <button onClick={handleSave} disabled={saving}
-                  style={{ background:'var(--primary)', color:'white', border:'none', borderRadius:'10px', padding:'12px 24px', fontSize:'14px', fontWeight:700, cursor:saving?'not-allowed':'pointer', display:'flex', alignItems:'center', gap:'8px', boxShadow:'0 4px 12px rgba(192,21,27,0.15)' }}>
+                  style={{ background:'var(--primary)', color:'white', border:'none', borderRadius:'10px', padding:'12px 24px', fontSize:'14px', fontWeight:700, cursor:saving?'not-allowed':'pointer', display:'flex', alignItems:'center', gap:'8px', boxShadow:'0 4px 12px rgba(2,145,192,0.15)' }}>
                   {saving ? <RefreshCw size={18} className="animate-spin" /> : <Save size={18} />}
                   {saving ? 'Saving...' : 'Save All Changes'}
                 </button>

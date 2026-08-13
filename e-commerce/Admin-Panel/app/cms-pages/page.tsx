@@ -485,7 +485,7 @@ export default function CMSPagesPage() {
               <button
                 onClick={handleSaveTheme}
                 disabled={themeSaving}
-                style={{ background:'var(--primary)', color:'white', border:'none', borderRadius:'10px', padding:'12px 24px', fontSize:'14px', fontWeight:700, cursor:themeSaving?'not-allowed':'pointer', display:'flex', alignItems:'center', gap:'8px', boxShadow:'0 4px 12px rgba(192,21,27,0.15)', opacity:themeSaving?0.7:1 }}
+                style={{ background:'var(--primary)', color:'white', border:'none', borderRadius:'10px', padding:'12px 24px', fontSize:'14px', fontWeight:700, cursor:themeSaving?'not-allowed':'pointer', display:'flex', alignItems:'center', gap:'8px', boxShadow:'0 4px 12px rgba(2,145,192,0.15)', opacity:themeSaving?0.7:1 }}
               >
                 {themeSaving ? <RefreshCw size={18} className="animate-spin" /> : <Save size={18} />}
                 {themeSaving ? 'Saving...' : 'Save Theme Colors'}

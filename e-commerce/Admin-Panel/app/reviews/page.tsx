@@ -104,7 +104,7 @@ function ReviewsContent() {
 
   const badge = (status: string) => {
     const m: Record<string, { bg: string; color: string }> = {
-      Published: { bg: 'rgba(192,21,27,0.10)', color: 'var(--primary)' },
+      Published: { bg: 'rgba(2,145,192,0.10)', color: 'var(--primary)' },
       Pending: { bg: 'rgba(246,176,30,0.12)', color: 'var(--gold)' },
       Rejected: { bg: 'rgba(185,28,28,0.12)', color: 'var(--danger)' },
     };

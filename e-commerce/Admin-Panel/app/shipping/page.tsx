@@ -156,7 +156,7 @@ function ShippingContent() {
     { key: 'rate',     label: 'Rate', render: (v) => <span style={{ fontWeight: 600, color: 'var(--primary)' }}>${String(v)}</span> },
     { key: 'minOrder', label: 'Min Order', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>${String(v)}</span> },
     { key: 'days',     label: 'Est. Days', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
-    { key: 'status',   label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'status',   label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
   ];
 
   const methodColumns: Column[] = [
@@ -165,7 +165,7 @@ function ShippingContent() {
     { key: 'fee',          label: 'Fee', render: (v) => <span style={{ fontWeight: 600, color: 'var(--primary)' }}>${String(v)}</span> },
     { key: 'minThreshold', label: 'Free Ship Above', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{Number(v) > 0 ? `$${v}` : '—'}</span> },
     { key: 'estimatedDays', label: 'Est. Days', render: (v) => <span style={{ color: textMuted, fontSize: '12px' }}>{String(v) || '—'}</span> },
-    { key: 'status',       label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(192,21,27,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
+    { key: 'status',       label: 'Status', render: (v) => <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 600, background: v === 'Active' ? 'rgba(2,145,192,0.10)' : 'rgba(100,116,139,0.1)', color: v === 'Active' ? 'var(--primary)' : 'var(--text-muted)' }}>{String(v)}</span> },
   ];
 
   const tabStyle = (active: boolean) => ({

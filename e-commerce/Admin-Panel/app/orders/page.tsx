@@ -420,7 +420,7 @@ function OrdersContent() {
         </div>
         <div style={{ display: 'flex', gap: '12px', marginLeft: 'auto' }}>
           {selectedIds.size > 0 && (
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(192,21,27,0.05)', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(192,21,27,0.1)' }}>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', background: 'rgba(2,145,192,0.05)', padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(2,145,192,0.1)' }}>
               <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--primary)', marginRight: '8px' }}>{selectedIds.size} selected</span>
               <button
                 onClick={() => setDeleteConfirm('bulk')}

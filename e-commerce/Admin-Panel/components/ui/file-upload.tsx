@@ -204,14 +204,14 @@ export default function CloudinaryUpload({
       >
         {uploading ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", padding: "4px 0" }}>
-            <div style={{ width: "32px", height: "32px", border: "3px solid rgba(192,21,27,0.15)", borderTopColor: "var(--primary)", borderRadius: "50%", animation: "cwSpin 0.8s linear infinite" }} />
+            <div style={{ width: "32px", height: "32px", border: "3px solid rgba(2,145,192,0.15)", borderTopColor: "var(--primary)", borderRadius: "50%", animation: "cwSpin 0.8s linear infinite" }} />
             <p style={{ fontSize: "12px", color: "var(--primary)", margin: 0, fontWeight: 600 }}>{uploadProgress || "Uploading..."}</p>
             <style>{`@keyframes cwSpin{to{transform:rotate(360deg)}}`}</style>
           </div>
         ) : (
           <>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", marginBottom: "6px" }}>
-              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(192,21,27,0.10)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: "36px", height: "36px", borderRadius: "10px", background: "rgba(2,145,192,0.10)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <Upload size={16} color="var(--primary)" />
               </div>
               {accept.includes("video") && (

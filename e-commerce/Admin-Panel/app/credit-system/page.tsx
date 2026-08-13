@@ -449,7 +449,7 @@ function CreditContent() {
   // ── Status badge helpers ──
   const appBadge = (s: string) => {
     const m: Record<string,{bg:string;color:string}> = {
-      Approved:{bg:'rgba(192,21,27,0.10)',color:'var(--primary)'},
+      Approved:{bg:'rgba(2,145,192,0.10)',color:'var(--primary)'},
       Pending:{bg:'rgba(246,176,30,0.12)',color:'var(--gold)'},
       Rejected:{bg:'rgba(214,48,49,0.12)',color:'var(--danger)'},
     };
@@ -458,7 +458,7 @@ function CreditContent() {
   };
   const statusBadge = (s: string) => {
     const active = s === 'Active';
-    return <span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'12px',fontWeight:600,background:active?'rgba(192,21,27,0.10)':'rgba(100,116,139,0.1)',color:active?'var(--primary)':'var(--text-muted)'}}>{s}</span>;
+    return <span style={{padding:'3px 10px',borderRadius:'20px',fontSize:'12px',fontWeight:600,background:active?'rgba(2,145,192,0.10)':'rgba(100,116,139,0.1)',color:active?'var(--primary)':'var(--text-muted)'}}>{s}</span>;
   };
 
   // ── Tab bar ──

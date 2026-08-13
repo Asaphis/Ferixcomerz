@@ -556,7 +556,7 @@ function UsersContent() {
 
   const statusBadge = (status: string) => {
     const map: Record<string, { bg: string; color: string }> = {
-      Active:     { bg: 'rgba(192,21,27,0.10)', color: 'var(--primary)' },
+      Active:     { bg: 'rgba(2,145,192,0.10)', color: 'var(--primary)' },
       Inactive:   { bg: 'rgba(83,83,87,0.12)',  color: 'var(--text-muted)' },
       Blocked:    { bg: 'rgba(185,28,28,0.12)', color: 'var(--danger)' },
       Suspended:  { bg: 'rgba(255,193,7,0.12)', color: 'var(--gold)' },
@@ -595,7 +595,7 @@ function UsersContent() {
       key: 'name', label: 'Name',
       render: (v, row) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(192,21,27,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: 'var(--primary)', flexShrink: 0 }}>
+          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(2,145,192,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', fontWeight: 700, color: 'var(--primary)', flexShrink: 0 }}>
             {String(v).charAt(0).toUpperCase()}
           </div>
           <div>
@@ -755,7 +755,7 @@ function UsersContent() {
 
       {/* ── Add Admin Modal (Super Admin only) ───────────────────────────────── */}
       <Modal open={addAdminOpen} onClose={() => setAddAdminOpen(false)} title="Add Admin Account">
-        <div style={{ background: 'rgba(192,21,27,0.06)', border: '1px solid rgba(192,21,27,0.2)', borderRadius: '10px', padding: '14px', marginBottom: '16px', fontSize: '13px', color: textMuted, lineHeight: 1.6 }}>
+        <div style={{ background: 'rgba(2,145,192,0.06)', border: '1px solid rgba(2,145,192,0.2)', borderRadius: '10px', padding: '14px', marginBottom: '16px', fontSize: '13px', color: textMuted, lineHeight: 1.6 }}>
           <strong style={{ color: textMain }}>How admin creation works:</strong><br />
           Enter the person's email and select their role. The system will automatically generate a secure temporary password and send it to their email along with a password reset link. They can log in with the temporary password or use the reset link to set their own password immediately.
         </div>
@@ -800,7 +800,7 @@ function UsersContent() {
         {viewRow && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: surface, borderRadius: '8px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(192,21,27,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: 700, color: 'var(--primary)' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(2,145,192,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: 700, color: 'var(--primary)' }}>
                 {viewRow.name.charAt(0).toUpperCase()}
               </div>
               <div>

@@ -518,7 +518,7 @@ function ProductsContent() {
 
   const statusBadge = (status: string) => {
     const map: Record<string, { bg: string; color: string }> = {
-      Active: { bg: 'rgba(192,21,27,0.10)', color: 'var(--primary)' },
+      Active: { bg: 'rgba(2,145,192,0.10)', color: 'var(--primary)' },
       Inactive: { bg: 'rgba(100,116,139,0.1)', color: 'var(--text-muted)' },
       'Low Stock': { bg: 'rgba(246,176,30,0.12)', color: 'var(--gold)' },
       'Out of Stock': { bg: 'rgba(214,48,49,0.12)', color: 'var(--danger)' },
