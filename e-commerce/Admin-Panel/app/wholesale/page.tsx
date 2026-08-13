@@ -87,6 +87,11 @@ function WholesaleContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   type Section = 'applications' | 'accounts' | 'deals' | 'inventory';
   const [section, setSection] = useState<Section>('applications');
 
@@ -564,7 +569,7 @@ function WholesaleContent() {
     <AdminShell>
       <PageHeader title="Wholesale Management" subtitle="Manage applications, partners, deals and bulk inventory" icon={Truck} />
 
-      <div style={{ display:'flex', gap:'12px', marginBottom:'24px', overflowX:'auto', paddingBottom:'4px' }}>
+      <div style={{ display:'flex', gap:clampPx(8, 12), marginBottom:clampPx(20, 24), overflowX:'auto', paddingBottom:'4px', WebkitOverflowScrolling:'touch' }}>
         {[
           { id:'applications', label:'Applications', icon:ClipboardList },
           { id:'accounts', label:'Wholesale Partners', icon:Users },
@@ -572,11 +577,12 @@ function WholesaleContent() {
           { id:'inventory', label:'Bulk Inventory', icon:Package }
         ].map(t => (
           <button key={t.id} onClick={() => setSection(t.id as Section)} style={{
-            display:'flex', alignItems:'center', gap:'8px', padding:'10px 16px', borderRadius:'12px', fontSize:'13.5px', fontWeight:600,
+            display:'flex', alignItems:'center', gap:'8px', padding:clampPx(10, 12) clampPx(12, 16), borderRadius:'12px', fontSize:clampPx(12, 13), fontWeight:600,
             background: section === t.id ? 'rgba(31,168,154,0.1)' : card,
             color: section === t.id ? 'var(--primary)' : textMuted,
             border: `1px solid ${section === t.id ? 'var(--primary)' : border}`,
-            cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.2s'
+            cursor:'pointer', whiteSpace:'nowrap', transition:'all 0.2s',
+            minHeight:'44px',
           }}>
             <t.icon size={16} /> {t.label}
           </button>
