@@ -368,7 +368,7 @@ function CurrenciesContent() {
       </div>
 
       {/* Exchange Rate Configuration Banner */}
-      <div className="card" style={{ marginBottom: clampPx(14, 16), padding: clampPx(10, 12) clampPx(12, 16), background: 'rgba(2,145,192,0.06)', border: '1px solid rgba(2,145,192,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: clampPx(10, 12), flexWrap: 'wrap' }}>
+      <div className="card" style={{ marginBottom: clampPx(14, 16), padding: `${clampPx(10, 12)} ${clampPx(12, 16)}`, background: 'rgba(2,145,192,0.06)', border: '1px solid rgba(2,145,192,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: clampPx(10, 12), flexWrap: 'wrap' }}>
         <div style={{ color: textMuted, fontSize: clampPx(12, 13), lineHeight: 1.5, minWidth: 0, flex: 1 }}>
           <span style={{ fontWeight: 600, color: textMain }}>Exchange Rate Provider: </span>
           {exchangeConfig.providerName} · {exchangeConfig.isActive ? 'Auto-update enabled' : 'Auto-update disabled'}

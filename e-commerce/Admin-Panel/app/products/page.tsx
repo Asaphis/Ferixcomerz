@@ -739,7 +739,7 @@ function ProductsContent() {
     <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Products" subtitle="Manage your product catalogue" icon={Package} onAdd={openAdd} addLabel="Add Product" />
       {isLoading ? (
-        <div style={{ padding: clampPx(12, 16) 0 }}>
+        <div style={{ padding: `${clampPx(12, 16)} 0` }}>
           {[...Array(8)].map((_, i) => (
             <div key={i} style={{
               height: clampPx(48, 52),

@@ -528,31 +528,31 @@ function OrdersContent() {
               ) : (
                 filteredOrders.map(o => (
                   <tr key={o.id} onClick={() => openDetail(o.id)} style={{ borderBottom: `1px solid ${T.border}`, cursor: 'pointer', transition: 'background 0.2s' }} className="table-row-hover">
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }} onClick={(e) => e.stopPropagation()}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }} onClick={(e) => e.stopPropagation()}>
                       <input type="checkbox" checked={selectedIds.has(o.id)} onChange={() => toggleSelectOne(o.id)} style={{ width: '18px', height: '18px', cursor: 'pointer' }} />
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }}>
                       <p style={{ fontWeight: '700', color: T.text, fontSize: clampPx(13, 14), marginBottom: '2px' }}>#{o.orderNumber}</p>
                       <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>{o._count.items} items</p>
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }}>
                       <p style={{ fontWeight: '600', color: T.text, fontSize: clampPx(13, 14), marginBottom: '2px' }}>{o.user ? `${o.user.firstName} ${o.user.lastName}` : 'Guest'}</p>
                       <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>{o.user?.email || 'No email'}</p>
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }}>
                       <p style={{ fontSize: clampPx(13, 14), color: T.text }}>{fmtDate(o.createdAt)}</p>
                       <p style={{ fontSize: clampPx(11, 12), color: T.muted }}>{fmtTime(o.createdAt)}</p>
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }}>
                       <p style={{ fontWeight: '700', color: T.text, fontSize: clampPx(13, 14) }}>{fmtMoney(o.total, o.currencySymbol)}</p>
                       {o.totalZMW && <p style={{ fontSize: clampPx(10, 11), color: T.muted }}>≈ ZMW {o.totalZMW.toLocaleString()}</p>}
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }}>
                       <div style={{ display: 'inline-flex', padding: '4px 10px', borderRadius: '6px', fontSize: clampPx(10, 11), fontWeight: '700', color: PAY_CFG[o.paymentStatus]?.color, background: PAY_CFG[o.paymentStatus]?.bg }}>
                         {PAY_CFG[o.paymentStatus]?.label}
                       </div>
                     </td>
-                    <td style={{ padding: clampPx(12, 16) clampPx(16, 20) }}>
+                    <td style={{ padding: `${clampPx(12, 16)} ${clampPx(16, 20)}` }}>
                       <div style={{ display: 'inline-flex', padding: '4px 10px', borderRadius: '6px', fontSize: clampPx(10, 11), fontWeight: '700', color: STATUS_CFG[o.status]?.color, background: STATUS_CFG[o.status]?.bg }}>
                         {STATUS_CFG[o.status]?.label}
                       </div>
