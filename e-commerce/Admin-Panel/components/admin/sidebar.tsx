@@ -67,11 +67,12 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
 
   return (
     <>
+      {/* Desktop Sidebar */}
       <aside style={{
         position: "fixed", top: 0, left: 0, bottom: 0,
         width: collapsed ? 60 : 260,
-        transition: "width 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-        zIndex: 30, overflow: "hidden", display: "flex",
+        transition: "width 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        zIndex: 30, overflow: "hidden", display: "none",
       }} className="sidebar-desktop">
         <div style={{
           display: "flex",
@@ -142,33 +143,36 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                     display: "flex",
                     alignItems: "center",
                     gap: collapsed ? 0 : 12,
-                    padding: collapsed ? "12px 0" : "10px 14px",
+                    padding: collapsed ? "12px 0" : "12px 14px",
                     justifyContent: collapsed ? "center" : "flex-start",
                     borderRadius: "10px",
                     background: active ? activeBg : "transparent",
                     color: active ? "white" : textMuted,
                     cursor: "pointer",
-                    transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
                     border: active ? "1px solid rgba(2, 145, 192, 0.25)" : "1px solid transparent",
-                    position: "relative"
+                    position: "relative",
+                    minHeight: collapsed ? "44px" : "auto"
                   }}
                     onMouseEnter={e => {
                       if (!active) {
                         e.currentTarget.style.background = "rgba(255, 255, 255, 0.04)";
                         e.currentTarget.style.color = "white";
+                        e.currentTarget.style.transform = "translateX(2px)";
                       }
                     }}
                     onMouseLeave={e => {
                       if (!active) {
                         e.currentTarget.style.background = "transparent";
                         e.currentTarget.style.color = textMuted;
+                        e.currentTarget.style.transform = "translateX(0)";
                       }
                     }}
                   >
                     <Icon size={18} style={{
                       flexShrink: 0,
                       color: active ? activeColor : "inherit",
-                      transition: "color 0.2s"
+                      transition: "color 0.25s"
                     }} />
                     {!collapsed && (
                       <span style={{
@@ -212,7 +216,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                   overflow: "hidden",
                   boxShadow: "0 -8px 24px rgba(0,0,0,0.4)",
                   marginBottom: 8,
-                  zIndex: 99
+                  zIndex: 99,
+                  animation: "fadeInUp 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
                 }}>
                   <button
                     onClick={handleProfile}
@@ -220,7 +225,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                       width: "100%", display: "flex", alignItems: "center", gap: 10,
                       padding: "12px 16px", background: "none", border: "none",
                       cursor: "pointer", color: "white", fontSize: "13px", fontWeight: 500,
-                      fontFamily: "var(--font-inter)", textAlign: "left"
+                      fontFamily: "var(--font-inter)", textAlign: "left",
+                      minHeight: "44px"
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
                     onMouseLeave={e => e.currentTarget.style.background = "none"}
@@ -234,7 +240,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                       width: "100%", display: "flex", alignItems: "center", gap: 10,
                       padding: "12px 16px", background: "none", border: "none",
                       cursor: "pointer", color: "var(--brand-gold-bright)", fontSize: "13px", fontWeight: 600,
-                      fontFamily: "var(--font-inter)", textAlign: "left"
+                      fontFamily: "var(--font-inter)", textAlign: "left",
+                      minHeight: "44px"
                     }}
                     onMouseEnter={e => e.currentTarget.style.background = "rgba(214, 155, 4, 0.12)"}
                     onMouseLeave={e => e.currentTarget.style.background = "none"}
@@ -254,7 +261,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                   justifyContent: collapsed ? "center" : "space-between",
                   gap: 12,
                   background: showUserPopup ? "rgba(255,255,255,0.04)" : "transparent",
-                  transition: "background 0.2s",
+                  transition: "background 0.25s",
+                  minHeight: collapsed ? "72px" : "auto"
                 }}
                 onMouseEnter={e => { if (!showUserPopup) e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
                 onMouseLeave={e => { if (!showUserPopup) e.currentTarget.style.background = "transparent"; }}
@@ -294,10 +302,29 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
         </div>
       </aside>
 
+      {/* Mobile Sidebar Overlay */}
       {mobileOpen && (
         <div style={{ position: "fixed", inset: 0, zIndex: 200, display: "flex" }}>
-          <div style={{ position: "absolute", inset: 0, background: "var(--overlay)", backdropFilter: "blur(4px)" }} onClick={onMobileClose} />
-          <aside style={{ position: "relative", width: 260, zIndex: 201, animation: "slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}>
+          <div 
+            style={{ 
+              position: "absolute", 
+              inset: 0, 
+              background: "var(--overlay)", 
+              backdropFilter: "blur(4px)",
+              WebkitBackdropFilter: "blur(4px)",
+              animation: "fadeIn 0.2s ease"
+            }} 
+            onClick={onMobileClose} 
+          />
+          <aside style={{ 
+            position: "relative", 
+            width: "100%", 
+            maxWidth: "320px",
+            zIndex: 201, 
+            animation: "slideInLeft 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+            maxHeight: "100vh",
+            overflow: "hidden"
+          }}>
             <div style={{
               display: "flex",
               flexDirection: "column",
@@ -309,8 +336,8 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
             }}>
               {/* Brand Header */}
               <div style={{
-                padding: "0 24px",
-                height: 72,
+                padding: "0 20px",
+                height: 64,
                 borderBottom: `1px solid ${border}`,
                 display: "flex",
                 alignItems: "center",
@@ -319,10 +346,10 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                 background: "rgba(1, 32, 68, 0.4)",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <BrandLogo size={36} />
+                  <BrandLogo size={32} />
                   <div style={{ display: "flex", flexDirection: "column" }}>
                     <span style={{
-                      fontSize: "16px",
+                      fontSize: "15px",
                       fontWeight: 800,
                       color: "white",
                       letterSpacing: "-0.4px",
@@ -331,7 +358,7 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                       Ferixcomerz
                     </span>
                     <span style={{
-                      fontSize: "9px",
+                      fontSize: "8px",
                       fontWeight: 700,
                       color: "var(--brand-gold-bright)",
                       letterSpacing: "1.5px",
@@ -345,18 +372,21 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                 <button
                   onClick={onMobileClose}
                   style={{
-                    background: "none",
+                    background: "rgba(255,255,255,0.08)",
                     border: "none",
                     cursor: "pointer",
                     color: textMuted,
-                    padding: 6,
+                    padding: 8,
                     display: "flex",
                     alignItems: "center",
-                    borderRadius: "50%",
-                    transition: "background 0.2s"
+                    borderRadius: "8px",
+                    transition: "all 0.2s",
+                    minWidth: "40px",
+                    minHeight: "40px",
+                    justifyContent: "center"
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
-                  onMouseLeave={e => e.currentTarget.style.background = "none"}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.12)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
                 >
                   <X size={18} />
                 </button>
@@ -384,15 +414,16 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                         display: "flex",
                         alignItems: "center",
                         gap: 12,
-                        padding: "10px 14px",
+                        padding: "12px 14px",
                         justifyContent: "flex-start",
                         borderRadius: "10px",
                         background: active ? activeBg : "transparent",
                         color: active ? "white" : textMuted,
                         cursor: "pointer",
-                        transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+                        transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
                         border: active ? "1px solid rgba(2, 145, 192, 0.25)" : "1px solid transparent",
-                        position: "relative"
+                        position: "relative",
+                        minHeight: "48px"
                       }}
                         onMouseEnter={e => {
                           if (!active) {
@@ -410,10 +441,10 @@ export default function Sidebar({ collapsed, mobileOpen, onMobileClose }: Sideba
                         <Icon size={18} style={{
                           flexShrink: 0,
                           color: active ? activeColor : "inherit",
-                          transition: "color 0.2s"
+                          transition: "color 0.25s"
                         }} />
                         <span style={{
-                          fontSize: "13px",
+                          fontSize: "14px",
                           fontWeight: active ? 600 : 500,
                           overflow: "hidden",
                           textOverflow: "ellipsis",

@@ -187,7 +187,7 @@ function LoginForm() {
       fontFamily: "var(--font-inter), sans-serif",
       position: "relative",
       overflow: "hidden",
-      padding: "24px 16px"
+      padding: "16px"
     }}>
       {/* Load reCAPTCHA v3 script */}
       {RECAPTCHA_SITE_KEY && (
@@ -199,17 +199,17 @@ function LoginForm() {
 
       {/* Floating Gorgeous Brand Light Nodes */}
       <div style={{
-        position: "absolute", width: "45vw", height: "45vw",
+        position: "absolute", width: "min(45vw, 300px)", height: "min(45vw, 300px)",
         background: "radial-gradient(circle, rgba(153, 188, 13, 0.12) 0%, rgba(255, 255, 255, 0) 70%)",
         top: "-15%", left: "-10%", zIndex: 0, pointerEvents: "none"
       }} />
       <div style={{
-        position: "absolute", width: "50vw", height: "50vw",
+        position: "absolute", width: "min(50vw, 350px)", height: "min(50vw, 350px)",
         background: "radial-gradient(circle, rgba(2, 145, 192, 0.15) 0%, rgba(255, 255, 255, 0) 70%)",
         bottom: "-20%", right: "-10%", zIndex: 0, pointerEvents: "none"
       }} />
       <div style={{
-        position: "absolute", width: "35vw", height: "35vw",
+        position: "absolute", width: "min(35vw, 250px)", height: "min(35vw, 250px)",
         background: "radial-gradient(circle, rgba(214, 155, 4, 0.08) 0%, rgba(255, 255, 255, 0) 70%)",
         bottom: "30%", left: "40%", zIndex: 0, pointerEvents: "none"
       }} />
@@ -223,21 +223,21 @@ function LoginForm() {
         WebkitBackdropFilter: "blur(30px)",
         border: "1px solid rgba(255, 255, 255, 0.12)",
         borderRadius: "28px",
-        padding: "52px 44px",
+        padding: "clamp(32px, 8vw, 52px)",
         boxShadow: "0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
         zIndex: 1,
         transition: "all 0.3s ease",
         color: "#FFFFFF"
       }}>
         {/* Brand header */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "40px" }}>
-          <div style={{ transform: "scale(1.1)", marginBottom: "16px" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "clamp(24px, 6vw, 40px)" }}>
+          <div style={{ transform: "scale(1.1)", marginBottom: "clamp(12px, 3vw, 16px)" }}>
             <BrandLogo size={64} />
           </div>
-          <h2 style={{ fontSize: "28px", fontWeight: 800, color: "#FFFFFF", letterSpacing: "-0.75px", margin: 0 }}>
+          <h2 style={{ fontSize: "clamp(22px, 5vw, 28px)", fontWeight: 800, color: "#FFFFFF", letterSpacing: "-0.75px", margin: 0 }}>
             Ferixcomerz
           </h2>
-          <span style={{ fontSize: "10px", fontWeight: 700, color: "var(--brand-gold-bright)", letterSpacing: "2.5px", textTransform: "uppercase", marginTop: "6px" }}>
+          <span style={{ fontSize: "clamp(9px, 2vw, 10px)", fontWeight: 700, color: "var(--brand-gold-bright)", letterSpacing: "2.5px", textTransform: "uppercase", marginTop: "6px" }}>
             Enterprise Console
           </span>
         </div>
@@ -269,7 +269,7 @@ function LoginForm() {
                   placeholder="admin@ferixcomerz.com"
                   autoComplete="username"
                   style={{
-                    width: "100%", padding: "15px 16px 15px 48px", fontSize: "14.5px",
+                    width: "100%", padding: "clamp(14px, 4vw, 15px) clamp(14px, 4vw, 48px)", fontSize: "clamp(14px, 3vw, 14.5px)",
                     background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.15)", borderRadius: "14px",
                     outline: "none", color: "#FFFFFF", transition: "all 0.25s",
                     boxShadow: "inset 0 1px 2px rgba(0,0,0,0.1)"
@@ -306,7 +306,7 @@ function LoginForm() {
                   placeholder="••••••••••••"
                   autoComplete="current-password"
                   style={{
-                    width: "100%", padding: "15px 52px 15px 48px", fontSize: "14.5px",
+                    width: "100%", padding: "clamp(14px, 4vw, 15px) clamp(14px, 4vw, 52px)", fontSize: "clamp(14px, 3vw, 14.5px)",
                     background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.15)", borderRadius: "14px",
                     outline: "none", color: "#FFFFFF", transition: "all 0.25s",
                     boxShadow: "inset 0 1px 2px rgba(0,0,0,0.1)"
@@ -370,9 +370,9 @@ function LoginForm() {
               type="submit"
               disabled={loading}
               style={{
-                width: "100%", padding: "16px",
+                width: "100%", padding: "clamp(14px, 4vw, 16px)",
                 background: "linear-gradient(135deg, var(--brand-blue-bright) 0%, var(--brand-blue-medium) 100%)",
-                border: "none", borderRadius: "14px", color: "white", fontSize: "15px", fontWeight: 700,
+                border: "none", borderRadius: "14px", color: "white", fontSize: "clamp(14px, 3vw, 15px)", fontWeight: 700,
                 cursor: loading ? "not-allowed" : "pointer", letterSpacing: "0.2px",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
                 boxShadow: "0 6px 20px rgba(2, 145, 192, 0.35)", transition: "all 0.25s"
@@ -431,8 +431,8 @@ function LoginForm() {
               maxLength={6}
               autoFocus
               style={{
-                width: "100%", fontSize: "28px", fontFamily: "monospace", letterSpacing: "0.2em",
-                textAlign: "center", padding: "15px", background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.15)",
+                width: "100%", fontSize: "clamp(20px, 5vw, 28px)", fontFamily: "monospace", letterSpacing: "0.2em",
+                textAlign: "center", padding: "clamp(12px, 3vw, 15px)", background: "rgba(255, 255, 255, 0.05)", border: "1px solid rgba(255, 255, 255, 0.15)",
                 borderRadius: "14px", color: "#FFFFFF", outline: "none", transition: "all 0.25s"
               }}
               onFocus={e => {
@@ -452,9 +452,9 @@ function LoginForm() {
               type="submit"
               disabled={twoFaLoading || twoFaCode.length !== 6}
               style={{
-                width: "100%", padding: "16px",
+                width: "100%", padding: "clamp(14px, 4vw, 16px)",
                 background: (twoFaCode.length === 6 && !twoFaLoading) ? "linear-gradient(135deg, var(--brand-blue-bright) 0%, var(--brand-blue-medium) 100%)" : "var(--btn-disabled)",
-                border: "none", borderRadius: "14px", color: "white", fontSize: "15px", fontWeight: 700,
+                border: "none", borderRadius: "14px", color: "white", fontSize: "clamp(14px, 3vw, 15px)", fontWeight: 700,
                 cursor: twoFaCode.length === 6 ? "pointer" : "not-allowed",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
                 marginTop: "20px", boxShadow: "0 6px 20px rgba(1, 62, 103, 0.2)", transition: "all 0.2s"
