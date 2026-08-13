@@ -174,8 +174,9 @@ function ShippingContent() {
   ];
 
   const tabStyle = (active: boolean) => ({
-    padding: '8px 18px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer',
+    padding: clampPx(8, 10) clampPx(14, 18), borderRadius: '8px', fontSize: clampPx(12, 13), fontWeight: 600, cursor: 'pointer',
     background: active ? 'var(--primary)' : 'transparent', color: active ? '#fff' : textMuted, border: 'none',
+    minHeight: '44px',
   });
 
   const ADD_LABELS   = { zones: 'Add Zone', methods: 'Add Method' };
@@ -185,7 +186,7 @@ function ShippingContent() {
   };
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader
         title="Shipping"
         subtitle="Manage shipping zones and delivery methods"
@@ -195,7 +196,7 @@ function ShippingContent() {
       />
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '6px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', gap: clampPx(4, 6), marginBottom: clampPx(16, 20), flexWrap: 'wrap' }}>
         <button style={tabStyle(tab === 'zones')}   onClick={() => setTab('zones')}>Shipping Zones ({zones.length})</button>
         <button style={tabStyle(tab === 'methods')} onClick={() => setTab('methods')}>Shipping Methods ({methods.length})</button>
       </div>
@@ -210,7 +211,7 @@ function ShippingContent() {
             onEdit={(row) => { const z = row as unknown as Zone; setZoneForm({ name: z.name, region: z.region, countries: z.countries, method: z.method, rate: z.rate, minOrder: z.minOrder, days: z.days, status: z.status }); setEditZone(z); }}
             onDelete={(row) => setDeleteZone(row as unknown as Zone)}
           />
-          <Modal open={addZoneOpen} onClose={() => setAddZoneOpen(false)} title="Add Shipping Zone">
+          <Modal open={addZoneOpen} onClose={() => setAddZoneOpen(false)} title="Add Shipping Zone" maxWidth="520px">
             <FormField label="Zone Name *" value={zoneForm.name} onChange={zfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Lusaka Zone" />
             <FormField label="Region / Area" value={zoneForm.region} onChange={zfp('region')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Central Province" />
             <FormField label="Countries Covered (comma-separated)" value={zoneForm.countries} onChange={zfp('countries')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Zambia" />
@@ -221,7 +222,7 @@ function ShippingContent() {
             <FormField label="Status" value={zoneForm.status} onChange={zfp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <ModalFooter onClose={() => setAddZoneOpen(false)} onSubmit={handleAddZone} loading={loadingZone} submitLabel="Add Zone" border={border} textMain={textMain} />
           </Modal>
-          <Modal open={!!editZone} onClose={() => setEditZone(null)} title={`Edit Zone: ${editZone?.name ?? ''}`}>
+          <Modal open={!!editZone} onClose={() => setEditZone(null)} title={`Edit Zone: ${editZone?.name ?? ''}`} maxWidth="520px">
             <FormField label="Zone Name *" value={zoneForm.name} onChange={zfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Region / Area" value={zoneForm.region} onChange={zfp('region')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Countries Covered" value={zoneForm.countries} onChange={zfp('countries')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
