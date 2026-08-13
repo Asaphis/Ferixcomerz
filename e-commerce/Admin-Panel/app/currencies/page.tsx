@@ -307,7 +307,7 @@ function CurrenciesContent() {
   ];
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader
         title="Currencies"
         subtitle="Manage exchange rates and currency display settings"
@@ -320,23 +320,23 @@ function CurrenciesContent() {
       />
 
       {/* Default Currency Selector */}
-      <div style={{ marginBottom: '16px', padding: '16px 20px', background: 'rgba(246,176,30,0.06)', border: '1px solid rgba(246,176,30,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'rgba(246,176,30,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Star size={20} color="var(--gold)" fill="var(--gold)" />
+      <div className="card" style={{ marginBottom: clampPx(14, 16), padding: clampPx(14, 16) clampPx(16, 20), background: 'rgba(246,176,30,0.06)', border: '1px solid rgba(246,176,30,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: clampPx(12, 16), flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: clampPx(10, 12), minWidth: 0, flex: 1 }}>
+          <div style={{ width: clampPx(36, 40), height: clampPx(36, 40), borderRadius: '10px', background: 'rgba(246,176,30,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Star size={clampPx(18, 20)} color="var(--gold)" fill="var(--gold)" />
           </div>
-          <div>
-            <div style={{ fontSize: '14px', fontWeight: 700, color: textMain }}>Default Currency</div>
-            <div style={{ fontSize: '12px', color: textMuted, marginTop: '2px' }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: clampPx(13, 14), fontWeight: 700, color: textMain }}>Default Currency</div>
+            <div style={{ fontSize: clampPx(11, 12), color: textMuted, marginTop: '2px', lineHeight: 1.4 }}>
               This currency is shown to visitors when geolocation fails or their country is not configured. Currently set to <b style={{ color: 'var(--gold)' }}>{defaultCurrencyCode}</b>.
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: clampPx(8, 10), flexShrink: 0 }}>
           <select
             value={defaultCurrencyCode}
             onChange={(e) => setDefaultCurrencyCode(e.target.value)}
-            style={{ padding: '8px 12px', borderRadius: '8px', background: surface, border: `1px solid ${border}`, color: textMain, fontSize: '13px', fontWeight: 600, cursor: 'pointer', outline: 'none' }}
+            style={{ padding: clampPx(8, 10) clampPx(10, 12), borderRadius: '8px', background: surface, border: `1px solid ${border}`, color: textMain, fontSize: clampPx(12, 13), fontWeight: 600, cursor: 'pointer', outline: 'none', minHeight: '44px' }}
           >
             {currencies.map((c) => (
               <option key={c.code} value={c.code}>{c.code} — {c.symbol}</option>
@@ -368,23 +368,24 @@ function CurrenciesContent() {
       </div>
 
       {/* Exchange Rate Configuration Banner */}
-      <div style={{ marginBottom: '16px', padding: '12px 16px', background: 'rgba(2,145,192,0.06)', border: '1px solid rgba(2,145,192,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-        <div style={{ color: textMuted, fontSize: '13px', lineHeight: 1.5 }}>
+      <div className="card" style={{ marginBottom: clampPx(14, 16), padding: clampPx(10, 12) clampPx(12, 16), background: 'rgba(2,145,192,0.06)', border: '1px solid rgba(2,145,192,0.15)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: clampPx(10, 12), flexWrap: 'wrap' }}>
+        <div style={{ color: textMuted, fontSize: clampPx(12, 13), lineHeight: 1.5, minWidth: 0, flex: 1 }}>
           <span style={{ fontWeight: 600, color: textMain }}>Exchange Rate Provider: </span>
           {exchangeConfig.providerName} · {exchangeConfig.isActive ? 'Auto-update enabled' : 'Auto-update disabled'}
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: clampPx(6, 8), flexShrink: 0 }}>
           <button
             onClick={() => setExchangeConfigOpen(true)}
             style={{
-              padding: '8px 16px',
+              padding: clampPx(8, 10) clampPx(12, 16),
               borderRadius: '8px',
-              fontSize: '12px',
+              fontSize: clampPx(11, 12),
               fontWeight: 600,
               background: 'transparent',
               color: 'var(--primary)',
               border: '1px solid var(--primary)',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              minHeight: '40px',
             }}
           >
             Configure Provider
@@ -393,15 +394,16 @@ function CurrenciesContent() {
             onClick={handleRefreshRates}
             disabled={exchangeConfigLoading}
             style={{
-              padding: '8px 16px',
+              padding: clampPx(8, 10) clampPx(12, 16),
               borderRadius: '8px',
-              fontSize: '12px',
+              fontSize: clampPx(11, 12),
               fontWeight: 600,
               background: 'var(--primary)',
               color: '#fff',
               border: 'none',
               cursor: exchangeConfigLoading ? 'not-allowed' : 'pointer',
-              opacity: exchangeConfigLoading ? 0.6 : 1
+              opacity: exchangeConfigLoading ? 0.6 : 1,
+              minHeight: '40px',
             }}
           >
             {exchangeConfigLoading ? 'Refreshing...' : 'Refresh Rates Now'}
