@@ -33,6 +33,11 @@ function InvoicingContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
   const [data, setData] = useState<Invoice[]>(INITIAL);
+
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
   useEffect(() => {
     Promise.all([
       getOrders({ limit: 200 }).catch(() => ({ data: [] })),
@@ -128,11 +133,11 @@ function InvoicingContent() {
   const addFields = (
     <>
       <FormField label="Client Name" value={form.client} onChange={fp('client')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. TechHub Zambia" />
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px'}}>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:clampPx(8, 10)}}>
         <FormField label="Issue Date" value={form.date} onChange={fp('date')} type="date" border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
         <FormField label="Due Date" value={form.due} onChange={fp('due')} type="date" border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
       </div>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'10px'}}>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:clampPx(8, 10)}}>
         <FormField label="Amount" value={form.amount} onChange={fp('amount')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="$0.00" />
         <FormField label="Processing Fees" value={form.processingFees} onChange={fp('processingFees')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="$0.00" />
         <FormField label="Total" value={form.total} onChange={fp('total')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="$0.00" />
@@ -142,13 +147,13 @@ function InvoicingContent() {
   );
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Invoicing" subtitle="Create and manage customer invoices" icon={FileText} onAdd={openAdd} addLabel="New Invoice" />
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'14px',marginBottom:'24px'}} className="sg">
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:clampPx(10, 14),marginBottom:clampPx(20, 24)}} className="sg">
         {[{label:'Total Invoices',val:String(data.length),color:'var(--primary)'},{label:'Paid',val:String(data.filter(i=>i.status==='Paid').length),color:'var(--primary)'},{label:'Outstanding',val:String(data.filter(i=>i.status==='Unpaid').length),color:'var(--gold)'},{label:'Overdue',val:String(data.filter(i=>i.status==='Overdue').length),color:'var(--danger)'}].map(s=>(
-          <div key={s.label} style={{background:card,border:`1px solid ${border}`,borderRadius:'12px',padding:'16px'}}>
-            <div style={{fontSize:'12px',color:textMuted,marginBottom:'6px'}}>{s.label}</div>
-            <div style={{fontSize:'20px',fontWeight:800,color:s.color}}>{s.val}</div>
+          <div key={s.label} className="card" style={{padding:clampPx(12, 16)}}>
+            <div style={{fontSize:clampPx(11, 12),color:textMuted,marginBottom:'6px'}}>{s.label}</div>
+            <div style={{fontSize:clampPx(18, 20),fontWeight:800,color:s.color,lineHeight:1.2}}>{s.val}</div>
           </div>
         ))}
       </div>
@@ -158,21 +163,21 @@ function InvoicingContent() {
       <Modal open={!!viewRow} onClose={()=>setViewRow(null)} title={`Invoice ${viewRow?.id??''}`}>
         {viewRow && <>
           <FormField label="Client" value={viewRow.client} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'10px'}}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:clampPx(8, 10)}}>
             <FormField label="Issue Date" value={viewRow.date} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Due Date" value={viewRow.due} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           </div>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'10px'}}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:clampPx(8, 10)}}>
             <FormField label="Amount" value={viewRow.amount} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Processing Fees" value={viewRow.processingFees} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Total" value={viewRow.total} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
           </div>
           <FormField label="Status" value={viewRow.status} readOnly border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
-          <button onClick={()=>setViewRow(null)} style={{width:'100%',padding:'10px',borderRadius:'9px',background:'var(--surface)',border:`1px solid ${border}`,color:textMain,fontSize:'13.5px',fontWeight:600,cursor:'pointer',fontFamily:'var(--font-inter)'}}>Close</button>
+          <button onClick={()=>setViewRow(null)} style={{width:'100%',padding:'12px',borderRadius:'9px',background:'var(--surface)',border:`1px solid ${border}`,color:textMain,fontSize:clampPx(13, 14),fontWeight:600,cursor:'pointer',fontFamily:'var(--font-inter)',minHeight:'44px'}}>Close</button>
         </>}
       </Modal>
       <Modal open={!!editRow} onClose={()=>setEditRow(null)} title={`Update: ${editRow?.id??''}`}>
-        {editRow && <><p style={{fontSize:'13px',color:textMuted,marginBottom:'16px'}}>Client: <strong style={{color:textMain}}>{editRow.client}</strong></p>
+        {editRow && <><p style={{fontSize:clampPx(12, 13),color:textMuted,marginBottom:clampPx(12, 16)}}>Client: <strong style={{color:textMain}}>{editRow.client}</strong></p>
         <FormField label="Invoice Status" value={editStatus} onChange={setEditStatus} options={INV_STATUSES} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
         <ModalFooter onClose={()=>setEditRow(null)} onSubmit={handleEdit} loading={false} submitLabel="Update Status" border={border} textMain={textMain} /></>}
       </Modal>
