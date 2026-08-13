@@ -22,6 +22,11 @@ function ReviewsContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const [data, setData] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -130,13 +135,13 @@ function ReviewsContent() {
   ];
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Reviews" subtitle="Manage customer product reviews" icon={Star} />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }} className="stats-grid">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: clampPx(10, 14), marginBottom: clampPx(20, 24) }} className="stats-grid">
         {stats.map(s => (
-          <div key={s.label} style={{ background: card, border: `1px solid ${border}`, borderRadius: '12px', padding: '16px' }}>
-            <div style={{ fontSize: '12px', color: textMuted, marginBottom: '6px' }}>{s.label}</div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: s.color }}>{s.val}</div>
+          <div key={s.label} className="card" style={{ padding: clampPx(12, 16) }}>
+            <div style={{ fontSize: clampPx(11, 12), color: textMuted, marginBottom: '6px' }}>{s.label}</div>
+            <div style={{ fontSize: clampPx(20, 24), fontWeight: 800, color: s.color, lineHeight: 1.2 }}>{s.val}</div>
           </div>
         ))}
       </div>
