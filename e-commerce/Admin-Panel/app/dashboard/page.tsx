@@ -19,7 +19,7 @@ const Cell: typeof RechartsTypes.Cell = _rc.Cell;
 import {
   TrendingUp, TrendingDown, ShoppingCart, DollarSign, Package,
   CreditCard, FileText, UserPlus, BarChart2, Settings, Wallet,
-  ArrowUpRight, ArrowDownRight, Clock, Award
+  Clock, ShieldAlert
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -66,7 +66,7 @@ function StatusBadge({ status }: { status: string }) {
   return (
     <span style={{
       background: style.bg, color: style.color, fontSize: "11px", fontWeight: 700,
-      padding: "4px 10px", borderRadius: "20px", whiteSpace: "nowrap", border: `1px solid ${style.bg}`
+      padding: "4px 10px", borderRadius: "20px", whiteSpace: "nowrap", border: `1px solid ${style.color}20`
     }}>
       {style.label}
     </span>
@@ -151,10 +151,15 @@ function DashboardContent() {
   const cardStyle = (extra?: React.CSSProperties): React.CSSProperties => ({
     background: card,
     border: `1px solid ${border}`,
-    borderRadius: 16,
+    borderRadius: 18,
     overflow: "hidden",
     minWidth: 0,
     boxShadow: "0 10px 30px rgba(76, 59, 53, 0.04)",
+    padding: "24px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    transition: "transform 0.25s ease, box-shadow 0.25s ease",
     ...extra,
   });
 
@@ -258,138 +263,179 @@ function DashboardContent() {
         </div>
       )}
 
-      <div className="dash-outer">
-        {/* ── TOP AREA ── */}
-        <div className="dash-top">
-          <div style={{
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            flexWrap: "wrap", gap: 16, marginBottom: 24, background: "#FFFFFF",
-            padding: "16px 24px", borderRadius: 16, border: `1px solid ${border}`,
-            boxShadow: "0 10px 30px rgba(76, 59, 53, 0.02)"
-          }}>
-            <div>
-              <h1 style={{ fontSize: "22px", fontWeight: 800, color: textMain, letterSpacing: "-0.5px", margin: 0 }}>
-                Operations Dashboard
-              </h1>
-              <p style={{ fontSize: "13px", color: textMuted, marginTop: 4, margin: 0 }}>
-                Synthesized real-time telemetry and ledger audits for <strong style={{ color: "var(--brand-blue-bright)" }}>{selectedLabel}</strong>.
-              </p>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: "12px", fontWeight: 700, color: textSec, textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                Active Period:
-              </span>
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(e.target.value)}
-                style={{
-                  background: surface, color: textMain, border: `1.5px solid ${border}`,
-                  borderRadius: 10, padding: "8px 16px", fontSize: "13px", fontWeight: 700,
-                  outline: "none", cursor: "pointer", boxShadow: "0 2px 6px rgba(0,0,0,0.01)"
-                }}
-              >
-                {(availableMonths.length > 0 ? availableMonths : [{ value: selectedMonth, label: selectedLabel }]).map((month) => (
-                  <option key={month.value} value={month.value}>{month.label}</option>
-                ))}
-              </select>
-            </div>
-          </div>
+      {/* ── HEADER ROW ── */}
+      <div style={{
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        flexWrap: "wrap", gap: 16, marginBottom: 24, background: "#FFFFFF",
+        padding: "20px 24px", borderRadius: 18, border: `1px solid ${border}`,
+        boxShadow: "0 10px 30px rgba(76, 59, 53, 0.02)"
+      }}>
+        <div>
+          <h1 style={{ fontSize: "24px", fontWeight: 800, color: textMain, letterSpacing: "-0.75px", margin: 0 }}>
+            Operations & Financial Telemetry
+          </h1>
+          <p style={{ fontSize: "13.5px", color: textMuted, marginTop: 4, margin: 0 }}>
+            Real-time ledger audit, dynamic metrics tracking, and catalog system management for <strong style={{ color: "var(--brand-blue-bright)" }}>{selectedLabel}</strong>.
+          </p>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: "12px", fontWeight: 700, color: textSec, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            Telemetry Frame:
+          </span>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            style={{
+              background: surface, color: textMain, border: `1.5px solid ${border}`,
+              borderRadius: 10, padding: "8px 16px", fontSize: "13.5px", fontWeight: 700,
+              outline: "none", cursor: "pointer", boxShadow: "0 2px 6px rgba(0,0,0,0.01)"
+            }}
+          >
+            {(availableMonths.length > 0 ? availableMonths : [{ value: selectedMonth, label: selectedLabel }]).map((month) => (
+              <option key={month.value} value={month.value}>{month.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-          {/* KPI Card Grid */}
-          <div className="kpi-grid" style={{ marginBottom: 24 }}>
-            {kpiCards.map(({ label, value, change, up, Icon, color, bgGrad, spark }) => {
-              const sparkData = spark.map(v => ({ v }));
-              return (
-                <div key={label} className="kpi-card" style={cardStyle({
-                  padding: "16px 20px", position: "relative",
-                  background: `${bgGrad}, #FFFFFF`
-                })}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{
-                        width: 34, height: 34, borderRadius: 10, background: `${color}15`,
-                        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                        border: `1px solid ${color}22`
-                      }}>
-                        <Icon size={16} color={color} />
-                      </div>
-                      <span style={{ fontSize: "12.5px", color: textMuted, fontWeight: 600 }}>{label}</span>
-                    </div>
-                    <span style={{
-                      fontSize: "11px", fontWeight: 800,
-                      color: up ? "var(--brand-green-deep)" : "var(--brand-gold-dark)",
-                      background: up ? "rgba(20, 113, 21, 0.08)" : "rgba(147, 95, 4, 0.08)",
-                      padding: "4px 8px", borderRadius: "12px",
-                      display: "flex", alignItems: "center", gap: 4
-                    }}>
-                      {up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-                      {change}
-                    </span>
+      {/* ── STEP 1: KPI CARDS WITH GRACEFUL WRAPPING AND SPACING ── */}
+      <div className="telemetry-grid" style={{ marginBottom: 24 }}>
+        {kpiCards.map(({ label, value, change, up, Icon, color, bgGrad, spark }) => {
+          const sparkData = spark.map(v => ({ v }));
+          return (
+            <div key={label} className="telemetry-card" style={cardStyle({
+              background: `${bgGrad}, #FFFFFF`,
+              border: `1.5px solid ${border}`,
+              minHeight: "150px"
+            })}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12, width: "100%" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{
+                    width: 38, height: 38, borderRadius: 12, background: `${color}15`,
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    border: `1.5px solid ${color}22`
+                  }}>
+                    <Icon size={18} color={color} />
                   </div>
-                  <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12 }}>
-                    <div>
-                      <div style={{ fontSize: "22px", fontWeight: 800, color: textMain, letterSpacing: "-0.5px" }}>{value}</div>
-                      <div style={{ fontSize: "10.5px", color: textMuted, marginTop: 4, fontWeight: 500 }}>
-                        {label.includes("Revenue") || label.includes("Orders") ? `Against previous term` : `Updated just now`}
-                      </div>
-                    </div>
-                    {/* Sparkline chart */}
-                    <div className="kpi-spark" style={{ width: 85, height: 36, flexShrink: 0, overflow: "hidden" }}>
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={sparkData} margin={{ top: 2, right: 0, left: 0, bottom: 0 }}>
-                          <defs>
-                            <linearGradient id={`sg-${label}`} x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-                              <stop offset="100%" stopColor={color} stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <Area type="monotone" dataKey="v" stroke={color} strokeWidth={2} fill={`url(#sg-${label})`} dot={false} />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
+                  <span style={{ fontSize: "13px", color: textMuted, fontWeight: 700 }}>{label}</span>
+                </div>
+                <span style={{
+                  fontSize: "11px", fontWeight: 800,
+                  color: up ? "var(--brand-green-deep)" : "var(--brand-gold-dark)",
+                  background: up ? "rgba(20, 113, 21, 0.1)" : "rgba(147, 95, 4, 0.1)",
+                  padding: "4px 8px", borderRadius: "12px",
+                  display: "flex", alignItems: "center", gap: 4
+                }}>
+                  {up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                  {change}
+                </span>
+              </div>
+              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 12, width: "100%", marginTop: "auto" }}>
+                <div>
+                  <div style={{ fontSize: "24px", fontWeight: 800, color: textMain, letterSpacing: "-0.75px", lineHeight: 1 }}>{value}</div>
+                  <div style={{ fontSize: "11px", color: textMuted, marginTop: 6, fontWeight: 500 }}>
+                    {label.includes("Revenue") || label.includes("Orders") ? `Against previous term` : `Updated just now`}
                   </div>
                 </div>
-              );
-            })}
+                {/* Sparkline chart */}
+                <div style={{ width: 85, height: 36, flexShrink: 0, overflow: "hidden" }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={sparkData} margin={{ top: 2, right: 0, left: 0, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id={`sg-${label}`} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+                          <stop offset="100%" stopColor={color} stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <Area type="monotone" dataKey="v" stroke={color} strokeWidth={2} fill={`url(#sg-${label})`} dot={false} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── STEP 2: MAIN CHARTS & SYSTEM CONTROL GRID ── */}
+      <div className="main-charts-grid" style={{ marginBottom: 24 }}>
+        {/* Left: Revenue Area Chart */}
+        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18, width: "100%" }}>
+            <div>
+              <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Revenue & Capital Yield</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
+                <span style={{ fontSize: "26px", fontWeight: 800, color: textMain, letterSpacing: "-0.75px" }}>{fmt(totalRevenue)}</span>
+                <span style={{
+                  fontSize: "11.5px", fontWeight: 800, color: "var(--brand-green-deep)",
+                  background: "rgba(20, 113, 21, 0.08)", padding: "4px 8px", borderRadius: "12px",
+                  display: "flex", alignItems: "center", gap: 4
+                }}>
+                  <TrendingUp size={12} /> Target Aligned
+                </span>
+              </div>
+            </div>
+            <div style={{ background: surface, border: `1.5px solid ${border}`, borderRadius: 10, padding: "6px 14px", fontSize: "12px", fontWeight: 700, color: textSec }}>
+              {selectedLabel} Analytics
+            </div>
+          </div>
+          <div style={{ height: 260, width: "100%" }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={salesData} margin={{ top: 10, right: 10, left: -15, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="var(--brand-blue-bright)" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="var(--brand-blue-bright)" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke={gridLine} vertical={false} />
+                <XAxis dataKey="date" tick={{ fontSize: 10, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(Number(v)/1000).toFixed(1)}k`} />
+                <Tooltip contentStyle={{ background: "#FFFFFF", border: `1.5px solid ${border}`, borderRadius: 12, boxShadow: "0 8px 24px rgba(76,59,53,0.06)", fontSize: "12px" }} formatter={(v: number) => [`$${Number(v).toLocaleString()}`, "Ledger Revenue"]} />
+                <Area type="monotone" dataKey="sales" stroke="var(--brand-blue-bright)" strokeWidth={3} fill="url(#salesGrad)" dot={{ fill: "var(--brand-blue-bright)", r: 4, strokeWidth: 0 }} activeDot={{ r: 6 }} />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
-        {/* ── RIGHT DOCK (Sidebar widgets) ── */}
-        <div className="dash-sidebar">
+        {/* Right: Pie Allocation & Quick Gateway Column */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {/* Quick Actions Panel */}
-          <div style={cardStyle({ padding: 20, marginBottom: 20 })}>
-            <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px", marginBottom: 14 }}>
+          <div style={cardStyle({ border: `1.5px solid ${border}`, flex: 1 })}>
+            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px", marginBottom: 14 }}>
               System Actions Gateway
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
               {quickActions.map(({ label, Icon, color, href }) => (
                 <button
                   key={label}
                   onClick={() => router.push(href)}
                   style={{
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+                    display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
                     background: surface, border: `1.5px solid ${border}`, borderRadius: 12,
-                    padding: "12px 6px", cursor: "pointer", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
+                    padding: "14px 6px", cursor: "pointer", transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)"
                   }}
                   onMouseEnter={e => {
                     e.currentTarget.style.borderColor = "var(--primary)";
                     e.currentTarget.style.background = "#FFFFFF";
-                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.transform = "translateY(-1.5px)";
+                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(2, 145, 192, 0.08)";
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.borderColor = border;
                     e.currentTarget.style.background = surface;
                     e.currentTarget.style.transform = "none";
+                    e.currentTarget.style.boxShadow = "none";
                   }}
                 >
                   <div style={{
-                    width: 32, height: 32, borderRadius: 10, background: `${color}12`,
+                    width: 34, height: 34, borderRadius: 10, background: `${color}12`,
                     display: "flex", alignItems: "center", justifyContent: "center",
-                    border: `1px solid ${color}20`
+                    border: `1.5px solid ${color}20`
                   }}>
-                    <Icon size={14} color={color} />
+                    <Icon size={15} color={color} />
                   </div>
-                  <span style={{ fontSize: "10px", fontWeight: 600, color: textSec, textAlign: "center", lineHeight: 1.2 }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: textSec, textAlign: "center", lineHeight: 1.2 }}>
                     {label}
                   </span>
                 </button>
@@ -397,354 +443,233 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* KPI Ledger Overview */}
-          <div style={cardStyle({ padding: 20, marginBottom: 20 })}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-              <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Ledger Breakdown</div>
-              <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-                View Logs
-              </span>
+          {/* Allocation sector */}
+          <div style={cardStyle({ border: `1.5px solid ${border}`, flex: 1 })}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+              <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Share Allocation by Sector</div>
+              <div style={{ background: surface, border: `1.5px solid ${border}`, borderRadius: 10, padding: "4px 10px", fontSize: "11.5px", fontWeight: 700, color: textSec }}>
+                Active Allocation
+              </div>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              <div style={{ position: "relative", width: 96, height: 96, flexShrink: 0 }}>
-                <svg viewBox="0 0 100 100" width="100%" height="100%">
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--border)" strokeWidth="10" />
-                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--brand-blue-bright)" strokeWidth="10"
-                    strokeDasharray="251.3" strokeDashoffset={totalOrdersCount > 0 ? "80" : "251.3"} strokeLinecap="round" transform="rotate(-90 50 50)" />
-                </svg>
-                <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: "16px", fontWeight: 800, color: textMain }}>{totalOrdersCount}</span>
-                  <span style={{ fontSize: "9px", color: textMuted, fontWeight: 600, textTransform: "uppercase" }}>Orders</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+              <div style={{ width: 110, height: 110, flexShrink: 0, position: "relative" }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={channelData} cx="50%" cy="50%" innerRadius={36} outerRadius={52} dataKey="value" stroke="none" paddingAngle={4}>
+                      {channelData.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+                <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                  <span style={{ fontSize: "11px", color: textMuted, fontWeight: 700, textTransform: "uppercase" }}>Yield</span>
                 </div>
               </div>
-              <div style={{ flex: 1 }}>
-                {[
-                  { label: "Gross Revenue", val: fmt(totalRevenue), color: "var(--brand-blue-bright)" },
-                  { label: "New Signups",   val: totalUsersCount,  color: "var(--brand-green-bright)" },
-                  { label: "Credit Disbursed", val: fmt(creditDisbursed), color: "var(--brand-gold-bright)" },
-                ].map(item => (
-                  <div key={item.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 6 }}>
+                {channelData.slice(0, 4).map((ch: any) => (
+                  <div key={ch.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: item.color, flexShrink: 0 }} />
-                      <span style={{ fontSize: "12px", color: textMuted, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {item.label}
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: ch.color, flexShrink: 0 }} />
+                      <span style={{ fontSize: "12px", fontWeight: 600, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {ch.name}
                       </span>
                     </div>
-                    <span style={{ fontSize: "12.5px", fontWeight: 700, color: textMain }}>{item.val}</span>
+                    <span style={{ fontSize: "11.5px", fontWeight: 700, color: textMuted }}>
+                      {ch.value}%
+                    </span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-
-          {/* Recent Audits Feed */}
-          <div style={cardStyle({ padding: 20 })}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-              <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Real-time Audit Ledger</div>
-              <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-                Full Audit
-              </span>
-            </div>
-            {activities.length === 0 ? (
-              <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "24px 0" }}>
-                <Clock size={20} color={textMuted} style={{ margin: "0 auto 8px", opacity: 0.5 }} />
-                No transactions recorded
-              </div>
-            ) : activities.map((a, i) => (
-              <div key={i} style={{ display: "flex", gap: 12, marginBottom: 16 }}>
-                <ActivityIcon color={a.color} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: "12.5px", color: textMain, fontWeight: 600, lineHeight: 1.4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {a.text}
-                  </div>
-                  <div style={{ fontSize: "10.5px", color: textMuted, marginTop: 3, display: "flex", alignItems: "center", gap: 4 }}>
-                    <Clock size={11} /> {a.time}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
+      </div>
 
-        {/* ── CENTRAL GRAPHS & TELEMETRY ── */}
-        <div className="dash-bottom">
-          <div className="charts-row" style={{ marginBottom: 24 }}>
-            {/* Sales Chart */}
-            <div style={cardStyle({ padding: 24 })}>
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 18 }}>
-                <div>
-                  <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Revenue & Capital Yield</div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 6 }}>
-                    <span style={{ fontSize: "24px", fontWeight: 800, color: textMain, letterSpacing: "-0.5px" }}>{fmt(totalRevenue)}</span>
-                    <span style={{
-                      fontSize: "11.5px", fontWeight: 800, color: "var(--brand-green-deep)",
-                      background: "rgba(20, 113, 21, 0.08)", padding: "4px 8px", borderRadius: "12px",
-                      display: "flex", alignItems: "center", gap: 4
-                    }}>
-                      <TrendingUp size={12} /> Live Target
-                    </span>
-                  </div>
-                </div>
-                <div style={{ background: surface, border: `1.5px solid ${border}`, borderRadius: 10, padding: "6px 14px", fontSize: "12px", fontWeight: 700, color: textSec }}>
-                  {selectedLabel} Analytics
-                </div>
-              </div>
-              <div style={{ height: 200 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={salesData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="var(--brand-blue-bright)" stopOpacity={0.35} />
-                        <stop offset="100%" stopColor="var(--brand-blue-bright)" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke={gridLine} vertical={false} />
-                    <XAxis dataKey="date" tick={{ fontSize: 10, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fontSize: 10, fill: textMuted, fontWeight: 600 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(Number(v)/1000).toFixed(1)}k`} />
-                    <Tooltip contentStyle={{ background: "#FFFFFF", border: `1.5px solid ${border}`, borderRadius: 12, boxShadow: "0 8px 24px rgba(76,59,53,0.06)", fontSize: "12px" }} formatter={(v: number) => [`$${Number(v).toLocaleString()}`, "Ledger Revenue"]} />
-                    <Area type="monotone" dataKey="sales" stroke="var(--brand-blue-bright)" strokeWidth={3} fill="url(#salesGrad)" dot={{ fill: "var(--brand-blue-bright)", r: 4, strokeWidth: 0 }} activeDot={{ r: 6 }} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Pie Chart */}
-            <div style={cardStyle({ padding: 24 })}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
-                <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Share Allocation by Sector</div>
-                <div style={{ background: surface, border: `1.5px solid ${border}`, borderRadius: 10, padding: "6px 14px", fontSize: "12px", fontWeight: 700, color: textSec }}>
-                  {selectedLabel}
-                </div>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <div style={{ width: 140, height: 140, flexShrink: 0, position: "relative" }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie data={channelData} cx="50%" cy="50%" innerRadius={48} outerRadius={68} dataKey="value" stroke="none" paddingAngle={3}>
-                        {channelData.map((e: any, i: number) => <Cell key={i} fill={e.color} />)}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                  <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
-                    <span style={{ fontSize: "14px", fontWeight: 800, color: textMain }}>{fmt(totalRevenue)}</span>
-                    <span style={{ fontSize: "9px", color: textMuted, fontWeight: 600, textTransform: "uppercase" }}>Yield</span>
-                  </div>
-                </div>
-                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 8 }}>
-                  {channelData.slice(0, 4).map((ch: any) => (
-                    <div key={ch.name} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
-                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: ch.color, flexShrink: 0 }} />
-                        <span style={{ fontSize: "12px", fontWeight: 600, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {ch.name}
-                        </span>
-                      </div>
-                      <span style={{ fontSize: "11.5px", fontWeight: 700, color: textMuted }}>
-                        {ch.value}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+      {/* ── STEP 3: QUEUES & LISTS GRID (Spatially independent, fully un-messy) ── */}
+      <div className="telemetry-grid" style={{ marginBottom: 24 }}>
+        {/* Order Pipeline card */}
+        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Order Pipeline</div>
+            <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
+              Active Queue &rarr;
+            </span>
           </div>
-
-          {/* Tables Row */}
-          <div className="tables-row" style={{ marginBottom: 24 }}>
-            {/* Recent Orders table widget */}
-            <div style={cardStyle({ padding: 20 })}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Order Pipeline</div>
-                <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-                  Active Queue &rarr;
-                </span>
-              </div>
-              {orders.length === 0 ? (
-                <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {orders.map((o, idx) => {
-                    const initials = getInitials(o);
-                    const name = getName(o);
-                    const color = COLORS[idx % COLORS.length];
-                    return (
-                      <div key={o.id} style={{
-                        display: "flex", alignItems: "center", gap: 12, paddingBottom: 10,
-                        borderBottom: `1px solid ${border}`
-                      }}>
-                        <div style={{
-                          width: 34, height: 34, borderRadius: "50%", background: `${color}12`,
-                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px",
-                          fontWeight: 800, color, flexShrink: 0, border: `1px solid ${color}22`
-                        }}>
-                          {initials}
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontSize: "13px", fontWeight: 700, color: textMain }}>{formatOrderRef(o.orderNumber, o.id)}</div>
-                          <div style={{ fontSize: "11px", color: textMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
-                        </div>
-                        <div style={{ fontSize: "11px", color: textMuted, whiteSpace: "nowrap" }}>{formatTime(o.createdAt)}</div>
-                        <div style={{ fontSize: "13px", fontWeight: 800, color: textMain, whiteSpace: "nowrap", marginLeft: 4 }}>
-                          {fmt(parseFloat(o.total || "0"))}
-                        </div>
-                        <StatusBadge status={o.status} />
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Top Products widget */}
-            <div style={cardStyle({ padding: 20 })}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Product Performance</div>
-                <span onClick={() => router.push("/products")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-                  Products list
-                </span>
-              </div>
-              {displayProducts.length === 0 ? (
-                <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {displayProducts.map((p) => (
-                    <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 10, borderBottom: `1px solid ${border}` }}>
-                      <div style={{
-                        width: 34, height: 34, borderRadius: 10, background: "rgba(2, 145, 192, 0.08)",
-                        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                        border: "1px solid rgba(2, 145, 192, 0.12)"
-                      }}>
-                        <Package size={15} color="var(--brand-blue-bright)" />
-                      </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: "13px", fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
-                        <div style={{ fontSize: "11px", color: "var(--brand-green-deep)", fontWeight: 700 }}>
-                          {p._count?.orderItems || 0} Units Cleared
-                        </div>
-                      </div>
-                      <div style={{ fontSize: "13px", fontWeight: 800, color: textMain, whiteSpace: "nowrap" }}>
-                        {fmt((p._count?.orderItems || 0) * (p.salePrice || p.price || 0))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* New Customers widget */}
-            <div style={cardStyle({ padding: 20 })}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                <div style={{ fontSize: "14px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Acquisition Ledger</div>
-                <span onClick={() => router.push("/users")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
-                  Users db
-                </span>
-              </div>
-              {customers.length === 0 ? (
-                <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {customers.map((c, idx) => {
-                    const initials = c.firstName && c.lastName
-                      ? `${c.firstName[0]}${c.lastName[0]}`.toUpperCase()
-                      : c.email.slice(0, 2).toUpperCase();
-                    const name = [c.firstName, c.lastName].filter(Boolean).join(" ") || c.email;
-                    const color = COLORS[idx % COLORS.length];
-                    return (
-                      <div key={c.id} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 10, borderBottom: `1px solid ${border}` }}>
-                        <div style={{
-                          width: 34, height: 34, borderRadius: "50%", background: `${color}12`,
-                          display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px",
-                          fontWeight: 800, color, flexShrink: 0, border: `1px solid ${color}22`
-                        }}>
-                          {initials}
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ fontSize: "13px", fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
-                          <div style={{ fontSize: "11px", color: textMuted, fontWeight: 500 }}>Signed {formatDate(c.createdAt)}</div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Financial summary blocks */}
-          <div className="financial-grid">
-            {[
-              { label: "Active Credit Exposure", val: fmt(totalOutstanding),  sub: "Risk outstanding balance",         color: "var(--brand-gold-dark)", hl: false },
-              { label: "Disbursed Credit",      val: fmt(creditDisbursed),   sub: `Credit issued in active range`,    color: "var(--brand-blue-medium)", hl: false },
-              { label: "Accounts Created",      val: String(totalUsersCount), sub: `Customer accounts registered`,    color: "var(--brand-green-bright)", hl: false },
-              { label: "Invoiced Revenue",      val: fmt(totalRevenue),       sub: `Gross settlement ledger yield`,    color: "var(--brand-blue-dark)", hl: true  },
-            ].map(item => (
-              <div key={item.label} style={{
-                background: item.hl ? "linear-gradient(135deg, var(--brand-blue-navy) 0%, var(--brand-blue-dark) 100%)" : "#FFFFFF",
-                border: `1.5px solid ${item.hl ? "transparent" : border}`,
-                borderRadius: 16, padding: "18px 16px",
-                boxShadow: "0 8px 24px rgba(76,59,53,0.02)"
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                  <div style={{
-                    width: 34, height: 34, borderRadius: 10,
-                    background: item.hl ? "rgba(255,255,255,0.12)" : `${item.color}12`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    border: item.hl ? "1px solid rgba(255,255,255,0.15)" : `1px solid ${item.color}20`
+          {orders.length === 0 ? (
+            <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
+              {orders.map((o, idx) => {
+                const initials = getInitials(o);
+                const name = getName(o);
+                const color = COLORS[idx % COLORS.length];
+                return (
+                  <div key={o.id} style={{
+                    display: "flex", alignItems: "center", gap: 12, paddingBottom: 12,
+                    borderBottom: `1px solid ${border}`
                   }}>
-                    <Wallet size={15} color={item.hl ? "#fff" : item.color} />
+                    <div style={{
+                      width: 36, height: 36, borderRadius: "50%", background: `${color}12`,
+                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px",
+                      fontWeight: 800, color, flexShrink: 0, border: `1px solid ${color}22`
+                    }}>
+                      {initials}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: "13.5px", fontWeight: 700, color: textMain }}>{formatOrderRef(o.orderNumber, o.id)}</div>
+                      <div style={{ fontSize: "11px", color: textMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
+                    </div>
+                    <div style={{ fontSize: "11px", color: textMuted, whiteSpace: "nowrap", marginRight: 8 }}>{formatTime(o.createdAt)}</div>
+                    <div style={{ fontSize: "13.5px", fontWeight: 800, color: textMain, whiteSpace: "nowrap", marginRight: 8 }}>
+                      {fmt(parseFloat(o.total || "0"))}
+                    </div>
+                    <StatusBadge status={o.status} />
                   </div>
-                  <div style={{ fontSize: "12px", fontWeight: 700, color: item.hl ? "rgba(255,255,255,0.85)" : textMuted }}>
-                    {item.label}
-                  </div>
-                </div>
-                <div style={{ fontSize: "20px", fontWeight: 800, color: item.hl ? "#FFFFFF" : textMain, marginBottom: 4, letterSpacing: "-0.5px" }}>
-                  {item.val}
-                </div>
-                <div style={{ fontSize: "11px", color: item.hl ? "rgba(255,255,255,0.7)" : textMuted, fontWeight: 500 }}>
-                  {item.sub}
-                </div>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
+
+        {/* Product Performance card */}
+        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Product Performance</div>
+            <span onClick={() => router.push("/products")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
+              Catalog List
+            </span>
+          </div>
+          {displayProducts.length === 0 ? (
+            <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "28px 0" }}>No records present</div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
+              {displayProducts.map((p) => (
+                <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, paddingBottom: 12, borderBottom: `1px solid ${border}` }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 10, background: "rgba(2, 145, 192, 0.08)",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                    border: "1px solid rgba(2, 145, 192, 0.12)"
+                  }}>
+                    <Package size={16} color="var(--brand-blue-bright)" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: "13.5px", fontWeight: 700, color: textMain, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+                    <div style={{ fontSize: "11px", color: "var(--brand-green-deep)", fontWeight: 700 }}>
+                      {p._count?.orderItems || 0} Units Cleared
+                    </div>
+                  </div>
+                  <div style={{ fontSize: "13.5px", fontWeight: 800, color: textMain, whiteSpace: "nowrap" }}>
+                    {fmt((p._count?.orderItems || 0) * (p.salePrice || p.price || 0))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Real-time Audit Ledger card */}
+        <div style={cardStyle({ border: `1.5px solid ${border}` })}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <div style={{ fontSize: "15px", fontWeight: 800, color: textMain, letterSpacing: "-0.2px" }}>Real-time Audit Ledger</div>
+            <span onClick={() => router.push("/orders")} style={{ fontSize: "12px", color: "var(--primary)", fontWeight: 700, cursor: "pointer" }}>
+              Full Audit
+            </span>
+          </div>
+          {activities.length === 0 ? (
+            <div style={{ fontSize: "13px", color: textMuted, textAlign: "center", padding: "24px 0" }}>
+              <Clock size={20} color={textMuted} style={{ margin: "0 auto 8px", opacity: 0.5 }} />
+              No transactions recorded
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
+              {activities.map((a, i) => (
+                <div key={i} style={{ display: "flex", gap: 12, paddingBottom: 12, borderBottom: `1px solid ${border}`, alignItems: "center" }}>
+                  <ActivityIcon color={a.color} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: "13px", color: textMain, fontWeight: 600, lineHeight: 1.4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {a.text}
+                    </div>
+                    <div style={{ fontSize: "11px", color: textMuted, marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+                      <Clock size={11} /> {a.time}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── STEP 4: FINANCIAL HEALTH & LEDGERS CARD WRAPPER ── */}
+      <div className="financial-health-grid" style={{ marginBottom: 24 }}>
+        {[
+          { label: "Active Credit Exposure", val: fmt(totalOutstanding),  sub: "Outstanding risk ledger",         color: "var(--brand-gold-dark)", hl: false },
+          { label: "Disbursed Credit Limit", val: fmt(creditDisbursed),   sub: `Credit issued in active period`,    color: "var(--brand-blue-medium)", hl: false },
+          { label: "Customer Signups",      val: String(totalUsersCount), sub: `New portal user registrations`,    color: "var(--brand-green-bright)", hl: false },
+          { label: "Gross Ledger Yield",     val: fmt(totalRevenue),       sub: `Settled invoices & contracts`,    color: "var(--brand-blue-dark)", hl: true  },
+        ].map(item => (
+          <div key={item.label} style={{
+            background: item.hl ? "linear-gradient(135deg, var(--brand-blue-navy) 0%, var(--brand-blue-dark) 100%)" : "#FFFFFF",
+            border: `1.5px solid ${item.hl ? "transparent" : border}`,
+            borderRadius: 18, padding: "20px",
+            boxShadow: "0 8px 24px rgba(76,59,53,0.02)"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 10,
+                background: item.hl ? "rgba(255,255,255,0.12)" : `${item.color}12`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                border: item.hl ? "1px solid rgba(255,255,255,0.15)" : `1px solid ${item.color}20`
+              }}>
+                <Wallet size={16} color={item.hl ? "#fff" : item.color} />
+              </div>
+              <div style={{ fontSize: "13px", fontWeight: 700, color: item.hl ? "rgba(255,255,255,0.85)" : textMuted }}>
+                {item.label}
+              </div>
+            </div>
+            <div style={{ fontSize: "22px", fontWeight: 800, color: item.hl ? "#FFFFFF" : textMain, marginBottom: 4, letterSpacing: "-0.5px" }}>
+              {item.val}
+            </div>
+            <div style={{ fontSize: "11px", color: item.hl ? "rgba(255,255,255,0.7)" : textMuted, fontWeight: 500 }}>
+              {item.sub}
+            </div>
+          </div>
+        ))}
       </div>
 
       <style>{`
         *, *::before, *::after { box-sizing: border-box; }
-        .dash-outer {
+        .telemetry-grid {
           display: grid;
-          grid-template-columns: 1fr 310px;
-          grid-template-areas: "top sidebar" "bottom sidebar";
-          gap: 20px;
-          align-items: start;
-          width: 100%;
-          min-width: 0;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 24px;
         }
-        .dash-top    { grid-area: top;     min-width: 0; }
-        .dash-bottom { grid-area: bottom;  min-width: 0; }
-        .dash-sidebar { grid-area: sidebar; position: sticky; top: 92px; min-width: 0; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; width: 100%; }
-        .kpi-card { min-width: 0; overflow: hidden; min-height: 100px; }
-        .charts-row     { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; width: 100%; overflow: hidden; }
-        .tables-row     { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 16px; width: 100%; overflow: hidden; }
-        .financial-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; }
-        @media (max-width: 1200px) {
-          .dash-outer { grid-template-columns: 1fr 280px; gap: 16px; }
-          .kpi-grid   { grid-template-columns: repeat(3, 1fr); }
+        .main-charts-grid {
+          display: grid;
+          grid-template-columns: 1.6fr 1fr;
+          gap: 24px;
         }
-        @media (max-width: 880px) {
-          .dash-outer   { grid-template-columns: 1fr; grid-template-areas: "top" "sidebar" "bottom"; }
-          .dash-sidebar { position: static; }
-          .kpi-grid     { grid-template-columns: repeat(2, 1fr); }
-          .charts-row   { grid-template-columns: 1fr; }
-          .tables-row   { grid-template-columns: 1fr; }
-          .financial-grid { grid-template-columns: repeat(2, 1fr); }
+        .financial-health-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 24px;
         }
-        @media (max-width: 480px) {
-          .kpi-grid       { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-          .financial-grid { grid-template-columns: repeat(2, 1fr); }
-          .kpi-spark      { display: none !important; }
-          .kpi-card       { min-height: 84px; }
+        @media (max-width: 1024px) {
+          .main-charts-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+        @media (max-width: 768px) {
+          .telemetry-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .financial-health-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .main-charts-grid {
+            gap: 16px;
+          }
         }
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
