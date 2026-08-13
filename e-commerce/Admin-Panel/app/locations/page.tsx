@@ -470,7 +470,7 @@ function LocationsContent() {
             }}
           />
           {/* Edit Country Modal */}
-          <Modal open={!!editCountry} onClose={() => setEditCountry(null)} title={`Edit Country: ${editCountry?.name ?? ''}`}>
+          <Modal open={!!editCountry} onClose={() => setEditCountry(null)} title={`Edit Country: ${editCountry?.name ?? ''}`} maxWidth="540px">
             <FormField label="Exchange Rate (vs USD)" value={cForm.rate} onChange={cfp('rate')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 27.5" />
             <FormField label="Symbol Position" value={cForm.symbolPosition} onChange={cfp('symbolPosition')} options={['BEFORE', 'AFTER']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
             <FormField label="Flag Emoji" value={cForm.flag} onChange={cfp('flag')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 🇿🇲" />
@@ -481,7 +481,7 @@ function LocationsContent() {
             <ModalFooter onClose={() => setEditCountry(null)} onSubmit={handleSaveCountry} loading={loadingCountry} submitLabel="Save Changes" border={border} textMain={textMain} />
           </Modal>
           {/* Add Country Modal */}
-          <Modal open={addCountryOpen} onClose={() => setAddCountryOpen(false)} title="Add New Country">
+          <Modal open={addCountryOpen} onClose={() => setAddCountryOpen(false)} title="Add New Country" maxWidth="540px">
             <FormField label="Country Name *" value={addCForm.name} onChange={acfp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Zambia" />
             <FormField label="Country Code * (2-letter)" value={addCForm.code} onChange={acfp('code')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. ZM" />
             <FormField label="Currency Code * (3-letter)" value={addCForm.currency} onChange={acfp('currency')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. ZMW" />
