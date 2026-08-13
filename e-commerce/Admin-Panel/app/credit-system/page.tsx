@@ -77,6 +77,11 @@ function CreditContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   type Tab = 'applications' | 'plans' | 'products' | 'accounts';
   const [activeTab, setActiveTab] = useState<Tab>('applications');
 
@@ -521,7 +526,7 @@ function CreditContent() {
   );
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader
         title="Credit System"
         subtitle="Manage installment applications, plans and credit accounts"
@@ -535,34 +540,35 @@ function CreditContent() {
       />
 
       {/* ── Summary stats ── */}
-      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'12px',marginBottom:'20px'}} className="cg">
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))',gap:clampPx(10, 12),marginBottom:clampPx(16, 20)}} className="cg">
         {[
           {label:'Total Applications', val:String(applications.length), color:'var(--secondary)'},
           {label:'Approved', val:String(applications.filter(a=>a.status==='Approved').length), color:'var(--primary)'},
           {label:'Pending', val:String(applications.filter(a=>a.status==='Pending').length), color:'var(--gold)'},
           {label:'Credit Accounts', val:String(credits.length), color:'var(--primary)'},
         ].map(s=>(
-          <div key={s.label} style={{background:card,border:`1px solid ${border}`,borderRadius:'12px',padding:'14px'}}>
-            <div style={{fontSize:'12px',color:textMuted,marginBottom:'4px'}}>{s.label}</div>
-            <div style={{fontSize:'22px',fontWeight:800,color:s.color}}>{s.val}</div>
+          <div key={s.label} className="card" style={{padding:clampPx(12, 14)}}>
+            <div style={{fontSize:clampPx(11, 12),color:textMuted,marginBottom:'4px'}}>{s.label}</div>
+            <div style={{fontSize:clampPx(18, 22),fontWeight:800,color:s.color,lineHeight:1.2}}>{s.val}</div>
           </div>
         ))}
       </div>
 
       {/* ── Tab bar ── */}
-      <div style={{display:'flex',gap:'4px',marginBottom:'20px',background:surface,padding:'4px',borderRadius:'10px',border:`1px solid ${border}`,overflowX:'auto'}}>
+      <div style={{display:'flex',gap:'4px',marginBottom:clampPx(16, 20),background:surface,padding:'4px',borderRadius:'10px',border:`1px solid ${border}`,overflowX:'auto',WebkitOverflowScrolling:'touch'}}>
         {TABS.map(t=>(
           <button key={t.key} onClick={()=>setActiveTab(t.key)} style={{
-            flex:'1 0 auto', padding:'8px 14px', borderRadius:'8px', border:'none', cursor:'pointer',
+            flex:'1 0 auto', padding:clampPx(8, 10) clampPx(12, 14), borderRadius:'8px', border:'none', cursor:'pointer',
             background:activeTab===t.key?'var(--primary)':'transparent',
             color:activeTab===t.key?'white':textMuted,
-            fontSize:'13px', fontWeight:600, fontFamily:'var(--font-inter)',
+            fontSize:clampPx(12, 13), fontWeight:600, fontFamily:'var(--font-inter)',
             display:'flex', alignItems:'center', gap:'6px', justifyContent:'center', whiteSpace:'nowrap',
             transition:'all 0.15s',
+            minHeight:'44px',
           }}>
             {t.label}
             <span style={{
-              fontSize:'10px', fontWeight:700, padding:'1px 6px', borderRadius:'10px',
+              fontSize:clampPx(9, 10), fontWeight:700, padding:'1px 6px', borderRadius:'10px',
               background:activeTab===t.key?'rgba(255,255,255,0.25)':'rgba(99,102,241,0.12)',
               color:activeTab===t.key?'white':'var(--secondary)',
             }}>{t.count}</span>
