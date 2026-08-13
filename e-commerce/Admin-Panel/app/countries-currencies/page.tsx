@@ -28,6 +28,11 @@ function CountriesContent() {
   const surface = 'var(--surface)';
   const card = 'var(--card)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const [tab, setTab] = useState<'countries'|'currencies'|'exchange-config'>('countries');
   const [countries, setCountries] = useState<Country[]>([]);
   const [currencies, setCurrencies] = useState<Currency[]>([]);
@@ -270,17 +275,18 @@ function CountriesContent() {
   );
 
   const tabStyle = (active:boolean) => ({
-    padding:'8px 20px', borderRadius:'8px', fontSize:'13px', fontWeight:600, cursor:'pointer',
+    padding:clampPx(8, 10) clampPx(16, 20), borderRadius:'8px', fontSize:clampPx(12, 13), fontWeight:600, cursor:'pointer',
     background:active ? 'var(--primary)' : 'transparent',
     color: active ? '#fff' : textMuted, border:'none',
+    minHeight: '44px',
   });
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Countries & Currencies" subtitle="Manage countries, currencies and exchange rates" icon={Globe} onAdd={()=>setAddCountryOpen(true)} addLabel="Add Country" />
 
       {/* Tabs */}
-      <div style={{display:'flex',gap:'8px',marginBottom:'20px'}}>
+      <div style={{display:'flex',gap:clampPx(6, 8),marginBottom:clampPx(16, 20),flexWrap:'wrap'}}>
         <button style={tabStyle(tab==='countries')} onClick={()=>setTab('countries')}>Countries</button>
         <button style={tabStyle(tab==='currencies')} onClick={()=>setTab('currencies')}>Currencies</button>
         <button style={tabStyle(tab==='exchange-config')} onClick={()=>setTab('exchange-config')}>Exchange Provider</button>
