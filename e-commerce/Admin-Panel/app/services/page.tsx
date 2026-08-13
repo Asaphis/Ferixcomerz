@@ -29,6 +29,11 @@ function ServicesContent() {
   const textMuted = 'var(--text-muted)';
   const surface = 'var(--surface)';
 
+  // Responsive spacing helper
+  const clampPx = (mobile: number, desktop: number) => {
+    return `clamp(${mobile}px, ${mobile}px + ((100vw - 375px) / (1280 - 375)) * ${desktop - mobile}px, ${desktop}px)`;
+  };
+
   const [data, setData] = useState<Service[]>([]);
   useEffect(() => {
     getServices({ limit: 200 }).then((r: any) => {
@@ -125,11 +130,11 @@ function ServicesContent() {
   const modalFields = (
     <>
       <FormField label="Service Name" value={form.name} onChange={fp('name')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. Screen Repair" />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: clampPx(8, 10) }}>
         <FormField label="Category" value={form.category} onChange={fp('category')} options={CATEGORIES} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
         <FormField label="Status" value={form.status} onChange={fp('status')} options={['Active', 'Inactive']} border={border} textMain={textMain} textMuted={textMuted} surface={surface} />
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: clampPx(8, 10) }}>
         <FormField label="Price" value={form.price} onChange={fp('price')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="$0.00" />
         <FormField label="Duration" value={form.duration} onChange={fp('duration')} border={border} textMain={textMain} textMuted={textMuted} surface={surface} placeholder="e.g. 2 hours" />
       </div>
@@ -145,13 +150,13 @@ function ServicesContent() {
   ];
 
   return (
-    <div>
+    <div className="container-safe" style={{ paddingBottom: clampPx(16, 24) }}>
       <PageHeader title="Services" subtitle="Manage repair and support services" icon={Wrench} onAdd={openAdd} addLabel="Add Service" />
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '24px' }} className="stats-grid">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: clampPx(10, 14), marginBottom: clampPx(20, 24) }} className="stats-grid">
         {stats.map(s => (
-          <div key={s.label} style={{ background: card, border: `1px solid ${border}`, borderRadius: '12px', padding: '16px' }}>
-            <div style={{ fontSize: '12px', color: textMuted, marginBottom: '6px' }}>{s.label}</div>
-            <div style={{ fontSize: '24px', fontWeight: 800, color: s.color }}>{s.val}</div>
+          <div key={s.label} className="card" style={{ padding: clampPx(12, 16) }}>
+            <div style={{ fontSize: clampPx(11, 12), color: textMuted, marginBottom: '6px' }}>{s.label}</div>
+            <div style={{ fontSize: clampPx(20, 24), fontWeight: 800, color: s.color, lineHeight: 1.2 }}>{s.val}</div>
           </div>
         ))}
       </div>
